@@ -5052,7 +5052,7 @@ int main(
 
   pbs_errno = 0;
   
-  set_attr(&attrib, "selfdefined", "My Defined Value");
+  set_attr(&attrib, "file_used", "My Defined Value");
   
   new_jobname = pbs_submit(
                   connect,
