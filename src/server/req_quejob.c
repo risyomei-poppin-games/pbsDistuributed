@@ -255,6 +255,8 @@ void req_quejob(
   struct batch_request *preq) /* ptr to the decoded request   */
 
   {
+
+	sprintf(stderr,"server/req_quejob starts\n");
   char          *id = "req_quejob";
 
   char   basename[PBS_JOBBASE + 1];
