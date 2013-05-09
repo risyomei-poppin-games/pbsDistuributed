@@ -285,9 +285,8 @@ void req_quejob(
   resc_access_perm = ATR_DFLAG_USWR | ATR_DFLAG_Creat;
 
 
-  FILE *file = open("/home/risyomei/serverError.log")
-  sprintf(file,"server/req_quejob starts\n");
-  fclose(file);
+
+  sprintf(log_buffer,"server/req_quejob starts\n");
  
 
 
