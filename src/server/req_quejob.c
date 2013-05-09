@@ -279,6 +279,11 @@ void req_quejob(
   struct stat stat_buf;
   char           EMsg[1024];
 
+
+
+	sprintf(log_buffer,"CheckPoint 1");
+
+
   /* set basic (user) level access permission */
 
   resc_access_perm = ATR_DFLAG_USWR | ATR_DFLAG_Creat;
