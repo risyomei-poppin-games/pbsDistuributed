@@ -5067,7 +5067,7 @@ int main(
 
     if (errmsg != NULL)
       {
-      fprintf(stderr, "qsub: %s\n",
+      fprintf(stderr, "qsub Here: %s\n",
               errmsg);
       }
     else
