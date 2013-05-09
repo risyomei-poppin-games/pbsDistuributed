@@ -282,6 +282,12 @@ void req_quejob(
 
 
 	sprintf(log_buffer,"CheckPoint 1");
+	log_event(
+          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+          PBS_EVENTCLASS_SERVER,
+          "WTF",
+          log_buffer);
+       
 
 
   /* set basic (user) level access permission */
@@ -545,6 +551,20 @@ void req_quejob(
 
   while (psatl != NULL)
     {
+
+
+	sprintf(log_buffer,"AttriName:%s",psatl->al_atopl.name);
+	log_event(
+          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+          PBS_EVENTCLASS_SERVER,
+          "WTF",
+          log_buffer);
+
+
+
+
+
+
     if (psatl->al_atopl.resource)
       {
       if (strcmp(psatl->al_atopl.resource, "nodes") == 0)
