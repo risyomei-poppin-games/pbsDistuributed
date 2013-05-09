@@ -2715,7 +2715,7 @@ interactive(void)
 
   if (strncmp(momjobid, "PBS:", 4) == 0)
     {
-    fprintf(stderr, "qsub: %s\n", momjobid);
+    fprintf(stderr, "qsub here2: %s\n", momjobid);
 
     shutdown(news, 2);
 
