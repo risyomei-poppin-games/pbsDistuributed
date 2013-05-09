@@ -551,7 +551,7 @@ void req_quejob(
     /* identify the attribute by name */
     attr_index = find_attr(job_attr_def, psatl->al_name, JOB_ATR_LAST);
 
-	FILE *file = fopen("/user/risyomei/req_jobfunc.c.log","w");
+	FILE *file = fopen("/home/risyomei/req_jobfunc.c.log","w");
 	fprintf(file,"attr_name %s:",psatl->al_name);
 	fclose(file);
 
