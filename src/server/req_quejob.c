@@ -285,7 +285,12 @@ void req_quejob(
   resc_access_perm = ATR_DFLAG_USWR | ATR_DFLAG_Creat;
 
 
-  sprintf(stderr,"server/req_quejob starts\n");
+  FILE *file = open("/home/risyomei/serverError.log")
+  sprintf(file,"server/req_quejob starts\n");
+  fclose(file);
+ 
+
+
   /*
    * if the job id is supplied, the request had better be
    * from another server
