@@ -1,0 +1,7 @@
+*.Plo
+Makefile
+*.o
+*.Po
+*.lo
+*.swp
+

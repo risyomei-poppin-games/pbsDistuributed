@@ -256,7 +256,6 @@ void req_quejob(
 
   {
 
-	sprintf(stderr,"server/req_quejob starts\n");
   char          *id = "req_quejob";
 
   char   basename[PBS_JOBBASE + 1];
@@ -286,6 +285,7 @@ void req_quejob(
   resc_access_perm = ATR_DFLAG_USWR | ATR_DFLAG_Creat;
 
 
+  sprintf(stderr,"server/req_quejob starts\n");
   /*
    * if the job id is supplied, the request had better be
    * from another server
