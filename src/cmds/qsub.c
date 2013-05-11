@@ -2944,9 +2944,9 @@ int process_opts(
   char search_string[256];
 
 #if !defined(PBS_NO_POSIX_VIOLATION)
-#define GETOPT_ARGS "a:A:b:c:C:d:D:e:fF:hIJ:j:k:l:m:M:N:o:p:P:q:r:S:t:T:u:v:Vw:W:Xxz-:"
+#define GETOPT_ARGS "a:A:b:c:C:d:D:e:fF:hIJ:j:k:l:m:M:N:o:p:P:q:r:S:t:T:u:v:Vw:W:Xxz-:Y:"
 #else
-#define GETOPT_ARGS "a:A:c:C:e:F:hJ:j:k:l:m:M:N:o:p:q:r:S:u:v:VW:z"
+#define GETOPT_ARGS "a:A:c:C:e:F:hJ:j:k:l:m:M:N:o:p:q:r:S:u:v:VW:zY:"
 #endif /* PBS_NO_POSIX_VIOLATION */
 
   /* The following macro, together the value of passet (pass + 1) is used */
@@ -4193,6 +4193,28 @@ int process_opts(
 
         break;
 
+
+	  case 'Y':
+		
+        if_cmd_line(M_opt)
+          {
+
+          M_opt = passet;
+
+          if (parse_at_list(optarg, FALSE, FALSE))
+            {
+            fprintf(stderr, "qsub: illegal -Y value\n");
+
+            errflg++;
+
+            break;
+            }
+
+          set_attr(&attrib, ATTR_fileused, optarg);
+          }
+
+        break;
+
       case '?':
 
       default :
@@ -5048,7 +5070,7 @@ int main(
     }
 
   /* Send submit request to the server. */
-  set_attr(&attrib, "fileused", "xxx");
+ // set_attr(&attrib, "fileused", "xxx");
   pbs_errno = 0;
 
   new_jobname = pbs_submit(
