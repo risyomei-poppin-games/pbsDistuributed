@@ -2715,7 +2715,7 @@ interactive(void)
 
   if (strncmp(momjobid, "PBS:", 4) == 0)
     {
-    fprintf(stderr, "qsub: %s\n", momjobid);
+    fprintf(stderr, "qsub here2: %s\n", momjobid);
 
     shutdown(news, 2);
 
@@ -4865,12 +4865,13 @@ int main(
   /* if script is empty, get standard input */
 
   if (!strcmp(script, "") || !strcmp(script, "-"))
-    {
+  {
     if (!N_opt)
       set_attr(&attrib, ATTR_N, "STDIN");
 
     if (Interact_opt == FALSE)
-      {
+    {
+		  
       if ((errflg = get_script(
                       argc,
                       argv,
@@ -4889,8 +4890,8 @@ int main(
 
         exit(1);
         }
-      }
-    }    /* END if (!strcmp(script,"") || !strcmp(script,"-")) */
+  	}
+  }    /* END if (!strcmp(script,"") || !strcmp(script,"-")) */
   else if ((Interact_opt != FALSE) && (Run_Inter_opt))
     
     {
@@ -4919,25 +4920,25 @@ int main(
       }
 
     if ((f = fopen(script, "r")) != NULL)
-      {
+    {
       if (!N_opt)
-        {
+      {
         if ((bnp = strrchr(script, (int)'/')))
-          bnp++;
+        	bnp++;
         else
-          bnp = script;
+        	bnp = script;
 
         if (check_job_name(bnp, 0) == 0)
-          {
+        {
           set_attr(&attrib, ATTR_N, bnp);
-          }
+        }
         else
-          {
+        {
           fprintf(stderr, "qsub: cannot form a valid job name from the script name\n");
 
           exit(1);
-          }
         }
+      }
 
       if ((errflg = get_script(
                       argc,
@@ -4957,7 +4958,7 @@ int main(
 
         exit(1);
         }
-      }    /* END if ((f = fopen(script,"r")) != NULL) */
+    }    /* END if ((f = fopen(script,"r")) != NULL) */
     else
       {
       perror("qsub: opening script file:");
@@ -5072,7 +5073,9 @@ int main(
   /* Send submit request to the server. */
  // set_attr(&attrib, "fileused", "xxx");
   pbs_errno = 0;
-
+  
+  //set_attr(&attrib, "file_used", "My Defined Value");
+  
   new_jobname = pbs_submit(
                   connect,
                   (struct attropl *)attrib,
@@ -5086,7 +5089,7 @@ int main(
 
     if (errmsg != NULL)
       {
-      fprintf(stderr, "qsub: %s\n",
+      fprintf(stderr, "qsub Here: %s\n",
               errmsg);
       }
     else

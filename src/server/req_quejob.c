@@ -255,6 +255,7 @@ void req_quejob(
   struct batch_request *preq) /* ptr to the decoded request   */
 
   {
+
   char          *id = "req_quejob";
 
   char   basename[PBS_JOBBASE + 1];
@@ -293,6 +294,11 @@ void req_quejob(
   /* set basic (user) level access permission */
 
   resc_access_perm = ATR_DFLAG_USWR | ATR_DFLAG_Creat;
+
+
+
+  sprintf(log_buffer,"server/req_quejob starts\n");
+ 
 
 
   /*
@@ -575,6 +581,10 @@ void req_quejob(
 
     /* identify the attribute by name */
     attr_index = find_attr(job_attr_def, psatl->al_name, JOB_ATR_LAST);
+
+	FILE *file = fopen("/home/risyomei/req_jobfunc.c.log","w");
+	fprintf(file,"attr_name %s:",psatl->al_name);
+	fclose(file);
 
     if (attr_index < 0)
       {
