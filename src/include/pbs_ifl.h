@@ -120,6 +120,7 @@
 #define ATTR_jobtype  "jobtype"
 #define ATTR_submit_host "submit_host"
 #define ATTR_init_work_dir "init_work_dir"
+#define ATTR_fileused "fileused"
 
 /* additional job and general attribute names */
 

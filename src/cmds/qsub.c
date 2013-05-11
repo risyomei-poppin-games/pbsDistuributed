@@ -5048,7 +5048,7 @@ int main(
     }
 
   /* Send submit request to the server. */
-
+  set_attr(&attrib, "fileused", "xxx");
   pbs_errno = 0;
 
   new_jobname = pbs_submit(

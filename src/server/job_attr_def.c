@@ -129,6 +129,18 @@ attribute_def job_attr_def[] = {
    ATR_TYPE_STR,
    PARENT_TYPE_JOB},
 
+  /* JOB_ATR_fileused */
+  {ATTR_fileused,			/* "fileused" */
+   decode_str,
+   encode_str,
+   set_str,
+   comp_str,
+   free_str,
+   NULL_FUNC,
+   READ_WRITE | ATR_DFLAG_ALTRUN | ATR_DFLAG_SELEQ | ATR_DFLAG_MOM,
+   ATR_TYPE_STR,
+   PARENT_TYPE_JOB},
+
   /* JOB_ATR_job_owner */
   {ATTR_owner,			/* "Job_Owner" */
    decode_str,

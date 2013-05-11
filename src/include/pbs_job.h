@@ -261,6 +261,7 @@ struct grpcache
 enum job_atr
   {
   JOB_ATR_jobname,   /* this set appears first as they show */
+  JOB_ATR_fileused, /*self defined value*/
   JOB_ATR_job_owner, /* in a basic job status display       */
   JOB_ATR_resc_used,
   JOB_ATR_state,
