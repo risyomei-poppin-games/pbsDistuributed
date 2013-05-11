@@ -2944,9 +2944,9 @@ int process_opts(
   char search_string[256];
 
 #if !defined(PBS_NO_POSIX_VIOLATION)
-#define GETOPT_ARGS "a:A:b:c:C:d:D:e:fF:hIJ:j:k:l:m:M:N:o:p:P:q:r:S:t:T:u:v:Vw:W:Xxz-:Y:"
+#define GETOPT_ARGS "a:A:b:c:C:d:D:e:fF:hIJ:j:k:l:m:M:N:o:p:P:q:r:S:t:T:u:v:Vw:W:Xxz-:g:"
 #else
-#define GETOPT_ARGS "a:A:c:C:e:F:hJ:j:k:l:m:M:N:o:p:q:r:S:u:v:VW:zY:"
+#define GETOPT_ARGS "a:A:c:C:e:F:hJ:j:k:l:m:M:N:o:p:q:r:S:u:v:VW:zg:"
 #endif /* PBS_NO_POSIX_VIOLATION */
 
   /* The following macro, together the value of passet (pass + 1) is used */
@@ -4194,7 +4194,7 @@ int process_opts(
         break;
 
 
-	  case 'Y':
+	  case 'g':
 		
         if_cmd_line(M_opt)
           {
