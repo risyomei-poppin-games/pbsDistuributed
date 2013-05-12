@@ -303,6 +303,19 @@ int svr_enquejob(
 
   /* add job to server's 'all job' list and update server counts */
 
+
+  sprintf(log_buffer, "enqueuing into %s, state %x hop %ld",
+    pque->qu_qs.qu_name,
+    pjob->ji_qs.ji_state,
+    pjob->ji_wattr[JOB_ATR_hopcount].at_val.at_long);
+
+  log_event(
+    PBSEVENT_ERROR,
+    PBS_EVENTCLASS_JOB,
+    "WTF",
+    log_buffer);
+
+
 #ifndef NDEBUG
   sprintf(log_buffer, "enqueuing into %s, state %x hop %ld",
     pque->qu_qs.qu_name,

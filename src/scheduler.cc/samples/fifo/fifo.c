@@ -351,10 +351,16 @@ int init_scheduling_cycle(server_info *sinfo)
 
 int schedule(
 
+
+
   int cmd,
   int sd)
 
+  
   {
+
+
+	//    sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.schedule is called"); 
   switch (cmd)
     {
 
@@ -441,6 +447,7 @@ int scheduling_cycle(
   int sd)
 
   {
+	  //
   server_info *sinfo;  /* ptr to the server/queue/job/node info */
   job_info *jinfo;  /* ptr to the job to see if it can run */
   int ret = SUCCESS;  /* return code from is_ok_to_run_job() */
@@ -485,6 +492,7 @@ int scheduling_cycle(
 
     if ((ret = is_ok_to_run_job(sd, sinfo, jinfo->queue, jinfo)) == SUCCESS)
       {
+      sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.scheduleing_cycle this job is ok to run"); 	 	
       run_update_job(sd, sinfo, jinfo->queue, jinfo);
       }
     else

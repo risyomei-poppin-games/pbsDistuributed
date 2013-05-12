@@ -281,12 +281,12 @@ void req_quejob(
 
 
 
-	sprintf(log_buffer,"CheckPoint 1");
-	log_event(
-          PBSEVENT_JOB | PBSEVENT_SYSTEM,
-          PBS_EVENTCLASS_SERVER,
-          "WTF",
-          log_buffer);
+//	sprintf(log_buffer,"CheckPoint 1");
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
        
 
 
@@ -552,17 +552,12 @@ void req_quejob(
   while (psatl != NULL)
     {
 
-
-	sprintf(log_buffer,"AttriName:%s",psatl->al_atopl.name);
-	log_event(
-          PBSEVENT_JOB | PBSEVENT_SYSTEM,
-          PBS_EVENTCLASS_SERVER,
-          "WTF",
-          log_buffer);
-
-
-
-
+//	sprintf(log_buffer,"AttriName:%s",psatl->al_atopl.name);
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
 
 
     if (psatl->al_atopl.resource)
@@ -609,6 +604,18 @@ void req_quejob(
            psatl->al_resc,
            psatl->al_value);
 
+	if(strcmp(psatl->al_name,ATTR_fileused)==0)
+	{
+
+		sprintf(log_buffer,"fileusedParameter:%s,%s",psatl->al_atopl.name,psatl->al_value);
+	
+		log_event(
+          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+          PBS_EVENTCLASS_SERVER,
+          "WTF",
+          log_buffer);
+	}
+
     if (rc != 0)
       {
       if (rc == PBSE_UNKRESC)
@@ -647,22 +654,9 @@ void req_quejob(
     psatl = (svrattrl *)GET_NEXT(psatl->al_link);
     } /* END while (psatl != NULL) */
 
-  	sprintf(log_buffer,"CheckPoint 2.01");
-	log_event(
-          PBSEVENT_JOB | PBSEVENT_SYSTEM,
-          PBS_EVENTCLASS_SERVER,
-          "WTF",
-          log_buffer);
-
-
   rc = set_nodes_attr(pj);
 
-//   	sprintf(log_buffer,"CheckPoint 2.05");
-//	log_event(
-//         PBSEVENT_JOB | PBSEVENT_SYSTEM,
-//          PBS_EVENTCLASS_SERVER,
-//          "WTF",
-//          log_buffer);/* perform any at_action routine declared for the attributes */
+
   if(rc)
     {
     /* just record that we could not set node count */
@@ -1119,11 +1113,11 @@ void req_quejob(
       }
     }
 //		sprintf(log_buffer,"CheckPoint 3");
-	log_event(
-          PBSEVENT_JOB | PBSEVENT_SYSTEM,
-          PBS_EVENTCLASS_SERVER,
-          "WTF",
-          log_buffer);
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
 
   /* set up at_server attribute for status */
 
@@ -1222,11 +1216,11 @@ void req_quejob(
 
   append_link(&svr_newjobs, &pj->ji_alljobs, pj);
 //	sprintf(log_buffer,"CheckPoint 4");
-	log_event(
-          PBSEVENT_JOB | PBSEVENT_SYSTEM,
-          PBS_EVENTCLASS_SERVER,
-          "WTF",
-          log_buffer);
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
   return;
   }  /* END req_quejob() */
 
