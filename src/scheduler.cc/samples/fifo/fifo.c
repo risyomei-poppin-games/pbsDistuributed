@@ -645,6 +645,17 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
   int ncpus;    /* numeric amount of resource ncpus */
   char *errmsg;    /* used for pbs_geterrmsg() */
 
+//  if(jinfo->fileused)
+//  {
+//	char temp[100];
+//	sprintf(temp,"run_update_job:fileused:%s",jinfo->fileused);
+//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_JOB, "WTF",temp);
+//  }
+
+
+
+
+
   strftime(timebuf, 128, "started on %a %b %d at %H:%M", localtime(&cstat.current_time));
 
   if (cstat.load_balancing || cstat.load_balancing_rr)
