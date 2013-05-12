@@ -1,7 +1,3 @@
-*.Plo
-Makefile
-*.o
-*.Po
-*.lo
-*.swp
-
+nqs2pbs
+*
+!*.[ch]
