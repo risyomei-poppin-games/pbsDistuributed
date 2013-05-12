@@ -275,9 +275,18 @@ job_info *query_job_info(struct batch_status *job, queue_info *queue)
       if (jinfo -> resused == NULL)
         jinfo -> resused = resreq;
       }
+	else if(!strcmp(attrp -> name, ATTR_fileused))
+	{
+		jinfo -> fileused = string_dup(attrp -> value);
+//		FILE* file = fopen("/home/lee/jobinfolog.txt", "wa");
+//		fprintf(file,"WTF:int job_info.c:%s",attrp->value);
+//		fclose(file);
+
+	}
 
     attrp = attrp -> next;
     }
+
 
   return jinfo;
   }
@@ -433,6 +442,9 @@ void free_job_info(job_info *jinfo)
 
   if (jinfo -> group != NULL)
     free(jinfo -> group);
+
+  if(jinfo -> fileused !=NULL )
+	free(jinfo -> fileused);
 
   free_resource_req_list(jinfo -> resreq);
 
