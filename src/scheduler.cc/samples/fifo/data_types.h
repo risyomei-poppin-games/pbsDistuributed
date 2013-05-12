@@ -246,7 +246,7 @@ unsigned can_never_run:
   char *comment;  /* comment field of job */
   char *account;  /* username of the owner of the job */
   char *group;   /* groupname of the owner of the job */
-
+  
   struct queue_info *queue; /* queue where job resides */
   int priority;   /* PBS priority of job */
   int sch_priority;  /* internal scheduler priority */
@@ -255,6 +255,7 @@ unsigned can_never_run:
   resource_req *resused; /* a list of resources used */
   group_info *ginfo;  /* the fair share node for the owner */
   node_info *job_node;  /* node the job is running on */
+  char *fileused;
   };
 
 struct node_info

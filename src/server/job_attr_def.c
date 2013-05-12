@@ -129,6 +129,18 @@ attribute_def job_attr_def[] = {
    ATR_TYPE_STR,
    PARENT_TYPE_JOB},
 
+  /* JOB_ATR_fileused */
+  {ATTR_fileused,			/* "fileused" */
+   decode_str,
+   encode_str,
+   set_str,
+   comp_str,
+   free_str,
+   NULL_FUNC,
+   READ_WRITE | ATR_DFLAG_ALTRUN | ATR_DFLAG_SELEQ | ATR_DFLAG_MOM,
+   ATR_TYPE_STR,
+   PARENT_TYPE_JOB},
+
   /* JOB_ATR_job_owner */
   {ATTR_owner,			/* "Job_Owner" */
    decode_str,
@@ -1009,23 +1021,7 @@ attribute_def job_attr_def[] = {
 
   /* Site defined attributes if any, see site_job_attr_*.h  */
 #include "site_job_attr_def.h"
-
-  {ATTR_fileUsed,			/* "file_used" */
-   decode_str,
-   encode_str,
-   set_str,
-   comp_str,
-   free_str,
-   NULL_FUNC,
-   READ_WRITE | ATR_DFLAG_ALTRUN | ATR_DFLAG_SELEQ | ATR_DFLAG_MOM,
-   ATR_TYPE_STR,
-   PARENT_TYPE_JOB},
-
-
-
-
-
-
+  
   /* JOB_ATR_UNKN - THIS MUST BE THE LAST ENTRY */
   {"_other_",
    decode_unkn,

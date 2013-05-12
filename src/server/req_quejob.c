@@ -255,7 +255,6 @@ void req_quejob(
   struct batch_request *preq) /* ptr to the decoded request   */
 
   {
-
   char          *id = "req_quejob";
 
   char   basename[PBS_JOBBASE + 1];
@@ -280,14 +279,20 @@ void req_quejob(
   struct stat stat_buf;
   char           EMsg[1024];
 
+
+
+//	sprintf(log_buffer,"CheckPoint 1");
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
+       
+
+
   /* set basic (user) level access permission */
 
   resc_access_perm = ATR_DFLAG_USWR | ATR_DFLAG_Creat;
-
-
-
-  sprintf(log_buffer,"server/req_quejob starts\n");
- 
 
 
   /*
@@ -546,6 +551,15 @@ void req_quejob(
 
   while (psatl != NULL)
     {
+
+//	sprintf(log_buffer,"AttriName:%s",psatl->al_atopl.name);
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
+
+
     if (psatl->al_atopl.resource)
       {
       if (strcmp(psatl->al_atopl.resource, "nodes") == 0)
@@ -557,9 +571,6 @@ void req_quejob(
     /* identify the attribute by name */
     attr_index = find_attr(job_attr_def, psatl->al_name, JOB_ATR_LAST);
 
-	FILE *file = fopen("/home/risyomei/req_jobfunc.c.log","w");
-	fprintf(file,"attr_name %s:",psatl->al_name);
-	fclose(file);
 
     if (attr_index < 0)
       {
@@ -592,6 +603,18 @@ void req_quejob(
            psatl->al_name,
            psatl->al_resc,
            psatl->al_value);
+
+	if(strcmp(psatl->al_name,ATTR_fileused)==0)
+	{
+
+		sprintf(log_buffer,"fileusedParameter:%s,%s",psatl->al_atopl.name,psatl->al_value);
+	
+		log_event(
+          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+          PBS_EVENTCLASS_SERVER,
+          "WTF",
+          log_buffer);
+	}
 
     if (rc != 0)
       {
@@ -632,6 +655,8 @@ void req_quejob(
     } /* END while (psatl != NULL) */
 
   rc = set_nodes_attr(pj);
+
+
   if(rc)
     {
     /* just record that we could not set node count */
@@ -643,7 +668,12 @@ void req_quejob(
               log_buffer);
     }
   
-  /* perform any at_action routine declared for the attributes */
+//	sprintf(log_buffer,"CheckPoint 2.1");
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);/* perform any at_action routine declared for the attributes */
   for (i = 0; i < JOB_ATR_LAST; ++i)
     {
     pdef = &job_attr_def[i];
@@ -663,6 +693,14 @@ void req_quejob(
         }
       }
     }    /* END for (i) */
+
+
+//    	sprintf(log_buffer,"CheckPoint 2.2");
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
 
 
   /*
@@ -1074,6 +1112,12 @@ void req_quejob(
       return;
       }
     }
+//		sprintf(log_buffer,"CheckPoint 3");
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
 
   /* set up at_server attribute for status */
 
@@ -1171,7 +1215,12 @@ void req_quejob(
   /* link job into server's new jobs list request  */
 
   append_link(&svr_newjobs, &pj->ji_alljobs, pj);
-
+//	sprintf(log_buffer,"CheckPoint 4");
+//	log_event(
+//          PBSEVENT_JOB | PBSEVENT_SYSTEM,
+//          PBS_EVENTCLASS_SERVER,
+//          "WTF",
+//          log_buffer);
   return;
   }  /* END req_quejob() */
 
