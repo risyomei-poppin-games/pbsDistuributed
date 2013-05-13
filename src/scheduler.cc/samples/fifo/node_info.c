@@ -88,7 +88,7 @@
 #include "node_info.h"
 #include "misc.h"
 #include "globals.h"
-#include "gfarm/gfarm.h"
+//`#include "gfarm/gfarm.h"
 
 
 	/* Internal functions */
@@ -663,25 +663,25 @@ node_info *find_best_node(job_info *jinfo, node_info **ninfo_arr)
 	}
 
 
-    //Get file name
-	char file_used[100]={0};
-	int argc_fake =1;
-	char argv_fake[30] ="WTFpbs_sched";
-	char **argv_fake_para = &argv_fake; 
-
-
-	if( GFARM_ERR_NO_ERROR !=  gfarm_initialize(&argc_fake,&argv_fake_para) )
-	{
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize failed");
-//		return NULL;
-	}
-	else
-	{
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize success");
-	}
-
-
-	gfarm_terminate();
+//    //Get file name
+//	char file_used[100]={0};
+//	int argc_fake =1;
+//	char argv_fake[30] ="WTFpbs_sched";
+//	char **argv_fake_para = &argv_fake; 
+//
+//
+//	if( GFARM_ERR_NO_ERROR !=  gfarm_initialize(&argc_fake,&argv_fake_para) )
+//	{
+//		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize failed");
+////		return NULL;
+//	}
+//	else
+//	{
+//		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize success");
+//	}
+//
+//
+//	gfarm_terminate();
 
 	
 
