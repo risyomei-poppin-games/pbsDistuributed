@@ -603,7 +603,7 @@ node_info *find_best_node(job_info *jinfo, node_info **ninfo_arr)
 
   if (ninfo_arr == NULL || jinfo == NULL)
     return NULL;
-
+  //TODO:do something here
   /* if the job is requesting nodes, then don't try and load balance it */
   if (find_resource_req(jinfo -> resreq, "nodes") != NULL)
     return NULL;
