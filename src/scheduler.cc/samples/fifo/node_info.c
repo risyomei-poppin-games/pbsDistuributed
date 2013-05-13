@@ -88,6 +88,7 @@
 #include "node_info.h"
 #include "misc.h"
 #include "globals.h"
+#include "gfarm/gfarm.h"
 
 
 	/* Internal functions */
@@ -662,6 +663,28 @@ node_info *find_best_node(job_info *jinfo, node_info **ninfo_arr)
 	}
 
 
+    //Get file name
+	char file_used[100]={0};
+	int argc_fake =1;
+	char argv_fake[30] ="WTFpbs_sched";
+	char **argv_fake_para = &argv_fake; 
+
+
+	if( GFARM_ERR_NO_ERROR !=  gfarm_initialize(&argc_fake,&argv_fake_para) )
+	{
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize failed");
+//		return NULL;
+	}
+	else
+	{
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize success");
+	}
+
+
+	gfarm_terminate();
+
+	
+
 	for (c = 0; c < jinfo -> queue -> server -> num_nodes; c++)
 	{
 		/* if the job didn't specify memory, it will default to 0, and if
@@ -674,17 +697,21 @@ node_info *find_best_node(job_info *jinfo, node_info **ninfo_arr)
 		{
 			proj_la = ninfo_arr[i] -> loadave + ncpus;
 
+
+
+
+
 			if (cstat.load_balancing)
 			{
 				if (proj_la <= ninfo_arr[i] -> ideal_load)
 				{
-					if (ninfo_arr[i] -> loadave < good_node_la)
+					if (ninfo_arr[i] -> loadave < good_node_la)//try to find hosts with low load
 					{
 						sprintf(logbuf, "Possible low-loaded node load: %6.2f proj load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
 								ninfo_arr[i] -> loadave, proj_la, ninfo_arr[i] -> ideal_load, good_node_la);
 
-						good_node = ninfo_arr[i];
-						good_node_la = ninfo_arr[i] -> loadave;
+						good_node = ninfo_arr[i];//this host is currently the lowest loaded one
+						good_node_la = ninfo_arr[i] -> loadave;//save its load
 					}
 					else
 						sprintf(logbuf, "Node Rejected, Load higher then last possible node: load: %6.2f last good ideal: %6.2f", 
@@ -747,8 +774,8 @@ node_info *find_best_node(job_info *jinfo, node_info **ninfo_arr)
 		if (cstat.load_balancing_rr)
 			strcpy(last_node_name, good_node -> name);
 
-		sched_log(PBSEVENT_DEBUG2, PBS_EVENTCLASS_NODE, good_node -> name, "Node Chosen to run job on");
 
+		sched_log(PBSEVENT_DEBUG2, PBS_EVENTCLASS_NODE, good_node -> name, "Node Chosen to run job on");
 		return good_node;
 	}
 

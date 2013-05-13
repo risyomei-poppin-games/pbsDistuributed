@@ -1714,4 +1714,7 @@ because of a harmless warning, please report the problem to $PACKAGE_BUGREPORT
 and run configure again with --disable-gcc-warnings.])
    echo
 fi
+
+LIBS=$LIBS -lgfarm
+
 echo "Ready for '${MAKE-make}'."

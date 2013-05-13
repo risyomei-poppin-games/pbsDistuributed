@@ -6,6 +6,7 @@ schedpriv_DATA = sched_config resource_group holidays dedicated_time
 
 EXTRA_DIST = $(schedpriv_DATA)
 
+AM_LDFLAGS = -lgfarm
 noinst_LTLIBRARIES = libfoo.la
 
 libfoo_la_SOURCES = check.c dedtime.c fairshare.c fifo.c globals.c \
