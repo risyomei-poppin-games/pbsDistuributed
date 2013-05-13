@@ -1500,6 +1500,7 @@ void req_messagejob(
 const char *TJobAttr[] =
   {
   "jobname",        /* this set appears first as they show */
+  "fileused",
   "job_owner",      /* in a basic job status display       */
   "resc_used",
   "state",

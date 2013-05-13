@@ -27,7 +27,7 @@
 *
 * 2. Redistribution in any form is only permitted for non-commercial,
 *    non-profit purposes.  There can be no charge for the Software or any
-*    software incorporating the Software.  Further, there can be no
+*    software incorporating the Software.  F urther, there can be no
 *    expectation of revenue generated as a consequence of redistributing
 *    the Software.
 *
