@@ -351,6 +351,8 @@ job_info *new_job_info()
 
   jinfo -> job_node = NULL;
 
+  jinfo -> fileused = NULL;
+
   return jinfo;
   }
 
