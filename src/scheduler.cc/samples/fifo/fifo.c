@@ -642,63 +642,74 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	i = 0;
 	ln_i = jinfo -> queue -> server -> num_nodes;
 
+	jinfo->fileused;
+
 	if(jinfo->fileused)
 	{
-
+		int noErr = 1;
+		gfarm_error_t  e;
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i] -> name,"Preparing dataAwareDispatch");
 		//Get prepared for getting the Information about the file used;
 		if( GFARM_ERR_NO_ERROR !=  gfarm_initialize(NULL,NULL) )
 		{
 			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize failed, used default value for data-aware value");
-			logbuf[0] = '\0';
+			noErr = 0;	
+		}
+		else
+		{
+			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize Success");	
+			
 		}
 
-		struct gfs_replica_info* ri=NULL;
-		gfarm_error_t  e=gfs_replica_info_by_name(jinfo->fileused, 0, &ri);
-		 
-		if(e==GFARM_ERR_NO_ERROR)
+		if(noErr)
 		{
-
-			logbuf[0] ='\0';
-			struct gfs_stat st;
-			gfs_lstat(jinfo->fileused, &st);
-			{
-				sprintf(logbuf, "user %s, group %s, size %ld",st.st_user,st.st_group,st.st_size);
-				fileSize = st.st_size;
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"wtf" ,logbuf );
-			}
-
-
-
-
-
-
-			if(ri)
+			struct gfs_replica_info* ri=NULL;
+			e=gfs_replica_info_by_name(jinfo->fileused, 0, &ri);
+			if(e==GFARM_ERR_NO_ERROR)
 			{
 				replicaCount = gfs_replica_info_number(ri);
 				sprintf(logbuf, "ReplicaCount %d",replicaCount );
 				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
-				logbuf[0] = '\0';	
-		
+
 				if(replicaCount>0)
 					nodes_filelocated = malloc(sizeof(nodes_filelocated)*replicaCount);
-				
+
 
 				int z;
 				for(z=0;z<replicaCount;z++)
 				{
-					
+
 					nodes_filelocated[z]=strdup(gfs_replica_info_nth_host(ri, z));
 					sprintf(logbuf, " %s",nodes_filelocated[z]); 
 					sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
 					logbuf[0] = 0;
 				}
+
 			}
-		}
-		else
+			else
+			{
+				sprintf(logbuf, "get_replic_info failed:error = %d",e );
+				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
+				noErr = 0;
+			}
+		}	
+
+		if(noErr)
 		{
-			sprintf(logbuf, "get_replic_info failed:error = %d",e );
-			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
+			struct gfs_stat st;
+			e=gfs_lstat(jinfo->fileused, &st);
+			if(e==GFARM_ERR_NO_ERROR)	
+			{
+				sprintf(logbuf, "user %s, group %s, size %ld",st.st_user,st.st_group,st.st_size);
+				fileSize = st.st_size;
+				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"wtf" ,logbuf );
+			}
+			else
+			{
+				sprintf(logbuf, "gfs_lstat  failed:error = %d",e );
+				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
+				noErr = 0;	
+			}
 		}
 
 		//Gfarm termination
@@ -736,17 +747,17 @@ node_info* dataAwareDispatch(job_info *jinfo)
 			
 
 			//update the average load value
-			proj_la = ninfo_arr[i] -> loadave;
+			proj_la = ninfo_arr[i] -> loadave + fileIOFacotor;
 
-			if( proj_la <= ninfo_arr[i]->ideal_load )
+			if( proj_la <= ninfo_arr[i]->ideal_load + fileIOFacotor)
 			{
-				if( ninfo_arr[i]->loadave < good_node_la )//try to find hosts with low load
+				if( proj_la < good_node_la )//try to find hosts with low load
 				{
-					sprintf(logbuf, "Possible low-loaded node load: %6.2f proj load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
-							ninfo_arr[i]->loadave, proj_la, ninfo_arr[i]->ideal_load, good_node_la);
+					sprintf(logbuf, "Possible low-loaded node load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
+							proj_la, ninfo_arr[i]->ideal_load, good_node_la);
 
 					good_node = ninfo_arr[i];//this host is currently the lowest loaded one
-					good_node_la = ninfo_arr[i]->loadave;//save its load
+					good_node_la = proj_la;//save its load
 
 				}
 				else
@@ -755,22 +766,22 @@ node_info* dataAwareDispatch(job_info *jinfo)
 							ninfo_arr[i]->loadave, good_node_la);
 				}
 			}
-			else if (possible_node == NULL && proj_la <= ninfo_arr[i]->max_load)
+			else if (possible_node==NULL && proj_la <= ninfo_arr[i]->max_load + fileIOFacotor )
 			{
-				if (ninfo_arr[i]->loadave < good_node_la)
+				if (proj_la < good_node_la)
 				{
-					sprintf(logbuf, "Possible medium-loaded node load: %6.2f max_load: %6.2f proj load: %6.2f last good ideal: %6.2f",
-							ninfo_arr[i]->loadave, ninfo_arr[i]->max_load, proj_la, good_node_la);
+					sprintf(logbuf, "Possible medium-loaded node load: %6.2f max_load: %6.2f  last good ideal: %6.2f",
+							proj_la, ninfo_arr[i]->max_load, good_node_la);
 					possible_node = ninfo_arr[i];
-					good_node_la = ninfo_arr[i] -> loadave;
+					good_node_la = proj_la;
 				}
 				else
 					sprintf(logbuf, "Node Rejected, Load higher then last possible node: load: %6.2f last good ideal: %6.2f", 
 							ninfo_arr[i] -> loadave, good_node_la);
 			}
 			else
-				sprintf(logbuf, "Node Rejected, Load too high: load: %6.2f proj load: %6.2f max_load: %6.2f", 
-						ninfo_arr[i] -> loadave, proj_la, ninfo_arr[i] -> max_load);
+				sprintf(logbuf, "Node Rejected, Load too high: load: %6.2f max_load: %6.2f", 
+						proj_la, ninfo_arr[i] -> max_load);
 
 		}
 		else
@@ -857,6 +868,7 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
   strftime(timebuf, 128, "started on %a %b %d at %H:%M", localtime(&cstat.current_time));
 
   best_node = dataAwareDispatch(jinfo);
+  best_node_name = best_node -> name;
 //  if (cstat.load_balancing || cstat.load_balancing_rr)
 //    {
 //    best_node = find_best_node(jinfo, sinfo -> timesharing_nodes);
