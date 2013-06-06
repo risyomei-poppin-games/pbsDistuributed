@@ -3,7 +3,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_PROGRAM_VERSION	5.7	//
 A	src/scheduler.basl/af.c	177;"	d	file:
 ACCT_H	src/include/acct.h	2;"	d
 ACL_Gid	src/include/attribute.h	475;"	d
@@ -13,6 +13,7 @@ ACL_User	src/include/attribute.h	473;"	d
 ACL_User_Host	src/include/attribute.h	476;"	d
 ACTIVE_SERVER	src/include/qmgr.h	92;"	d
 ACount	src/include/mcom.h	/^  int   ACount;$/;"	m	struct:mxml_s
+ALL	contrib/pestat-1.0/pestat.c	29;"	d	file:
 ALL	src/include/mcom.h	35;"	d
 ALL	src/scheduler.cc/samples/cray_t3e/pnp.c	114;"	d	file:
 ALL	src/scheduler.cc/samples/dec_cluster/toolkit.c	1436;"	d	file:
@@ -46,6 +47,7 @@ ALT_DISPLAY_s	src/cmds/qstat.c	109;"	d	file:
 ALT_DISPLAY_u	src/cmds/qstat.c	107;"	d	file:
 AMP_ESCAPED	src/include/utils.h	127;"	d
 AMP_ESCAPED_LEN	src/include/utils.h	128;"	d
+AM_CPPFLAGS	buildutils/config.mk	/^AM_CPPFLAGS = -I$(top_srcdir)\/src\/include$/;"	m
 AName	src/include/mcom.h	/^  char **AName;$/;"	m	struct:mxml_s
 APOS_ESCAPED	src/include/utils.h	131;"	d
 APOS_ESCAPED_LEN	src/include/utils.h	132;"	d
@@ -252,7 +254,7 @@ ATTR_exechost	src/include/pbs_ifl.h	127;"	d
 ATTR_exitstat	src/include/pbs_ifl.h	152;"	d
 ATTR_extraresc	src/include/pbs_ifl.h	277;"	d
 ATTR_f	src/include/pbs_ifl.h	96;"	d
-ATTR_fileUsed	src/include/pbs_ifl.h	123;"	d
+ATTR_fileused	src/include/pbs_ifl.h	123;"	d
 ATTR_forwardx11	src/include/pbs_ifl.h	153;"	d
 ATTR_fromroute	src/include/pbs_ifl.h	193;"	d
 ATTR_g	src/include/pbs_ifl.h	97;"	d
@@ -378,16 +380,17 @@ ATTR_u	src/include/pbs_ifl.h	109;"	d
 ATTR_umask	src/include/pbs_ifl.h	157;"	d
 ATTR_used	src/include/pbs_ifl.h	140;"	d
 ATTR_v	src/include/pbs_ifl.h	110;"	d
+AUTOMAKE_OPTIONS	buildutils/config.mk	/^AUTOMAKE_OPTIONS = foreign$/;"	m
 AVal	src/include/mcom.h	/^  char **AVal;$/;"	m	struct:mxml_s
 A_opt	src/cmds/qsub.c	/^int A_opt = FALSE;$/;"	v
 A_opt	src/gui/Ccode/xpbs_scriptload.c	/^int A_opt = FALSE;$/;"	v
 AccessEntry	src/scheduler.cc/samples/dec_cluster/toolkit.h	/^typedef struct accessentry AccessEntry;$/;"	t	typeref:struct:accessentry
 AccessEntry	src/scheduler.cc/samples/msic_cluster/toolkit.h	/^typedef struct accessentry AccessEntry;$/;"	t	typeref:struct:accessentry
 AccessEntry	src/scheduler.cc/samples/umn_cluster/toolkit.h	/^typedef struct accessentry AccessEntry;$/;"	t	typeref:struct:accessentry
-AcctFile	src/server/req_quejob.c	2153;"	d	file:
-AcctScanAcct	src/server/req_quejob.c	2151;"	d	file:
-AcctScanLine	src/server/req_quejob.c	2152;"	d	file:
-AcctScanUser	src/server/req_quejob.c	2150;"	d	file:
+AcctFile	src/server/req_quejob.c	2212;"	d	file:
+AcctScanAcct	src/server/req_quejob.c	2210;"	d	file:
+AcctScanLine	src/server/req_quejob.c	2211;"	d	file:
+AcctScanUser	src/server/req_quejob.c	2209;"	d	file:
 ActAdr	src/server/req_quejob.c	/^  char *ActAdr[UserAcctMax];            \/* Pointers to ActDat items *\/$/;"	m	struct:__anon54	file:
 ActCnt	src/server/req_quejob.c	/^  int  ActCnt;                          \/* How many projects *\/$/;"	m	struct:__anon54	file:
 ActDat	src/server/req_quejob.c	/^  char ActDat[80];                      \/* ActRaw with \\0 as necessary *\/$/;"	m	struct:__anon54	file:
@@ -520,6 +523,7 @@ Bitfield	src/scheduler.cc/samples/cray_t3e/bitfield.h	/^  } Bitfield;$/;"	t	type
 Bitfield	src/scheduler.cc/samples/sgi_origin/bitfield.h	/^  } Bitfield;$/;"	t	typeref:struct:bitfield
 C	src/include/mcom.h	/^  struct mxml_s **C;$/;"	m	struct:mxml_s	typeref:struct:mxml_s::mxml_s
 CCount	src/include/mcom.h	/^  int   CCount;$/;"	m	struct:mxml_s
+CFLAGS	contrib/pestat-1.0/Makefile	/^CFLAGS = -g -I$(PBSHOME)\/include$/;"	m
 CHANGE_STATE	src/server/pbsd_init.c	225;"	d	file:
 CHECKPOINTCONT	src/include/pbs_ifl.h	484;"	d
 CHECKPOINTHOLD	src/include/pbs_ifl.h	483;"	d
@@ -530,6 +534,7 @@ CHK_CONT	src/server/req_modify.c	112;"	d	file:
 CHK_HOLD	src/server/req_modify.c	111;"	d	file:
 CKPT_DIR_IN	src/include/batch_request.h	275;"	d
 CKPT_DIR_OUT	src/include/batch_request.h	276;"	d
+CLEAR	contrib/pestat-1.0/pestat.c	26;"	d	file:
 CLEAR	src/cmds/pbsnodes.c	118;"	d	file:
 CLEAR_HEAD	src/include/list_link.h	111;"	d
 CLEAR_LINK	src/include/list_link.h	112;"	d
@@ -804,6 +809,7 @@ DELDELAY	src/include/pbs_ifl.h	329;"	d
 DELETE	src/scheduler.basl/af.h	/^enum action_type { SYNCRUN, ASYNCRUN, DELETE, RERUN, HOLD, RELEASE, SIGNAL,                                                             MODIFYATTR, MODIFYRES };$/;"	e	enum:action_type
 DELETED	src/scheduler.basl/af_job.h	101;"	d
 DELPURGE	src/include/pbs_ifl.h	330;"	d
+DEMUX_PATH	buildutils/config.mk	/^DEMUX_PATH = $(sbindir)\/$(program_prefix)pbs_demux$(program_suffix)$/;"	m
 DESC	src/scheduler.basl/af.h	119;"	d
 DETECT_SIG	src/drmaa/src/wait.c	619;"	d	file:
 DFLT	src/include/pbs_ifl.h	/^enum batch_op { SET, UNSET, INCR, DECR, EQ, NE, GE, GT, LE, LT, DFLT, MERGE, INCR_OLD };$/;"	e	enum:batch_op
@@ -845,6 +851,7 @@ DONT_START_JOB	src/scheduler.cc/samples/dec_cluster/evaluate_system.c	98;"	d	fil
 DONT_START_JOB	src/scheduler.cc/samples/msic_cluster/evaluate_system.c	98;"	d	file:
 DONT_START_JOB	src/scheduler.cc/samples/sgi_origin/evaluate_system.c	98;"	d	file:
 DONT_START_JOB	src/scheduler.cc/samples/umn_cluster/evaluate_system.c	97;"	d	file:
+DOWN	contrib/pestat-1.0/pestat.c	24;"	d	file:
 DRMAA_ATTR_BUFFER	src/drmaa/src/drmaa.h	71;"	d
 DRMAA_BLOCK_EMAIL	src/drmaa/src/drmaa.h	100;"	d
 DRMAA_CONTACT_BUFFER	src/drmaa/src/drmaa.h	72;"	d
@@ -1236,12 +1243,12 @@ HIGH_PRIME	src/scheduler.cc/samples/fifo/constant.h	/^  HIGH_PRIME$/;"	e	enum:pr
 HIGH_PRIORITY_FIRST	src/scheduler.cc/samples/fifo/constant.h	/^  HIGH_PRIORITY_FIRST,$/;"	e	enum:sort_type
 HOLD	src/scheduler.basl/af.h	/^enum action_type { SYNCRUN, ASYNCRUN, DELETE, RERUN, HOLD, RELEASE, SIGNAL,                                                             MODIFYATTR, MODIFYRES };$/;"	e	enum:action_type
 HOLD_ENCODE_SIZE	src/lib/Libattr/attr_fn_hold.c	96;"	d	file:
-HOLD_a	src/include/pbs_job.h	902;"	d
-HOLD_l	src/include/pbs_job.h	903;"	d
-HOLD_n	src/include/pbs_job.h	896;"	d
-HOLD_o	src/include/pbs_job.h	898;"	d
-HOLD_s	src/include/pbs_job.h	899;"	d
-HOLD_u	src/include/pbs_job.h	897;"	d
+HOLD_a	src/include/pbs_job.h	903;"	d
+HOLD_l	src/include/pbs_job.h	904;"	d
+HOLD_n	src/include/pbs_job.h	897;"	d
+HOLD_o	src/include/pbs_job.h	899;"	d
+HOLD_s	src/include/pbs_job.h	900;"	d
+HOLD_u	src/include/pbs_job.h	898;"	d
 HOLIDAYS_FILE	src/scheduler.cc/samples/cray_t3e/toolkit.h	96;"	d
 HOLIDAYS_FILE	src/scheduler.cc/samples/dec_cluster/toolkit.h	110;"	d
 HOLIDAYS_FILE	src/scheduler.cc/samples/fifo/config.h	99;"	d
@@ -1271,23 +1278,24 @@ HostFile	src/momctl/momctl.c	/^char HostFile[256];$/;"	v
 I	src/lib/Libnet/md5.c	70;"	d	file:
 I2TOH	src/lib/Libifl/rpp.c	509;"	d	file:
 I8TOH	src/lib/Libifl/rpp.c	517;"	d	file:
+IFF_PATH	buildutils/config.mk	/^IFF_PATH = $(sbindir)\/$(program_prefix)pbs_iff$(program_suffix)$/;"	m
 II	src/lib/Libnet/md5.c	92;"	d	file:
-IM_ABORT_JOB	src/include/pbs_job.h	748;"	d
-IM_ALL_OKAY	src/include/pbs_job.h	738;"	d
-IM_ERROR	src/include/pbs_job.h	750;"	d
-IM_GET_INFO	src/include/pbs_job.h	746;"	d
-IM_GET_RESC	src/include/pbs_job.h	747;"	d
-IM_GET_TASKS	src/include/pbs_job.h	742;"	d
-IM_GET_TID	src/include/pbs_job.h	749;"	d
-IM_JOIN_JOB	src/include/pbs_job.h	739;"	d
-IM_KILL_JOB	src/include/pbs_job.h	740;"	d
-IM_MAX	src/include/pbs_job.h	752;"	d
-IM_OBIT_TASK	src/include/pbs_job.h	744;"	d
-IM_POLL_JOB	src/include/pbs_job.h	745;"	d
+IM_ABORT_JOB	src/include/pbs_job.h	749;"	d
+IM_ALL_OKAY	src/include/pbs_job.h	739;"	d
+IM_ERROR	src/include/pbs_job.h	751;"	d
+IM_GET_INFO	src/include/pbs_job.h	747;"	d
+IM_GET_RESC	src/include/pbs_job.h	748;"	d
+IM_GET_TASKS	src/include/pbs_job.h	743;"	d
+IM_GET_TID	src/include/pbs_job.h	750;"	d
+IM_JOIN_JOB	src/include/pbs_job.h	740;"	d
+IM_KILL_JOB	src/include/pbs_job.h	741;"	d
+IM_MAX	src/include/pbs_job.h	753;"	d
+IM_OBIT_TASK	src/include/pbs_job.h	745;"	d
+IM_POLL_JOB	src/include/pbs_job.h	746;"	d
 IM_PROTOCOL	src/include/net_connect.h	108;"	d
 IM_PROTOCOL_VER	src/include/net_connect.h	109;"	d
-IM_SIGNAL_TASK	src/include/pbs_job.h	743;"	d
-IM_SPAWN_TASK	src/include/pbs_job.h	741;"	d
+IM_SIGNAL_TASK	src/include/pbs_job.h	744;"	d
+IM_SPAWN_TASK	src/include/pbs_job.h	742;"	d
 INCR	src/include/pbs_ifl.h	/^enum batch_op { SET, UNSET, INCR, DECR, EQ, NE, GE, GT, LE, LT, DFLT, MERGE, INCR_OLD };$/;"	e	enum:batch_op
 INCR_OLD	src/include/pbs_ifl.h	/^enum batch_op { SET, UNSET, INCR, DECR, EQ, NE, GE, GT, LE, LT, DFLT, MERGE, INCR_OLD };$/;"	e	enum:batch_op
 IND_ACCT	src/tools/tracejob.h	/^  IND_ACCT = 0,$/;"	e	enum:index
@@ -1468,6 +1476,7 @@ JOB_ATR_exec_host	src/include/pbs_job.h	/^  JOB_ATR_exec_host,$/;"	e	enum:job_at
 JOB_ATR_exectime	src/include/pbs_job.h	/^  JOB_ATR_exectime,$/;"	e	enum:job_atr
 JOB_ATR_exitstat	src/include/pbs_job.h	/^  JOB_ATR_exitstat, \/* exit status of job     *\/$/;"	e	enum:job_atr
 JOB_ATR_fault_tolerant	src/include/pbs_job.h	/^  JOB_ATR_fault_tolerant, \/* indicates if a job should keep going if it looses a sister *\/$/;"	e	enum:job_atr
+JOB_ATR_fileused	src/include/pbs_job.h	/^  JOB_ATR_fileused, \/*self defined value*\/$/;"	e	enum:job_atr
 JOB_ATR_forwardx11	src/include/pbs_job.h	/^  JOB_ATR_forwardx11,$/;"	e	enum:job_atr
 JOB_ATR_gpu_flags	src/include/pbs_job.h	/^  JOB_ATR_gpu_flags,		\/* gpu flags - mode and reset flags *\/$/;"	e	enum:job_atr
 JOB_ATR_grouplst	src/include/pbs_job.h	/^  JOB_ATR_grouplst,$/;"	e	enum:job_atr
@@ -1516,8 +1525,8 @@ JOB_ATR_substate	src/include/pbs_job.h	/^  JOB_ATR_substate,$/;"	e	enum:job_atr
 JOB_ATR_umask	src/include/pbs_job.h	/^  JOB_ATR_umask,        \/* 50 *\/$/;"	e	enum:job_atr
 JOB_ATR_userlst	src/include/pbs_job.h	/^  JOB_ATR_userlst,$/;"	e	enum:job_atr
 JOB_ATR_variables	src/include/pbs_job.h	/^  JOB_ATR_variables,    \/* (32) *\/$/;"	e	enum:job_atr
-JOB_BAD_SUFFIX	src/include/pbs_job.h	815;"	d
-JOB_CHECKPOINT_SUFFIX	src/include/pbs_job.h	813;"	d
+JOB_BAD_SUFFIX	src/include/pbs_job.h	816;"	d
+JOB_CHECKPOINT_SUFFIX	src/include/pbs_job.h	814;"	d
 JOB_COMMENT_OPTIONAL	src/scheduler.cc/samples/cray_t3e/toolkit.h	449;"	d
 JOB_COMMENT_OPTIONAL	src/scheduler.cc/samples/dec_cluster/toolkit.h	433;"	d
 JOB_COMMENT_OPTIONAL	src/scheduler.cc/samples/msic_cluster/toolkit.h	392;"	d
@@ -1553,23 +1562,23 @@ JOB_DEPEND_TYPE_BEFORESTARTARRAY	src/include/pbs_job.h	175;"	d
 JOB_DEPEND_TYPE_ON	src/include/pbs_job.h	168;"	d
 JOB_DEPEND_TYPE_SYNCCT	src/include/pbs_job.h	170;"	d
 JOB_DEPEND_TYPE_SYNCWITH	src/include/pbs_job.h	169;"	d
-JOB_EXEC_BADRESRT	src/include/pbs_job.h	915;"	d
-JOB_EXEC_CMDFAIL	src/include/pbs_job.h	916;"	d
-JOB_EXEC_FAIL1	src/include/pbs_job.h	909;"	d
-JOB_EXEC_FAIL2	src/include/pbs_job.h	910;"	d
-JOB_EXEC_INITABT	src/include/pbs_job.h	912;"	d
-JOB_EXEC_INITRMG	src/include/pbs_job.h	914;"	d
-JOB_EXEC_INITRST	src/include/pbs_job.h	913;"	d
-JOB_EXEC_OK	src/include/pbs_job.h	908;"	d
-JOB_EXEC_OVERLIMIT	src/include/pbs_job.h	918;"	d
-JOB_EXEC_RETRY	src/include/pbs_job.h	911;"	d
-JOB_EXEC_STDOUTFAIL	src/include/pbs_job.h	917;"	d
+JOB_EXEC_BADRESRT	src/include/pbs_job.h	916;"	d
+JOB_EXEC_CMDFAIL	src/include/pbs_job.h	917;"	d
+JOB_EXEC_FAIL1	src/include/pbs_job.h	910;"	d
+JOB_EXEC_FAIL2	src/include/pbs_job.h	911;"	d
+JOB_EXEC_INITABT	src/include/pbs_job.h	913;"	d
+JOB_EXEC_INITRMG	src/include/pbs_job.h	915;"	d
+JOB_EXEC_INITRST	src/include/pbs_job.h	914;"	d
+JOB_EXEC_OK	src/include/pbs_job.h	909;"	d
+JOB_EXEC_OVERLIMIT	src/include/pbs_job.h	919;"	d
+JOB_EXEC_RETRY	src/include/pbs_job.h	912;"	d
+JOB_EXEC_STDOUTFAIL	src/include/pbs_job.h	918;"	d
 JOB_FAIL	src/resmom/linux/mom_mach.h	102;"	d
 JOB_FAIL	src/resmom/linux/mom_mach.h	98;"	d
-JOB_FILE_BACKUP	src/include/pbs_job.h	809;"	d
-JOB_FILE_COPY	src/include/pbs_job.h	807;"	d
-JOB_FILE_SUFFIX	src/include/pbs_job.h	808;"	d
-JOB_FILE_TMP_SUFFIX	src/include/pbs_job.h	816;"	d
+JOB_FILE_BACKUP	src/include/pbs_job.h	810;"	d
+JOB_FILE_COPY	src/include/pbs_job.h	808;"	d
+JOB_FILE_SUFFIX	src/include/pbs_job.h	809;"	d
+JOB_FILE_TMP_SUFFIX	src/include/pbs_job.h	817;"	d
 JOB_ID_LEN	src/drmaa/test/example.c	43;"	d	file:
 JOB_INFO_H	src/scheduler.cc/samples/fifo/job_info.h	81;"	d
 JOB_OVERTIME_SLOP	src/scheduler.cc/samples/cray_t3e/toolkit.h	108;"	d
@@ -1591,72 +1600,72 @@ JOB_RESUBMITTED	src/scheduler.cc/samples/dec_cluster/msgs.h	108;"	d
 JOB_RESUBMITTED	src/scheduler.cc/samples/msic_cluster/msgs.h	108;"	d
 JOB_RESUBMITTED	src/scheduler.cc/samples/sgi_origin/msgs.h	108;"	d
 JOB_RESUBMITTED	src/scheduler.cc/samples/umn_cluster/msgs.h	108;"	d
-JOB_SCRIPT_SUFFIX	src/include/pbs_job.h	810;"	d
+JOB_SCRIPT_SUFFIX	src/include/pbs_job.h	811;"	d
 JOB_STARVING	src/scheduler.cc/samples/fifo/constant.h	117;"	d
-JOB_STATE_COMPLETE	src/include/pbs_job.h	829;"	d
-JOB_STATE_EXITING	src/include/pbs_job.h	828;"	d
-JOB_STATE_HELD	src/include/pbs_job.h	825;"	d
-JOB_STATE_QUEUED	src/include/pbs_job.h	824;"	d
-JOB_STATE_RUNNING	src/include/pbs_job.h	827;"	d
-JOB_STATE_TRANSIT	src/include/pbs_job.h	823;"	d
-JOB_STATE_WAITING	src/include/pbs_job.h	826;"	d
-JOB_STDERR_SUFFIX	src/include/pbs_job.h	812;"	d
-JOB_STDOUT_SUFFIX	src/include/pbs_job.h	811;"	d
-JOB_SUBSTATE_ABORT	src/include/pbs_job.h	869;"	d
-JOB_SUBSTATE_ARRAY_TEMP	src/include/pbs_job.h	885;"	d
-JOB_SUBSTATE_CHKPTCMP	src/include/pbs_job.h	851;"	d
-JOB_SUBSTATE_CHKPTGO	src/include/pbs_job.h	850;"	d
-JOB_SUBSTATE_COMPLETE	src/include/pbs_job.h	874;"	d
-JOB_SUBSTATE_DEPNHOLD	src/include/pbs_job.h	855;"	d
-JOB_SUBSTATE_EXITED	src/include/pbs_job.h	868;"	d
-JOB_SUBSTATE_EXITING	src/include/pbs_job.h	865;"	d
-JOB_SUBSTATE_HELD	src/include/pbs_job.h	853;"	d
-JOB_SUBSTATE_NOTERM_REQUE	src/include/pbs_job.h	870;"	d
-JOB_SUBSTATE_OBIT	src/include/pbs_job.h	873;"	d
-JOB_SUBSTATE_PREOBIT	src/include/pbs_job.h	872;"	d
-JOB_SUBSTATE_PRERUN	src/include/pbs_job.h	860;"	d
-JOB_SUBSTATE_PRESTAGEIN	src/include/pbs_job.h	845;"	d
-JOB_SUBSTATE_QUEUED	src/include/pbs_job.h	844;"	d
-JOB_SUBSTATE_RERUN	src/include/pbs_job.h	876;"	d
-JOB_SUBSTATE_RERUN1	src/include/pbs_job.h	877;"	d
-JOB_SUBSTATE_RERUN2	src/include/pbs_job.h	878;"	d
-JOB_SUBSTATE_RERUN3	src/include/pbs_job.h	879;"	d
-JOB_SUBSTATE_RETURNSTD	src/include/pbs_job.h	881;"	d
-JOB_SUBSTATE_RUNNING	src/include/pbs_job.h	862;"	d
-JOB_SUBSTATE_STAGECMP	src/include/pbs_job.h	849;"	d
-JOB_SUBSTATE_STAGEDEL	src/include/pbs_job.h	867;"	d
-JOB_SUBSTATE_STAGEFAIL	src/include/pbs_job.h	858;"	d
-JOB_SUBSTATE_STAGEGO	src/include/pbs_job.h	848;"	d
-JOB_SUBSTATE_STAGEIN	src/include/pbs_job.h	847;"	d
-JOB_SUBSTATE_STAGEOUT	src/include/pbs_job.h	866;"	d
-JOB_SUBSTATE_STARTING	src/include/pbs_job.h	861;"	d
-JOB_SUBSTATE_SUSPEND	src/include/pbs_job.h	863;"	d
-JOB_SUBSTATE_SYNCHOLD	src/include/pbs_job.h	854;"	d
-JOB_SUBSTATE_SYNCRES	src/include/pbs_job.h	846;"	d
-JOB_SUBSTATE_TRANSICM	src/include/pbs_job.h	840;"	d
-JOB_SUBSTATE_TRANSIN	src/include/pbs_job.h	839;"	d
-JOB_SUBSTATE_TRNOUT	src/include/pbs_job.h	841;"	d
-JOB_SUBSTATE_TRNOUTCM	src/include/pbs_job.h	842;"	d
-JOB_SUBSTATE_WAITING	src/include/pbs_job.h	857;"	d
-JOB_SVFLG_CHECKPOINT_COPIED	src/include/pbs_job.h	787;"	d
-JOB_SVFLG_CHECKPOINT_FILE	src/include/pbs_job.h	778;"	d
-JOB_SVFLG_CHECKPOINT_MIGRATEABLE	src/include/pbs_job.h	782;"	d
-JOB_SVFLG_HASRUN	src/include/pbs_job.h	776;"	d
-JOB_SVFLG_HASWAIT	src/include/pbs_job.h	775;"	d
-JOB_SVFLG_HERE	src/include/pbs_job.h	773;"	d
-JOB_SVFLG_HOTSTART	src/include/pbs_job.h	777;"	d
-JOB_SVFLG_HasNodes	src/include/pbs_job.h	785;"	d
-JOB_SVFLG_OVERLMT1	src/include/pbs_job.h	780;"	d
-JOB_SVFLG_OVERLMT2	src/include/pbs_job.h	781;"	d
-JOB_SVFLG_RescAssn	src/include/pbs_job.h	786;"	d
-JOB_SVFLG_SCRIPT	src/include/pbs_job.h	779;"	d
-JOB_SVFLG_StagedIn	src/include/pbs_job.h	784;"	d
-JOB_SVFLG_Suspend	src/include/pbs_job.h	783;"	d
-JOB_TASKDIR_SUFFIX	src/include/pbs_job.h	814;"	d
-JOB_UNION_TYPE_EXEC	src/include/pbs_job.h	890;"	d
-JOB_UNION_TYPE_MOM	src/include/pbs_job.h	892;"	d
-JOB_UNION_TYPE_NEW	src/include/pbs_job.h	889;"	d
-JOB_UNION_TYPE_ROUTE	src/include/pbs_job.h	891;"	d
+JOB_STATE_COMPLETE	src/include/pbs_job.h	830;"	d
+JOB_STATE_EXITING	src/include/pbs_job.h	829;"	d
+JOB_STATE_HELD	src/include/pbs_job.h	826;"	d
+JOB_STATE_QUEUED	src/include/pbs_job.h	825;"	d
+JOB_STATE_RUNNING	src/include/pbs_job.h	828;"	d
+JOB_STATE_TRANSIT	src/include/pbs_job.h	824;"	d
+JOB_STATE_WAITING	src/include/pbs_job.h	827;"	d
+JOB_STDERR_SUFFIX	src/include/pbs_job.h	813;"	d
+JOB_STDOUT_SUFFIX	src/include/pbs_job.h	812;"	d
+JOB_SUBSTATE_ABORT	src/include/pbs_job.h	870;"	d
+JOB_SUBSTATE_ARRAY_TEMP	src/include/pbs_job.h	886;"	d
+JOB_SUBSTATE_CHKPTCMP	src/include/pbs_job.h	852;"	d
+JOB_SUBSTATE_CHKPTGO	src/include/pbs_job.h	851;"	d
+JOB_SUBSTATE_COMPLETE	src/include/pbs_job.h	875;"	d
+JOB_SUBSTATE_DEPNHOLD	src/include/pbs_job.h	856;"	d
+JOB_SUBSTATE_EXITED	src/include/pbs_job.h	869;"	d
+JOB_SUBSTATE_EXITING	src/include/pbs_job.h	866;"	d
+JOB_SUBSTATE_HELD	src/include/pbs_job.h	854;"	d
+JOB_SUBSTATE_NOTERM_REQUE	src/include/pbs_job.h	871;"	d
+JOB_SUBSTATE_OBIT	src/include/pbs_job.h	874;"	d
+JOB_SUBSTATE_PREOBIT	src/include/pbs_job.h	873;"	d
+JOB_SUBSTATE_PRERUN	src/include/pbs_job.h	861;"	d
+JOB_SUBSTATE_PRESTAGEIN	src/include/pbs_job.h	846;"	d
+JOB_SUBSTATE_QUEUED	src/include/pbs_job.h	845;"	d
+JOB_SUBSTATE_RERUN	src/include/pbs_job.h	877;"	d
+JOB_SUBSTATE_RERUN1	src/include/pbs_job.h	878;"	d
+JOB_SUBSTATE_RERUN2	src/include/pbs_job.h	879;"	d
+JOB_SUBSTATE_RERUN3	src/include/pbs_job.h	880;"	d
+JOB_SUBSTATE_RETURNSTD	src/include/pbs_job.h	882;"	d
+JOB_SUBSTATE_RUNNING	src/include/pbs_job.h	863;"	d
+JOB_SUBSTATE_STAGECMP	src/include/pbs_job.h	850;"	d
+JOB_SUBSTATE_STAGEDEL	src/include/pbs_job.h	868;"	d
+JOB_SUBSTATE_STAGEFAIL	src/include/pbs_job.h	859;"	d
+JOB_SUBSTATE_STAGEGO	src/include/pbs_job.h	849;"	d
+JOB_SUBSTATE_STAGEIN	src/include/pbs_job.h	848;"	d
+JOB_SUBSTATE_STAGEOUT	src/include/pbs_job.h	867;"	d
+JOB_SUBSTATE_STARTING	src/include/pbs_job.h	862;"	d
+JOB_SUBSTATE_SUSPEND	src/include/pbs_job.h	864;"	d
+JOB_SUBSTATE_SYNCHOLD	src/include/pbs_job.h	855;"	d
+JOB_SUBSTATE_SYNCRES	src/include/pbs_job.h	847;"	d
+JOB_SUBSTATE_TRANSICM	src/include/pbs_job.h	841;"	d
+JOB_SUBSTATE_TRANSIN	src/include/pbs_job.h	840;"	d
+JOB_SUBSTATE_TRNOUT	src/include/pbs_job.h	842;"	d
+JOB_SUBSTATE_TRNOUTCM	src/include/pbs_job.h	843;"	d
+JOB_SUBSTATE_WAITING	src/include/pbs_job.h	858;"	d
+JOB_SVFLG_CHECKPOINT_COPIED	src/include/pbs_job.h	788;"	d
+JOB_SVFLG_CHECKPOINT_FILE	src/include/pbs_job.h	779;"	d
+JOB_SVFLG_CHECKPOINT_MIGRATEABLE	src/include/pbs_job.h	783;"	d
+JOB_SVFLG_HASRUN	src/include/pbs_job.h	777;"	d
+JOB_SVFLG_HASWAIT	src/include/pbs_job.h	776;"	d
+JOB_SVFLG_HERE	src/include/pbs_job.h	774;"	d
+JOB_SVFLG_HOTSTART	src/include/pbs_job.h	778;"	d
+JOB_SVFLG_HasNodes	src/include/pbs_job.h	786;"	d
+JOB_SVFLG_OVERLMT1	src/include/pbs_job.h	781;"	d
+JOB_SVFLG_OVERLMT2	src/include/pbs_job.h	782;"	d
+JOB_SVFLG_RescAssn	src/include/pbs_job.h	787;"	d
+JOB_SVFLG_SCRIPT	src/include/pbs_job.h	780;"	d
+JOB_SVFLG_StagedIn	src/include/pbs_job.h	785;"	d
+JOB_SVFLG_Suspend	src/include/pbs_job.h	784;"	d
+JOB_TASKDIR_SUFFIX	src/include/pbs_job.h	815;"	d
+JOB_UNION_TYPE_EXEC	src/include/pbs_job.h	891;"	d
+JOB_UNION_TYPE_MOM	src/include/pbs_job.h	893;"	d
+JOB_UNION_TYPE_NEW	src/include/pbs_job.h	890;"	d
+JOB_UNION_TYPE_ROUTE	src/include/pbs_job.h	892;"	d
 JPtr	src/momctl/momctl.c	/^char *JPtr     = NULL;$/;"	v
 JScript	src/include/libpbs.h	/^  JScript,$/;"	e	enum:job_file
 JTOS	src/resmom/cygwin/mom_mach.c	307;"	d	file:
@@ -1771,6 +1780,7 @@ LDBL_MAX	src/lib/Libdis/diswl_.c	109;"	d	file:
 LDBL_MAX	src/lib/Libdis/diswl_.c	112;"	d	file:
 LDBL_MAX	src/lib/Libdis/diswl_.c	119;"	d	file:
 LDBL_MAX	src/lib/Libdis/diswl_.c	122;"	d	file:
+LDFLAGS	contrib/pestat-1.0/Makefile	/^LDFLAGS = -g$/;"	m
 LE	src/include/pbs_ifl.h	/^enum batch_op { SET, UNSET, INCR, DECR, EQ, NE, GE, GT, LE, LT, DFLT, MERGE, INCR_OLD };$/;"	e	enum:batch_op
 LEAVE_JOB_COMMENT	src/scheduler.cc/samples/cray_t3e/toolkit.h	555;"	d
 LEAVE_JOB_COMMENT	src/scheduler.cc/samples/dec_cluster/toolkit.h	492;"	d
@@ -1779,9 +1789,11 @@ LEAVE_JOB_COMMENT	src/scheduler.cc/samples/sgi_origin/toolkit.h	552;"	d
 LEAVE_JOB_COMMENT	src/scheduler.cc/samples/umn_cluster/toolkit.h	453;"	d
 LEXEMSZ	src/scheduler.basl/ParLexGlob.h	101;"	d
 LIBPBS_H	src/include/libpbs.h	106;"	d
+LIBS	contrib/pestat-1.0/Makefile	/^LIBS = -L\/usr\/pbs\/lib -lnet -lpbs -lcmds $/;"	m
 LINEBUFSIZ	src/cmds/pbspoe.c	177;"	d	file:
 LINK_INSET_AFTER	src/include/list_link.h	115;"	d
 LINK_INSET_BEFORE	src/include/list_link.h	114;"	d
+LIST	contrib/pestat-1.0/pestat.c	25;"	d	file:
 LIST	src/cmds/pbsnodes.c	117;"	d	file:
 LIST_LINK_H	src/include/list_link.h	94;"	d
 LIVE_DANGEROUSLY	src/scheduler.cc/samples/cray_t3e/schedinit.c	80;"	d	file:
@@ -1850,17 +1862,18 @@ Long	src/include/Long.h	/^typedef long long  Long;$/;"	t
 Long_dig	src/lib/Libattr/Long_.c	/^char Long_dig[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";$/;"	v
 Long_neg	src/lib/Libattr/Long_.c	/^int Long_neg;$/;"	v
 M	src/include/libpbs.h	136;"	d
-MAIL_ABORT	src/include/pbs_job.h	797;"	d
+MAIL_ABORT	src/include/pbs_job.h	798;"	d
 MAIL_AT_ABORT	src/include/pbs_ifl.h	325;"	d
-MAIL_BEGIN	src/include/pbs_job.h	798;"	d
-MAIL_CHKPTCOPY	src/include/pbs_job.h	803;"	d
-MAIL_DEL	src/include/pbs_job.h	799;"	d
-MAIL_END	src/include/pbs_job.h	800;"	d
-MAIL_FORCE	src/include/pbs_job.h	805;"	d
-MAIL_NONE	src/include/pbs_job.h	796;"	d
-MAIL_NORMAL	src/include/pbs_job.h	804;"	d
-MAIL_OTHER	src/include/pbs_job.h	801;"	d
-MAIL_STAGEIN	src/include/pbs_job.h	802;"	d
+MAIL_BEGIN	src/include/pbs_job.h	799;"	d
+MAIL_CHKPTCOPY	src/include/pbs_job.h	804;"	d
+MAIL_DEL	src/include/pbs_job.h	800;"	d
+MAIL_END	src/include/pbs_job.h	801;"	d
+MAIL_FORCE	src/include/pbs_job.h	806;"	d
+MAIL_NONE	src/include/pbs_job.h	797;"	d
+MAIL_NORMAL	src/include/pbs_job.h	805;"	d
+MAIL_OTHER	src/include/pbs_job.h	802;"	d
+MAIL_STAGEIN	src/include/pbs_job.h	803;"	d
+MAIN	contrib/qpeek	/^MAIN:$/;"	l
 MALLOCLEN	src/scheduler.basl/af.c	222;"	d	file:
 MALLOC_INDEX_LEN	src/scheduler.basl/af.c	234;"	d	file:
 MALLOC_SUBINDEX_LEN	src/scheduler.basl/af.c	246;"	d	file:
@@ -2029,6 +2042,7 @@ MIDNIGHT	src/scheduler.cc/samples/dec_cluster/toolkit.c	1678;"	d	file:
 MIDNIGHT	src/scheduler.cc/samples/msic_cluster/toolkit.c	1685;"	d	file:
 MIDNIGHT	src/scheduler.cc/samples/sgi_origin/pnp.c	358;"	d	file:
 MIDNIGHT	src/scheduler.cc/samples/umn_cluster/toolkit.c	1688;"	d	file:
+MIN	contrib/pestat-1.0/pestat.c	22;"	d	file:
 MIN	src/include/mcom.h	15;"	d
 MIN	src/include/resmon.h	130;"	d
 MIN	src/include/server.h	266;"	d
@@ -2097,12 +2111,12 @@ MOMPrologTimeoutCount	src/resmom/mom_main.c	/^int             MOMPrologTimeoutCo
 MOMSendStatFailure	src/resmom/mom_server.c	/^  char            MOMSendStatFailure[MMAX_LINE];$/;"	m	struct:mom_server	file:
 MOMStartTime	src/resmom/mom_main.c	/^time_t          MOMStartTime         = 0;$/;"	v
 MOMUNameMissing	src/resmom/mom_main.c	/^char            MOMUNameMissing[64];$/;"	v
-MOM_CHECKPOINT_ACTIVE	src/include/pbs_job.h	407;"	d
-MOM_CHECKPOINT_POST	src/include/pbs_job.h	408;"	d
+MOM_CHECKPOINT_ACTIVE	src/include/pbs_job.h	408;"	d
+MOM_CHECKPOINT_POST	src/include/pbs_job.h	409;"	d
 MOM_DEFAULT_CHECKPOINT_DIR	src/include/pbs_ifl.h	485;"	d
-MOM_HAS_NODEFILE	src/include/pbs_job.h	409;"	d
-MOM_HAS_TMPDIR	src/include/pbs_job.h	411;"	d
-MOM_JOB_RECOVERY	src/include/pbs_job.h	414;"	d
+MOM_HAS_NODEFILE	src/include/pbs_job.h	410;"	d
+MOM_HAS_TMPDIR	src/include/pbs_job.h	412;"	d
+MOM_JOB_RECOVERY	src/include/pbs_job.h	415;"	d
 MOM_MACH	src/resmom/aix4/mom_mach.h	88;"	d
 MOM_MACH	src/resmom/aix5/mom_mach.h	88;"	d
 MOM_MACH	src/resmom/cygwin/mom_mach.h	88;"	d
@@ -2123,7 +2137,7 @@ MOM_MACH	src/resmom/solaris7/mom_mach.h	86;"	d
 MOM_MACH	src/resmom/sunos4/mom_mach.h	88;"	d
 MOM_MACH	src/resmom/unicos8/mom_mach.h	88;"	d
 MOM_MACH	src/resmom/unicosmk2/mom_mach.h	88;"	d
-MOM_NO_PROC	src/include/pbs_job.h	410;"	d
+MOM_NO_PROC	src/include/pbs_job.h	411;"	d
 MOM_OBIT_RETRY	src/include/mom_func.h	107;"	d
 MOM_RUN_STATE_EXIT	src/resmom/mom_main.c	/^  MOM_RUN_STATE_EXIT,$/;"	e	enum:PMOMStateEnum	file:
 MOM_RUN_STATE_KILLALL	src/resmom/mom_main.c	/^  MOM_RUN_STATE_KILLALL,$/;"	e	enum:PMOMStateEnum	file:
@@ -2228,14 +2242,23 @@ ND_ATR_status	src/include/pbs_nodes.h	/^  ND_ATR_status,$/;"	e	enum:nodeattr
 ND_active	src/include/pbs_ifl.h	354;"	d
 ND_all	src/include/pbs_ifl.h	356;"	d
 ND_busy	src/include/pbs_ifl.h	348;"	d
+ND_cluster	contrib/pestat-1.0/pestat.c	41;"	d	file:
 ND_cluster	src/include/pbs_ifl.h	361;"	d
+ND_down	contrib/pestat-1.0/pestat.c	35;"	d	file:
 ND_down	src/include/pbs_ifl.h	344;"	d
+ND_free	contrib/pestat-1.0/pestat.c	33;"	d	file:
 ND_free	src/include/pbs_ifl.h	342;"	d
+ND_job_exclusive	contrib/pestat-1.0/pestat.c	37;"	d	file:
 ND_job_exclusive	src/include/pbs_ifl.h	346;"	d
+ND_job_sharing	contrib/pestat-1.0/pestat.c	38;"	d	file:
 ND_job_sharing	src/include/pbs_ifl.h	347;"	d
+ND_offline	contrib/pestat-1.0/pestat.c	34;"	d	file:
 ND_offline	src/include/pbs_ifl.h	343;"	d
+ND_reserve	contrib/pestat-1.0/pestat.c	36;"	d	file:
 ND_reserve	src/include/pbs_ifl.h	345;"	d
+ND_state_unknown	contrib/pestat-1.0/pestat.c	39;"	d	file:
 ND_state_unknown	src/include/pbs_ifl.h	349;"	d
+ND_timeshared	contrib/pestat-1.0/pestat.c	40;"	d	file:
 ND_timeshared	src/include/pbs_ifl.h	350;"	d
 ND_up	src/include/pbs_ifl.h	358;"	d
 NE	src/include/pbs_ifl.h	/^enum batch_op { SET, UNSET, INCR, DECR, EQ, NE, GE, GT, LE, LT, DFLT, MERGE, INCR_OLD };$/;"	e	enum:batch_op
@@ -2256,6 +2279,7 @@ NODE_DESCRIP	src/include/server_limits.h	138;"	d
 NODE_INFO_H	src/scheduler.cc/samples/fifo/node_info.h	81;"	d
 NODE_NOTE	src/include/server_limits.h	140;"	d
 NODE_STATUS	src/include/server_limits.h	139;"	d
+NODE_T	contrib/pestat-1.0/pestat.c	402;"	d	file:
 NOJOB	src/scheduler.basl/af.h	105;"	d
 NONE	src/include/mcom.h	31;"	d
 NONE	src/scheduler.cc/samples/cray_t3e/pnp.c	115;"	d	file:
@@ -2392,6 +2416,7 @@ Num_holidays	src/scheduler.cc/samples/dec_cluster/toolkit.c	/^static int Num_hol
 Num_holidays	src/scheduler.cc/samples/msic_cluster/toolkit.c	/^static int Num_holidays;$/;"	v	file:
 Num_holidays	src/scheduler.cc/samples/sgi_origin/pnp.c	/^static int Num_holidays;$/;"	v	file:
 Num_holidays	src/scheduler.cc/samples/umn_cluster/toolkit.c	/^static int Num_holidays;$/;"	v	file:
+OFFLINE	contrib/pestat-1.0/pestat.c	27;"	d	file:
 OFFLINE	src/cmds/pbsnodes.c	119;"	d	file:
 OK	src/drmaa/src/attrib.c	81;"	d	file:
 OPEN_MAX	src/scheduler.basl/af_system.c	126;"	d	file:
@@ -2420,6 +2445,7 @@ OTHER	src/scheduler.basl/ParLexGlob.h	97;"	d
 OTHER_HOLD	src/include/pbs_ifl.h	337;"	d
 OUTAGE_FLAGS_SYSTEM	src/scheduler.cc/samples/cray_t3e/toolkit.h	343;"	d
 OUTAGE_FLAGS_SYSTEM	src/scheduler.cc/samples/sgi_origin/toolkit.h	351;"	d
+OUTER	contrib/showjobs	/^OUTER: foreach my $jobFile (@jobFiles)$/;"	l
 OVERLAP_BATCH	src/scheduler.cc/samples/cray_t3e/msgs.h	104;"	d
 OVERLAP_BATCH	src/scheduler.cc/samples/dec_cluster/msgs.h	104;"	d
 OVERLAP_BATCH	src/scheduler.cc/samples/msic_cluster/msgs.h	104;"	d
@@ -2439,6 +2465,7 @@ O_Sync	src/include/svrfunc.h	180;"	d
 O_Sync	src/include/svrfunc.h	182;"	d
 OpenRM	src/scheduler.tcl/pbs_tclWrap.c	/^OpenRM(clientData, interp, objc, objv)$/;"	f
 Oper	src/include/qmgr.h	116;"	d
+Options	contrib/qpeek	/^Options:$/;"	l
 OriginalPath	src/server/pbsd_main.c	/^char      OriginalPath[MAXPATHLEN+1];$/;"	v
 Outage	src/scheduler.cc/samples/cray_t3e/toolkit.h	/^typedef struct outage Outage;$/;"	t	typeref:struct:outage
 Outage	src/scheduler.cc/samples/sgi_origin/toolkit.h	/^typedef struct outage Outage;$/;"	t	typeref:struct:outage
@@ -2513,6 +2540,7 @@ PBSE_	src/include/pbs_error.h	106;"	d
 PBSE_Constants	src/include/pbs_error.h	/^enum PBSE_Constants {$/;"	g
 PBSE_NONE	src/include/pbs_error.h	107;"	d
 PBSE_TOTAL_CEILING	src/include/pbs_error.h	/^PBSE_TOTAL_CEILING$/;"	e	enum:PBSE_Constants
+PBSHOME	contrib/pestat-1.0/Makefile	/^PBSHOME = $$HOME\/src\/PBS\/OpenPBS\/OpenPBS_2_3_2\/src$/;"	m
 PBSNODE_NTYPE	src/include/pbs_nodes.h	266;"	d
 PBSNODE_NTYPE_MASK	src/include/pbs_nodes.h	267;"	d
 PBSNODE_PROPERTIES	src/include/pbs_nodes.h	265;"	d
@@ -2634,6 +2662,7 @@ PBS_MAXUSER	src/include/pbs_ifl.h	420;"	d
 PBS_MAX_HOPCOUNT	src/include/server_limits.h	97;"	d
 PBS_MAX_TIME	src/lib/Libattr/attr_fn_time.c	123;"	d	file:
 PBS_MINNAMELEN	src/cmds/qstat.c	382;"	d	file:
+PBS_MKDIRS	buildutils/config.mk	/^PBS_MKDIRS = $(SHELL) $(top_builddir)\/buildutils\/pbs_mkdirs$/;"	m
 PBS_MOM	src/lib/Libsite/site_mom_chu.c	91;"	d	file:
 PBS_MOM	src/lib/Libsite/site_mom_ckp.c	94;"	d	file:
 PBS_MOM	src/lib/Libsite/site_mom_jst.c	87;"	d	file:
@@ -3016,6 +3045,7 @@ RERUN	src/scheduler.basl/af.h	/^enum action_type { SYNCRUN, ASYNCRUN, DELETE, RE
 RERUNFORCE	src/include/pbs_ifl.h	334;"	d
 RESCSTRLEN	src/cmds/pbsdsh.c	109;"	d	file:
 RESC_USED_BUF	src/server/req_jobobit.c	113;"	d	file:
+RESET	contrib/pestat-1.0/pestat.c	28;"	d	file:
 RESET	src/cmds/pbsnodes.c	120;"	d	file:
 RESGROUP_FILE	src/scheduler.cc/samples/fifo/config.h	100;"	d
 RESOURCE_H	src/include/resource.h	2;"	d
@@ -3078,7 +3108,7 @@ RPT_STATFS_MEMBER	src/resmom/linux/mom_mach.c	3625;"	d	file:
 RSRCS_FLAGS_HPM_IN_USE	src/scheduler.cc/samples/sgi_origin/toolkit.h	387;"	d
 RSRCS_FLAGS_HPM_USER	src/scheduler.cc/samples/sgi_origin/toolkit.h	386;"	d
 RT_BLK_SZ	src/resmom/requests.c	604;"	d	file:
-RUJ_BUFSIZ	src/scheduler.cc/samples/fifo/fifo.c	626;"	d	file:
+RUJ_BUFSIZ	src/scheduler.cc/samples/fifo/fifo.c	843;"	d	file:
 RUNNING	src/scheduler.basl/af_job.h	99;"	d
 RUNNING_BIG_JOB	src/scheduler.cc/samples/cray_t3e/msgs.h	103;"	d
 RUNNING_BIG_JOB	src/scheduler.cc/samples/dec_cluster/msgs.h	103;"	d
@@ -3139,9 +3169,9 @@ SATURDAY	src/scheduler.cc/samples/fifo/constant.h	/^  SATURDAY,$/;"	e	enum:days
 SATURDAY	src/scheduler.cc/samples/msic_cluster/toolkit.c	1432;"	d	file:
 SATURDAY	src/scheduler.cc/samples/sgi_origin/pnp.c	103;"	d	file:
 SATURDAY	src/scheduler.cc/samples/umn_cluster/toolkit.c	1435;"	d	file:
-SAVEJOB_FULL	src/include/pbs_job.h	793;"	d
-SAVEJOB_NEW	src/include/pbs_job.h	794;"	d
-SAVEJOB_QUICK	src/include/pbs_job.h	792;"	d
+SAVEJOB_FULL	src/include/pbs_job.h	794;"	d
+SAVEJOB_NEW	src/include/pbs_job.h	795;"	d
+SAVEJOB_QUICK	src/include/pbs_job.h	793;"	d
 SCHD_ERROR	src/scheduler.cc/samples/fifo/constant.h	103;"	d
 SCHD_RESTART_NONE	src/scheduler.cc/samples/cray_t3e/gblxvars.h	150;"	d
 SCHD_RESTART_NONE	src/scheduler.cc/samples/dec_cluster/gblxvars.h	128;"	d
@@ -3306,10 +3336,11 @@ SIGIOT	src/resmom/cygwin/mom_mach.h	102;"	d
 SIGNAL	src/scheduler.basl/af.h	/^enum action_type { SYNCRUN, ASYNCRUN, DELETE, RERUN, HOLD, RELEASE, SIGNAL,                                                             MODIFYATTR, MODIFYRES };$/;"	e	enum:action_type
 SIG_RESUME	src/include/pbs_ifl.h	399;"	d
 SIG_SUSPEND	src/include/pbs_ifl.h	400;"	d
-SISTER_BADPOLL	src/include/pbs_job.h	401;"	d
-SISTER_EOF	src/include/pbs_job.h	402;"	d
-SISTER_KILLDONE	src/include/pbs_job.h	400;"	d
-SISTER_OKAY	src/include/pbs_job.h	399;"	d
+SISTER_BADPOLL	src/include/pbs_job.h	402;"	d
+SISTER_EOF	src/include/pbs_job.h	403;"	d
+SISTER_KILLDONE	src/include/pbs_job.h	401;"	d
+SISTER_OKAY	src/include/pbs_job.h	400;"	d
+SIZE	contrib/pestat-1.0/pestat.c	403;"	d	file:
 SIZECMP	src/scheduler.basl/af.h	97;"	d
 SIZEKEY	src/scheduler.basl/af_cnode.c	/^  enum { INTKEY, FLOATKEY, STRINGKEY, DATETIMEKEY, SIZEKEY } keytype;$/;"	e	enum:CNodeSortArgs::__anon21	file:
 SIZEKEY	src/scheduler.basl/af_job.c	/^  enum { INTKEY, FLOATKEY, STRINGKEY, DATETIMEKEY, SIZEKEY } keytype;$/;"	e	enum:JobSortArgs::__anon23	file:
@@ -3329,6 +3360,8 @@ SKIP_EXCLUSIVE	src/server/node_manager.c	178;"	d	file:
 SKIP_NONE	src/server/node_manager.c	177;"	d	file:
 SKIP_NONE_REUSE	src/server/node_manager.c	180;"	d	file:
 SMALLEST_MEM_FIRST	src/scheduler.cc/samples/fifo/constant.h	/^  SMALLEST_MEM_FIRST,$/;"	e	enum:sort_type
+SORTLIST	contrib/pestat-1.0/pestat.c	/^void SORTLIST(NODE_T **first)$/;"	f
+SORTLIST	contrib/pestat-1.0/pestat.c	404;"	d	file:
 SORT_H	src/scheduler.cc/samples/fifo/sort.h	81;"	d
 SPACE	src/server/req_getcred.c	110;"	d	file:
 SPC_PEER_GID	src/include/net_connect.h	147;"	d
@@ -3474,6 +3507,7 @@ STR_TYPE	src/scheduler.basl/af_cnodemap.h	93;"	d
 SUBCMDMASK	src/resmom/cygwin/quota.h	13;"	d
 SUBCMDSHIFT	src/resmom/cygwin/quota.h	12;"	d
 SUBMIT_FILTER_ADMIN_REJECT_CODE	src/cmds/qsub.c	146;"	d	file:
+SUBMIT_FILTER_PATH	buildutils/config.mk	/^SUBMIT_FILTER_PATH = $(libexecdir)\/qsub_filter$/;"	m
 SUCCESS	src/include/mcom.h	43;"	d
 SUCCESS	src/include/pbs_job.h	94;"	d
 SUCCESS	src/resmom/linux/cpuset.c	27;"	d	file:
@@ -3672,6 +3706,7 @@ SetServerSortInt	src/scheduler.basl/af_server.c	/^int SetServerSortInt(s, key, o
 SetServerSortSize	src/scheduler.basl/af_server.c	/^int SetServerSortSize(s, key, order)$/;"	f
 SetServerSortStr	src/scheduler.basl/af_server.c	/^int SetServerSortStr(s, key, order)$/;"	f
 SetServer_type	src/scheduler.basl/af_server.h	/^struct SetServer_type$/;"	s
+ShowUsage	contrib/pestat-1.0/pestat.c	/^ShowUsage(void)$/;"	f
 Sinfo	src/scheduler.cc/samples/umn_cluster/toolkit.h	/^struct Sinfo$/;"	s
 Size	src/scheduler.basl/af.h	/^typedef struct size_struct Size;$/;"	t	typeref:struct:size_struct
 SizeRange	src/scheduler.basl/af.h	/^typedef struct sizeRange_struct SizeRange;$/;"	t	typeref:struct:sizeRange_struct
@@ -3770,13 +3805,13 @@ TIME_LENGTH	src/scheduler.cc/samples/dec_cluster/toolkit.h	129;"	d
 TIME_LENGTH	src/scheduler.cc/samples/msic_cluster/toolkit.h	133;"	d
 TIME_LENGTH	src/scheduler.cc/samples/sgi_origin/toolkit.h	119;"	d
 TIME_LENGTH	src/scheduler.cc/samples/umn_cluster/toolkit.h	133;"	d
-TI_FLAGS_CHECKPOINT	src/include/pbs_job.h	721;"	d
-TI_FLAGS_INIT	src/include/pbs_job.h	720;"	d
-TI_FLAGS_RECOVERY	src/include/pbs_job.h	724;"	d
-TI_STATE_DEAD	src/include/pbs_job.h	730;"	d
-TI_STATE_EMBRYO	src/include/pbs_job.h	727;"	d
-TI_STATE_EXITED	src/include/pbs_job.h	729;"	d
-TI_STATE_RUNNING	src/include/pbs_job.h	728;"	d
+TI_FLAGS_CHECKPOINT	src/include/pbs_job.h	722;"	d
+TI_FLAGS_INIT	src/include/pbs_job.h	721;"	d
+TI_FLAGS_RECOVERY	src/include/pbs_job.h	725;"	d
+TI_STATE_DEAD	src/include/pbs_job.h	731;"	d
+TI_STATE_EMBRYO	src/include/pbs_job.h	728;"	d
+TI_STATE_EXITED	src/include/pbs_job.h	730;"	d
+TI_STATE_RUNNING	src/include/pbs_job.h	729;"	d
 TJCache	src/resmom/cygwin/mom_start.c	/^job *TJCache[TMAX_TJCACHESIZE];$/;"	v
 TJCache	src/resmom/freebsd5/mom_start.c	/^job *TJCache[TMAX_TJCACHESIZE];$/;"	v
 TJCache	src/resmom/linux/mom_start.c	/^job *TJCache[TMAX_TJCACHESIZE];$/;"	v
@@ -3930,7 +3965,7 @@ TimeRange	src/scheduler.basl/af.h	/^typedef struct timeRange_struct TimeRange;$/
 ToServerASN	src/include/net_connect.h	/^  ToServerASN,$/;"	e	enum:conn_type
 ToServerDIS	src/include/net_connect.h	/^  ToServerDIS,$/;"	e	enum:conn_type
 Transform	src/lib/Libnet/md5.c	/^Transform(UINT4 *buf, UINT4 *in)$/;"	f	file:
-UDC_CLONEBUFSIZ	src/scheduler.cc/samples/fifo/job_info.c	676;"	d	file:
+UDC_CLONEBUFSIZ	src/scheduler.cc/samples/fifo/job_info.c	690;"	d	file:
 UINT4	src/include/md5.h	/^typedef unsigned long int UINT4;$/;"	t
 UNKNOWN	src/scheduler.basl/ParLexGlob.h	116;"	d
 UNSET	src/include/pbs_ifl.h	/^enum batch_op { SET, UNSET, INCR, DECR, EQ, NE, GE, GT, LE, LT, DFLT, MERGE, INCR_OLD };$/;"	e	enum:batch_op
@@ -3955,8 +3990,9 @@ UlONG_MAX	src/include/Long.h	148;"	d
 UlONG_MAX	src/include/Long.h	169;"	d
 UlONG_MAX	src/include/Long.h	191;"	d
 Umask_opt	src/cmds/qsub.c	/^int Umask_opt = FALSE;$/;"	v
+Usage	contrib/qpeek	/^Usage:  qpeek [options] JOBID$/;"	l
 UserAcct	src/server/req_quejob.c	/^  } UserAcct =$/;"	v	typeref:struct:__anon54
-UserAcctMax	src/server/req_quejob.c	2032;"	d	file:
+UserAcctMax	src/server/req_quejob.c	2091;"	d	file:
 UserAcl	src/scheduler.cc/samples/cray_t3e/toolkit.h	/^typedef struct useracl UserAcl;$/;"	t	typeref:struct:useracl
 UserAcl	src/scheduler.cc/samples/dec_cluster/toolkit.h	/^typedef struct useracl UserAcl;$/;"	t	typeref:struct:useracl
 UserAcl	src/scheduler.cc/samples/msic_cluster/toolkit.h	/^typedef struct useracl UserAcl;$/;"	t	typeref:struct:useracl
@@ -4032,6 +4068,8 @@ WRITENODE_STATE	src/include/pbs_nodes.h	269;"	d
 WRITE_NEW_NODESFILE	src/include/pbs_nodes.h	270;"	d
 White	src/include/qmgr.h	122;"	d
 X11OFFSET	src/include/port_forwarding.h	7;"	d
+XPBSMON_DIR	buildutils/config.mk	/^XPBSMON_DIR = $(libdir)\/xpbsmon$/;"	m
+XPBS_DIR	buildutils/config.mk	/^XPBS_DIR = $(libdir)\/xpbs$/;"	m
 XPDBX_PATH	src/cmds/pbspoe.c	111;"	d	file:
 X_UNIX_PATH	src/include/port_forwarding.h	13;"	d
 X_UNIX_PATH	src/include/port_forwarding.h	15;"	d
@@ -4342,6 +4380,7 @@ at_str	src/include/attribute.h	/^  char   *at_str;   \/* char string (alloc) *\/
 at_type	src/include/attribute.h	/^  unsigned int at_type:$/;"	m	struct:attribute_def
 at_type	src/include/attribute.h	/^unsigned int at_type:$/;"	m	struct:attribute
 at_val	src/include/attribute.h	/^  union  attr_val at_val;  \/* the attribute value *\/$/;"	m	struct:attribute	typeref:union:attribute::attr_val
+atcheckpoint	configure	/^atcheckpoint ();$/;"	f
 atime	src/mom_rcp/rcp.c	702;"	d	file:
 atoL	src/include/Long.h	116;"	d
 atoL	src/include/Long.h	134;"	d
@@ -4633,6 +4672,7 @@ check_csa_status	src/resmom/start_exec.c	/^int check_csa_status(enum csa_chk_cmd
 check_ded_time_boundry	src/scheduler.cc/samples/fifo/check.c	/^int check_ded_time_boundry(job_info *jinfo)$/;"	f
 check_ded_time_queue	src/scheduler.cc/samples/fifo/check.c	/^int check_ded_time_queue(queue_info *qinfo)$/;"	f
 check_domain_user_privileges	src/lib/Liblog/chk_file_sec.c	/^int check_domain_user_privileges (LPWSTR servername, char *username_utf8, int usertype)$/;"	f
+check_env	buildutils/pbs_mkdirs.in	/^check_env()$/;"	f
 check_environment	src/cmds/pbspoe.c	/^check_environment(void)$/;"	f
 check_host	src/server/req_getcred.c	/^int check_host(struct batch_request *preq, pbs_net_t ipaddr)$/;"	f
 check_ignored	src/scheduler.cc/samples/fifo/check.c	/^int check_ignored(queue_info *qinfo)$/;"	f
@@ -4694,6 +4734,7 @@ chk_job_torun	src/server/req_runjob.c	/^static job *chk_job_torun($/;"	f	file:
 chk_resc_limits	src/server/svr_jobfunc.c	/^int chk_resc_limits($/;"	f
 chk_save_file	src/server/pbsd_init.c	/^static int chk_save_file($/;"	f	file:
 chk_svr_resc_limit	src/server/svr_jobfunc.c	/^static void chk_svr_resc_limit($/;"	f	file:
+chk_tree_wrap	buildutils/pbs_mkdirs.in	/^chk_tree_wrap()$/;"	f
 chkpt_xfr_done	src/server/req_modify.c	/^void chkpt_xfr_done($/;"	f
 chkpt_xfr_hold	src/server/req_modify.c	/^void chkpt_xfr_hold($/;"	f
 ck_checkpoint	src/server/svr_func.c	/^int ck_checkpoint($/;"	f
@@ -4987,6 +5028,7 @@ count_states	src/scheduler.cc/samples/fifo/state_count.c	/^void count_states(job
 count_substrings	src/lib/Libattr/attr_func.c	/^count_substrings($/;"	f
 count_user_jobs	src/scheduler.cc/samples/msic_cluster/usersort.c	/^count_user_jobs(Job *job, int *running, int *total, int *max)$/;"	f	file:
 counter	src/include/net_connect.h	/^  int     counter;$/;"	m	struct:netcounter
+cpa_new_node_req	configure	/^cpa_new_node_req ();$/;"	f
 cph_from	src/include/mom_func.h	/^  char *cph_from;$/;"	m	struct:cphosts
 cph_hosts	src/include/mom_func.h	/^  char *cph_hosts;$/;"	m	struct:cphosts
 cph_to	src/include/mom_func.h	/^  char *cph_to;$/;"	m	struct:cphosts
@@ -5095,11 +5137,13 @@ cputype	src/resmom/hpux11/mom_mach.c	/^cputype(struct rm_attribute *attrib)$/;"	
 cpy_checkpoint	src/server/job_func.c	/^struct batch_request *cpy_checkpoint($/;"	f
 cpy_stage	src/server/req_jobobit.c	/^struct batch_request *cpy_stage($/;"	f
 cpy_stdfile	src/server/req_jobobit.c	/^static struct batch_request *cpy_stdfile($/;"	f	file:
+cr_init	configure	/^cr_init ();$/;"	f
 crackdate	src/cmds/nqs2pbs	/^function crackdate(word) {$/;"	f
 crackdate	src/cmds/nqs2pbs.in	/^function crackdate(word) {$/;"	f
 cray_susp_resum	src/resmom/requests.c	/^static void cray_susp_resum($/;"	f	file:
 crc	src/lib/Libifl/rpp.c	/^u_long crc(buf, clen)$/;"	f
 crctab	src/lib/Libifl/rpp.c	/^static u_long crctab[] =$/;"	v	file:
+create	contrib/init.d/pbs_server	/^create() {$/;"	f
 createFileselectWidget	src/gui/fileselect.tk	/^proc createFileselectWidget {frame_name {title "FILE SELECTION BOX"} {cdCWD 1} {dim 80x10}} {$/;"	p
 create_DateTime_box	src/gui/common.tk	/^proc create_DateTime_box {frame_name def_mon def_day def_yr def_hr \\$/;"	p
 create_WLM_Rec	src/resmom/start_exec.c	/^int create_WLM_Rec($/;"	f
@@ -5123,6 +5167,7 @@ create_work_thread	src/lib/Libutils/u_threadpool.c	/^int create_work_thread(void
 cred	src/mom_rcp/rcp.c	/^CREDENTIALS  cred;$/;"	v
 credential	src/include/credential.h	/^struct credential$/;"	s
 cresgroup	src/scheduler.cc/samples/fifo/data_types.h	/^  int cresgroup;   \/* resgroup of the children of group *\/$/;"	m	struct:group_info
+csa_check	configure	/^csa_check ();$/;"	f
 csa_chk_cmd	src/resmom/start_exec.c	/^enum csa_chk_cmd$/;"	g	file:
 cstat	src/scheduler.cc/samples/fifo/globals.c	/^struct status cstat;$/;"	v	typeref:struct:status
 cstime	src/resmom/cygwin/mom_mach.h	/^  unsigned long   cstime; \/* sum of children's stime *\/$/;"	m	struct:proc_stat
@@ -5154,6 +5199,7 @@ darray_t	src/server/pbsd_init.c	/^} darray_t;$/;"	t	typeref:struct:darray_t	file
 data	src/lib/Libifl/rpp.c	/^  u_char *data;               \/* points to a buffer to be transferred *\/$/;"	m	struct:send_packet	file:
 data	src/lib/Libifl/rpp.c	/^  u_char *data;  \/* pointer to a buffer of user data *\/$/;"	m	struct:pending	file:
 data	src/lib/Libifl/rpp.c	/^  u_char *data;  \/* pointer to byte string that was sent from *\/$/;"	m	struct:recv_packet	file:
+dataAwareDispatch	src/scheduler.cc/samples/fifo/fifo.c	/^node_info* dataAwareDispatch(job_info *jinfo)$/;"	f
 dataTypes	src/scheduler.basl/Parser.y	/^dataTypes:	dataTypesSimple	{$/;"	l
 dataTypesComplex	src/scheduler.basl/Parser.y	/^dataTypesComplex:	SERVER {$/;"	l
 dataTypesRange	src/scheduler.basl/Parser.y	/^dataTypesRange:	RANGE INT {$/;"	l
@@ -5210,6 +5256,7 @@ dc_num	src/include/pbs_job.h	/^  int  dc_num;$/;"	m	struct:array_depend_job
 dc_state	src/include/pbs_job.h	/^  short dc_state; \/* released \/ ready to run (syncct)  *\/$/;"	m	struct:depend_job
 dc_svr	src/include/pbs_job.h	/^  char dc_svr[PBS_MAXSERVERNAME+1]; \/* server owning job  *\/$/;"	m	struct:depend_job
 dc_svr	src/include/pbs_job.h	/^  char dc_svr[PBS_MAXSERVERNAME+1];$/;"	m	struct:array_depend_job
+ddhhmmss	contrib/showjobs	/^sub ddhhmmss$/;"	s
 debug	src/scheduler.cc/samples/cray_t3e/usersort.c	/^static int    debug = 1;$/;"	v	file:
 debug	src/scheduler.cc/samples/sgi_origin/usersort.c	/^static int debug = 1;$/;"	v	file:
 debug_msg	src/scheduler.cc/samples/fifo/data_types.h	/^  char *debug_msg;$/;"	m	struct:rescheck
@@ -5463,6 +5510,7 @@ dispatch_request	src/server/process_request.c	/^void dispatch_request($/;"	f
 dispatch_task	src/server/svr_task.c	/^void dispatch_task($/;"	f
 display	src/cmds/qmgr.c	/^void display($/;"	f
 displayView	src/tools/xpbsmon/main.tk	/^proc displayView {frame sitename {init 0}} {$/;"	p
+display_flags	buildutils/pbs_mkdirs.in	/^display_flags()$/;"	f
 display_statjob	src/cmds/qstat.c	/^void display_statjob($/;"	f
 display_statjob	src/gui/Ccode/xpbs_datadump.c	/^display_statjob(struct batch_status *status, int prtheader, int full, char *server_name)$/;"	f
 display_statque	src/cmds/qstat.c	/^void display_statque($/;"	f
@@ -5534,13 +5582,26 @@ diswui	src/lib/Libdis/diswui.c	110;"	d	file:
 diswui_	src/lib/Libdis/diswui_.c	/^diswui_(int stream, unsigned value)$/;"	f
 diswul	src/lib/Libdis/diswul.c	/^int diswul($/;"	f
 diswus	src/include/dis.h	203;"	d
+dld_link	configure	/^dld_link ();$/;"	f
+dlopen	configure	/^dlopen ();$/;"	f
+do_check_tree	buildutils/pbs_mkdirs.in	/^do_check_tree()$/;"	f
 do_dir	src/cmds/qsub.c	/^int do_dir($/;"	f
 do_dir	src/gui/Ccode/xpbs_scriptload.c	/^do_dir(char *opts)$/;"	f
 do_mom	src/momctl/momctl.c	/^int do_mom($/;"	f
+do_reload	contrib/init.d/debian.pbs_mom	/^do_reload() {$/;"	f
+do_reload	contrib/init.d/debian.pbs_sched	/^do_reload() {$/;"	f
+do_reload	contrib/init.d/debian.pbs_server	/^do_reload() {$/;"	f
 do_rpp	src/resmom/mom_main.c	/^void do_rpp($/;"	f
 do_rpp	src/server/pbsd_main.c	/^void do_rpp($/;"	f
+do_start	contrib/init.d/debian.pbs_mom	/^do_start()$/;"	f
+do_start	contrib/init.d/debian.pbs_sched	/^do_start()$/;"	f
+do_start	contrib/init.d/debian.pbs_server	/^do_start()$/;"	f
+do_stop	contrib/init.d/debian.pbs_mom	/^do_stop()$/;"	f
+do_stop	contrib/init.d/debian.pbs_sched	/^do_stop()$/;"	f
+do_stop	contrib/init.d/debian.pbs_server	/^do_stop()$/;"	f
 do_tcp	src/resmom/mom_main.c	/^int do_tcp($/;"	f
 doencrypt	src/mom_rcp/rcp.c	/^int doencrypt = 0;$/;"	v
+dofile	doc/soelim.c	/^int dofile(filein)$/;"	f
 doreq	src/lib/Libnet/rm.c	/^static int doreq($/;"	f	file:
 down	src/lib/Libifl/rpp.c	/^  struct send_packet *down; \/* similar to up, but pointing to *\/$/;"	m	struct:send_packet	typeref:struct:send_packet::send_packet	file:
 down_svraddrs	src/resmom/mom_server.c	/^pbs_net_t      down_svraddrs[PBS_MAXSERVER];$/;"	v
@@ -5822,6 +5883,7 @@ enum_domain_users	src/lib/Liblog/chk_file_sec.c	/^int enum_domain_users (LPWSTR 
 enum_local_users	src/lib/Liblog/chk_file_sec.c	/^int enum_local_users (LPWSTR groupname,char *username)$/;"	f
 env_alrm	src/gui/Ccode/xpbs_datadump.c	/^static sigjmp_buf env_alrm;$/;"	v	file:
 eol	src/scheduler.cc/samples/fifo/data_types.h	/^unsigned eol:$/;"	m	struct:mom_res
+epochDate	contrib/showjobs	/^sub epochDate$/;"	s
 eqs	src/scheduler.basl/Parser.y	/^eqs:	'=' 	{$/;"	l
 err	src/mom_rcp/replace.c	/^void err($/;"	f
 errno_error	src/drmaa/test/example.c	45;"	d	file:
@@ -5989,6 +6051,7 @@ filestatus	src/scheduler.cc/samples/dec_cluster/toolkit.c	/^struct filestatus$/;
 filestatus	src/scheduler.cc/samples/msic_cluster/toolkit.c	/^struct filestatus$/;"	s	file:
 filestatus	src/scheduler.cc/samples/sgi_origin/file_chgs.c	/^struct filestatus$/;"	s	file:
 filestatus	src/scheduler.cc/samples/umn_cluster/toolkit.c	/^struct filestatus$/;"	s	file:
+fileused	src/scheduler.cc/samples/fifo/data_types.h	/^  char *fileused;$/;"	m	struct:job_info
 fillHostsFrame	src/gui/main.tk	/^proc fillHostsFrame widget_name {$/;"	p
 fillHostsHeaderFrame	src/gui/main.tk	/^proc fillHostsHeaderFrame widget_name {$/;"	p
 fillHostsListFrame	src/gui/main.tk	/^proc fillHostsListFrame widget_name {$/;"	p
@@ -6154,6 +6217,8 @@ funDescr	src/scheduler.basl/Node.h	/^  struct FUNDESCR funDescr;$/;"	m	struct:No
 funFlag	src/scheduler.basl/Node.h	/^  int funFlag;  \/* YES it is a function; otherwise NO *\/$/;"	m	struct:Node
 funHead	src/scheduler.basl/Parser.y	/^funHead:	dataTypesSimple IDENT { $2.type = $1.type;$/;"	l
 func	src/resmom/mom_server.c	/^  gen_func_ptr func;$/;"	m	struct:stat_record	file:
+func_infer_tag	buildutils/ltmain.sh	/^func_infer_tag () {$/;"	f
+func_win32_libid	buildutils/ltmain.sh	/^func_win32_libid () {$/;"	f
 funcs_dis	src/lib/Libnet/rm.c	/^funcs_dis(void)   \/* The equivalent of DIS_tcp_funcs() *\/$/;"	f	file:
 funcs_dis	src/lib/Libnet/rm.c	188;"	d	file:
 funcs_dis	src/server/node_manager.c	/^funcs_dis(void)  \/* The equivalent of DIS_tcp_funcs() *\/$/;"	f	file:
@@ -6319,6 +6384,7 @@ getdata	src/gui/pbs.tcl	/^proc getdata {server_names {jobs_info_only 0}} {$/;"	p
 getegroup	src/server/geteusernam.c	/^static char *getegroup($/;"	f	file:
 geteusernam	src/server/geteusernam.c	/^static char *geteusernam($/;"	f	file:
 getgrnam_ext	src/lib/Libutils/u_groups.c	/^struct group * getgrnam_ext( $/;"	f
+getgroups	configure	/^getgroups ();$/;"	f
 gethostnames	src/cmds/pbsdsh.c	/^char *gethostnames($/;"	f
 getjoblist	src/resmom/mom_main.c	/^static char *getjoblist($/;"	f	file:
 getjobstat	src/resmom/aix4/mom_mach.c	/^getjobstat(void)$/;"	f
@@ -6329,6 +6395,7 @@ getlong	src/resmom/irix6array/mom_mach.c	/^getlong(resource *pres, unsigned long
 getlong	src/resmom/unicos8/mom_mach.c	/^getlong(resource *pres, long *ret)$/;"	f	file:
 getlong	src/resmom/unicosmk2/mom_mach.c	/^getlong(resource *pres, long *ret)$/;"	f	file:
 getnum	src/mom_rcp/rcp.c	772;"	d	file:
+getpeername	configure	/^getpeername ();$/;"	f
 getprocs	src/resmom/darwin/mom_mach.c	/^getprocs(void)$/;"	f
 getprocs	src/resmom/digitalunix/mom_mach.c	/^getprocs(void)$/;"	f
 getprocs	src/resmom/freebsd/mom_mach.c	/^getprocs(void)$/;"	f
@@ -6520,6 +6587,8 @@ hostname_check	src/server/req_manager.c	/^int hostname_check($/;"	f
 hostname_specified	src/resmom/mom_main.c	/^int          hostname_specified = 0;$/;"	v
 hour	src/scheduler.cc/samples/fifo/data_types.h	/^unsigned hour :$/;"	m	struct:t
 howl	src/include/pbs_nodes.h	/^struct howl$/;"	s
+hrTime	contrib/showjobs	/^sub hrTime$/;"	s
+hstrerror	configure	/^hstrerror ();$/;"	f
 i	src/include/md5.h	/^  UINT4 i[2];                   \/* number of _bits_ handled mod 2^64 *\/$/;"	m	struct:__anon9
 iamrecursive	src/mom_rcp/rcp.c	/^int pflag, iamremote, iamrecursive, targetshouldbedirectory;$/;"	v
 iamremote	src/mom_rcp/rcp.c	/^int pflag, iamremote, iamrecursive, targetshouldbedirectory;$/;"	v
@@ -6716,6 +6785,7 @@ initialize_pbsnode	src/server/node_func.c	/^static void initialize_pbsnode($/;"	
 initialize_procct	src/server/job_route.c	/^int initialize_procct(job *pjob)$/;"	f
 initialize_root_cpuset	src/resmom/linux/cpuset.c	/^initialize_root_cpuset(void)$/;"	f
 initialize_threadpool	src/lib/Libutils/u_threadpool.c	/^int initialize_threadpool($/;"	f
+initscr	configure	/^initscr ();$/;"	f
 injob	src/resmom/aix4/mom_mach.c	/^injob(pjob, sesid)$/;"	f	file:
 injob	src/resmom/aix5/mom_mach.c	/^injob(pjob, sesid)$/;"	f	file:
 injob	src/resmom/cygwin/mom_mach.c	/^static int injob($/;"	f	file:
@@ -6740,6 +6810,8 @@ inode	src/resmom/linux/mom_mach.h	/^  unsigned  inode;  \/* inode of region *\/$
 insertHereStageinEntry	src/gui/staging.tk	/^proc insertHereStageinEntry {array host input} {$/;"	p
 insertHereStageoutEntry	src/gui/staging.tk	/^proc insertHereStageoutEntry {array host output} {$/;"	p
 insert_link	src/lib/Libifl/list_link.c	/^void insert_link($/;"	f
+install_dir	buildutils/pbs_mkdirs.in	/^install_dir()$/;"	f
+install_dir_by_varname	buildutils/pbs_mkdirs.in	/^install_dir_by_varname()$/;"	f
 intConst	src/scheduler.basl/Parser.y	/^intConst:	INTCONST	{ $/;"	l
 intConstRange	src/scheduler.basl/Parser.y	/^intConstRange:	lb intConst comma intConst rb	{ $/;"	l
 intExpr	src/scheduler.basl/af_que.c	/^static Job *intExpr(j, q, func, operator, value, maxj, minj)$/;"	f	file:
@@ -7071,6 +7143,7 @@ job_atr	src/include/pbs_job.h	/^enum job_atr$/;"	g
 job_attr_def	src/server/job_attr_def.c	/^attribute_def job_attr_def[] = {$/;"	v
 job_clone	src/server/job_func.c	/^job *job_clone($/;"	f
 job_clone_wt	src/server/job_func.c	/^void job_clone_wt($/;"	f
+job_create	configure	/^job_create ();$/;"	f
 job_delete_nanny	src/server/req_delete.c	/^static void job_delete_nanny($/;"	f	file:
 job_exceeds_accesslimits	src/scheduler.cc/samples/umn_cluster/fair_access.c	/^int job_exceeds_accesslimits(Job *job, char *queue_arch, size_t arch_mem,$/;"	f
 job_file	src/include/libpbs.h	/^enum job_file$/;"	g
@@ -7182,6 +7255,7 @@ kfd	src/resmom/irix6/mom_mach.c	/^static int  kfd = -1;$/;"	v	file:
 kfd	src/resmom/irix6array/mom_mach.c	/^static int  kfd = -1;$/;"	v	file:
 kill_all_running_jobs	src/resmom/mom_main.c	/^kill_all_running_jobs(void)$/;"	f
 kill_job	src/resmom/mom_main.c	/^int kill_job($/;"	f
+kill_pbs_mom	contrib/init.d/pbs_mom	/^kill_pbs_mom() {$/;"	f
 kill_ptree	src/resmom/solaris7/mom_mach.c	/^static void kill_ptree(int idx, int flag, int sig)$/;"	f	file:
 kill_task	src/resmom/aix4/mom_mach.c	/^kill_task(task *ptask, int sig, int pg)$/;"	f
 kill_task	src/resmom/aix5/mom_mach.c	/^kill_task(task *ptask, int sig, int pg)$/;"	f
@@ -7203,6 +7277,8 @@ kill_task	src/resmom/solaris7/mom_mach.c	/^kill_task(task *ptask, int sig, int p
 kill_task	src/resmom/sunos4/mom_mach.c	/^kill_task(task *ptask, int sig, int pg)$/;"	f
 kill_task	src/resmom/unicosmk2/mom_mach.c	/^kill_task(task *ptask, int sig, int pg)$/;"	f
 kinfo_proc	src/resmom/darwin/mom_mach.c	/^typedef struct kinfo_proc kinfo_proc;$/;"	t	typeref:struct:kinfo_proc	file:
+ktoMG	contrib/showjobs	/^sub ktoMG$/;"	s
+kvm_open	configure	/^kvm_open ();$/;"	f
 kvm_read	src/resmom/aix4/mom_mach.c	/^kvm_read(int fd, long addr, char *buf, int size)$/;"	f
 kvm_read	src/resmom/aix5/mom_mach.c	/^kvm_read(int fd, long addr, char *buf, int size)$/;"	f
 lONG_H	src/include/Long.h	85;"	d
@@ -7423,6 +7499,11 @@ mach_restart	src/resmom/solaris5/mom_mach.c	/^mach_restart(task *ptask, char *fi
 mach_restart	src/resmom/solaris7/mom_mach.c	/^mach_restart(task *ptask, char *file)$/;"	f
 mach_restart	src/resmom/sunos4/mom_mach.c	/^mach_restart(task *ptask, char *file)$/;"	f
 mach_restart	src/resmom/unicosmk2/mom_mach.c	/^mach_restart(task *ptask, char *path)$/;"	f
+main	buildutils/config.guess	/^		main()$/;"	f
+main	buildutils/config.guess	/^	main ()$/;"	f
+main	buildutils/config.guess	/^main ()$/;"	f
+main	contrib/pestat-1.0/pestat.c	/^int main($/;"	f
+main	doc/soelim.c	/^main(int argc, char *argv[])$/;"	f
 main	src/cmds/pbs_track.c	/^int main($/;"	f
 main	src/cmds/pbsdsh.c	/^int main($/;"	f
 main	src/cmds/pbsnodes.c	/^int main($/;"	f
@@ -7767,9 +7848,15 @@ misc	src/gui/misc.tk	/^proc misc {callerDialogBox {qalter 0}} {$/;"	p
 missingfd	src/scheduler.tcl/pbs_tclWrap.c	/^char missingfd[] = "%s: missing file descriptor";$/;"	v
 mix	src/drmaa/src/lookup3.c	136;"	d	file:
 mjspipe	src/include/pbs_job.h	/^  int       mjspipe[2];     \/* MOM to job starter for ack *\/$/;"	m	struct:__anon10
+mk_aux_dir	buildutils/pbs_mkdirs.in	/^mk_aux_dir()$/;"	f
+mk_common	buildutils/pbs_mkdirs.in	/^mk_common()$/;"	f
+mk_default_file	buildutils/pbs_mkdirs.in	/^mk_default_file()$/;"	f
+mk_dirs	buildutils/pbs_mkdirs.in	/^mk_dirs()$/;"	f
 mk_dirs	src/resmom/mom_main.c	/^char *mk_dirs($/;"	f
 mk_job_log_name	src/lib/Liblog/pbs_log.c	/^static char *mk_job_log_name($/;"	f	file:
 mk_log_name	src/lib/Liblog/pbs_log.c	/^static char *mk_log_name($/;"	f	file:
+mk_mom_dirs	buildutils/pbs_mkdirs.in	/^mk_mom_dirs()$/;"	f
+mk_server_dirs	buildutils/pbs_mkdirs.in	/^mk_server_dirs()$/;"	f
 mkdirtree	src/resmom/start_exec.c	/^int mkdirtree($/;"	f
 mktmpdir	src/resmom/unicos8/mom_start.c	/^mktmpdir($/;"	f
 mktmpdir	src/resmom/unicosmk2/mom_start.c	/^mktmpdir($/;"	f
@@ -8003,6 +8090,7 @@ mom_varattrs	src/resmom/mom_main.c	/^tlist_head mom_varattrs; \/* variable attri
 mom_writer	src/resmom/mom_inter.c	/^int mom_writer($/;"	f
 momgetattr	src/resmom/mom_main.c	/^struct rm_attribute *momgetattr($/;"	f
 moreParams	src/scheduler.basl/Parser.y	/^moreParams:	\/*lambda*\/		{$/;"	l
+motherSuperior	contrib/qpeek	/^sub motherSuperior    #($)$/;"	s
 move_job_file	src/server/svr_movejob.c	/^move_job_file(int conn, job *pjob, enum job_file which)$/;"	f	file:
 move_to_jobset	src/resmom/linux/cpuset.c	/^int move_to_jobset($/;"	f
 move_to_taskset	src/resmom/linux/cpuset.c	/^int move_to_taskset($/;"	f
@@ -8453,6 +8541,7 @@ nl	src/resmom/freebsd/mom_mach.c	/^struct nlist nl[] =$/;"	v	typeref:struct:nlis
 nl	src/resmom/freebsd5/mom_mach.c	/^struct nlist nl[] =$/;"	v	typeref:struct:nlist
 nl	src/resmom/fujitsu/mom_mach.c	/^struct nlist nl[] =$/;"	v	typeref:struct:nlist
 nl	src/resmom/sunos4/mom_mach.c	/^struct nlist nl[] =$/;"	v	typeref:struct:nlist
+nlist	configure	/^nlist ();$/;"	f
 nn_link	src/include/server.h	/^  list_link            nn_link;   \/* link to other resources in list *\/$/;"	m	struct:new_node
 nn_name	src/include/server.h	/^  char                *nn_name;   \/* name of new node *\/$/;"	m	struct:new_node
 nncpus	src/resmom/aix4/mom_mach.c	/^static int  nncpus;$/;"	v	file:
@@ -8744,6 +8833,7 @@ num_purged	src/include/array.h	/^    int  num_purged;     \/* number of jobs whi
 num_purged	src/include/array.h	/^    int  num_purged;     \/* number of jobs which have called purge_job *\/$/;"	m	struct:job_array_259::array_info_259
 num_queues	src/scheduler.cc/samples/fifo/data_types.h	/^  int num_queues;  \/* number of queues that reside on the server *\/$/;"	m	struct:server_info
 num_res	src/scheduler.cc/samples/fifo/globals.c	/^const int num_res = sizeof(res_to_check) \/ sizeof(struct rescheck);$/;"	v
+num_resget	contrib/pestat-1.0/pestat.c	/^const int num_resget = sizeof(res_to_get) \/ sizeof(char *);$/;"	v
 num_resget	src/scheduler.cc/samples/fifo/globals.c	/^const int num_resget = sizeof(res_to_get) \/ sizeof(char *);$/;"	v
 num_sorts	src/scheduler.cc/samples/fifo/globals.c	/^const int num_sorts = sizeof(sorting_info) \/ sizeof(struct sort_info);$/;"	v
 num_started	src/include/array.h	/^    int  num_started;    \/* number of jobs that have begun execution *\/$/;"	m	struct:job_array::array_info
@@ -8853,6 +8943,8 @@ open_sgi_proj	src/resmom/irix6/mom_start.c	/^open_sgi_proj(void)$/;"	f
 open_sgi_proj	src/resmom/irix6array/mom_start.c	/^open_sgi_proj(void)$/;"	f
 open_std_file	src/resmom/start_exec.c	/^int open_std_file($/;"	f
 open_std_out_err	src/resmom/start_exec.c	/^static int open_std_out_err($/;"	f	file:
+opendir	configure	/^opendir ();$/;"	f
+openpty	configure	/^openpty ();$/;"	f
 openrm	src/lib/Libnet/rm.c	/^int openrm($/;"	f
 oper	src/gui/pbs.tcl	/^proc oper {operator} {$/;"	p
 oper_invert	src/gui/pbs.tcl	/^proc oper_invert {str} {$/;"	p
@@ -8927,6 +9019,7 @@ owners	src/gui/owners.tk	/^proc owners {} {$/;"	p
 p_opt	src/cmds/qsub.c	/^int p_opt = FALSE;$/;"	v
 p_opt	src/gui/Ccode/xpbs_scriptload.c	/^int p_opt = FALSE;$/;"	v
 p_pos	src/lib/Libcmds/parse_jobid.c	/^static int p_pos;$/;"	v	file:
+p_rname	contrib/pestat-1.0/pestat.c	/^  char *p_rname;$/;"	m	struct:state_map	file:
 p_rtime	src/resmom/freebsd/mom_mach.c	291;"	d	file:
 p_rtime	src/resmom/freebsd5/mom_mach.c	291;"	d	file:
 packinfo	src/gui/common.tk	/^proc packinfo {slave} {$/;"	p
@@ -9083,6 +9176,7 @@ pbs_rescquery	src/lib/Libifl/pbsD_resc.c	/^int pbs_rescquery($/;"	f
 pbs_rescrelease	src/lib/Libifl/pbsD_resc.c	/^pbs_rescrelease(int c, resource_t rh)$/;"	f
 pbs_rescreserve	src/lib/Libifl/pbsD_resc.c	/^pbs_rescreserve($/;"	f
 pbs_rlsjob	src/lib/Libifl/pbsD_rlsjob.c	/^pbs_rlsjob(int c, char *jobid, char *holdtype, char *extend)$/;"	f
+pbs_rm_port	contrib/pestat-1.0/pestat.c	/^const int pbs_rm_port = 15003;$/;"	v
 pbs_rm_port	src/resmom/mom_main.c	/^unsigned int pbs_rm_port = 0;$/;"	v
 pbs_rm_port	src/scheduler.cc/pbs_sched.c	/^int   pbs_rm_port;$/;"	v
 pbs_rm_port	src/server/pbsd_main.c	/^unsigned int pbs_rm_port;$/;"	v
@@ -9196,6 +9290,7 @@ physmem	src/scheduler.cc/samples/fifo/data_types.h	/^  int physmem;   \/* amount
 pid	src/resmom/cygwin/mom_mach.h	/^  int           pid;  \/* process id *\/$/;"	m	struct:proc_stat
 pid	src/resmom/linux/mom_mach.h	/^  int           pid;  \/* process id *\/$/;"	m	struct:proc_stat
 pid_to_idx	src/resmom/solaris7/mom_mach.c	/^static int pid_to_idx(pid)$/;"	f	file:
+pidof_pbs_mom	contrib/init.d/pbs_mom	/^pidof_pbs_mom() {$/;"	f
 pids	src/resmom/aix4/mom_mach.c	/^pids(struct rm_attribute *attrib)$/;"	f
 pids	src/resmom/aix5/mom_mach.c	/^pids(struct rm_attribute *attrib)$/;"	f
 pids	src/resmom/cygwin/mom_mach.c	/^char *pids($/;"	f
@@ -9338,6 +9433,7 @@ prime_sort	src/scheduler.cc/samples/fifo/data_types.h	/^  struct sort_info *prim
 prime_sq	src/scheduler.cc/samples/fifo/data_types.h	/^unsigned prime_sq :$/;"	m	struct:config
 prime_time	src/scheduler.cc/samples/fifo/constant.h	/^enum prime_time$/;"	g
 printDynamicArrayTable	src/scheduler.basl/af.c	/^void printDynamicArrayTable(void)$/;"	f
+printHelp	contrib/qpeek	/^sub printHelp    #()$/;"	s
 print_config	src/scheduler.cc/samples/cray_t3e/getconfig.c	/^print_config(void)$/;"	f	file:
 print_config	src/scheduler.cc/samples/dec_cluster/getconfig.c	/^print_config(void)$/;"	f	file:
 print_config	src/scheduler.cc/samples/msic_cluster/getconfig.c	/^print_config(void)$/;"	f	file:
@@ -9454,6 +9550,7 @@ properties	src/scheduler.basl/af_cnode.h	/^  char  *properties;   \/* comma-sepa
 properties	src/scheduler.cc/samples/fifo/data_types.h	/^  char **properties;  \/* the node properties *\/$/;"	m	struct:node_info
 property	src/server/node_manager.c	/^static int property($/;"	f	file:
 proplist	src/server/node_manager.c	/^static int proplist($/;"	f	file:
+prototypes	configure	/^   function prototypes and stuff, but not '\\xHH' hex character constants.$/;"	f
 prt_attr	src/cmds/qstat.c	/^void prt_attr($/;"	f
 prt_attr	src/gui/Ccode/xpbs_datadump.c	/^prt_attr(char *n, char *r, char *v)$/;"	f
 prt_error	src/cmds/nqs2pbs	/^function prt_error(text, word) {$/;"	f
@@ -9469,10 +9566,13 @@ prt_warning	src/cmds/nqs2pbs	/^function prt_warning(text) {$/;"	f
 prt_warning	src/cmds/nqs2pbs.in	/^function prt_warning(text) {$/;"	f
 pshutdown_request	src/server/req_shutdown.c	/^static struct batch_request *pshutdown_request = 0;$/;"	v	typeref:struct:batch_request	file:
 psit	src/include/pbs_nodes.h	/^enum psit$/;"	g
+pstate	contrib/pestat-1.0/pestat.c	/^struct state_map pstate[] =$/;"	v	typeref:struct:state_map
 pstderr_big	src/cmds/qmgr.c	/^void pstderr_big($/;"	f
 ptask	src/include/pbs_job.h	/^  void     *ptask;$/;"	m	struct:__anon10
 ptc	src/include/pbs_job.h	/^  int       ptc;$/;"	m	struct:__anon10
 ptc_name	src/include/pbs_job.h	/^  char     *ptc_name;  \/* (ptr, no-alloc) *\/$/;"	m	struct:__anon10
+pthread_create	configure	/^pthread_create ();$/;"	f
+pthread_join	configure	/^pthread_join ();$/;"	f
 ptr	src/scheduler.basl/af.c	/^  struct mallocIndex_type  *ptr;$/;"	m	struct:mallocSubIndex_type	typeref:struct:mallocSubIndex_type::mallocIndex_type	file:
 ptr	src/scheduler.basl/af.c	/^  struct varstrIndex_type         *ptr;$/;"	m	struct:varstrSubIndex_type	typeref:struct:varstrSubIndex_type::varstrIndex_type	file:
 ptr	src/scheduler.basl/af.c	/^  void    *ptr;           \/* ptr to malloc-ed storage of variable str *\/$/;"	m	struct:varstr_type	file:
@@ -9623,6 +9723,7 @@ queuemask	src/scheduler.cc/samples/sgi_origin/toolkit.h	/^  Bitfield queuemask; 
 queues	src/scheduler.basl/af_server.h	/^  SetQue  queues;       \/* queues managed by the server *\/$/;"	m	struct:server_struct
 queues	src/scheduler.cc/samples/fifo/data_types.h	/^  queue_info **queues;  \/* array of queues *\/$/;"	m	struct:server_info
 quicksize	src/server/job_recov.c	/^static const unsigned int quicksize = sizeof(struct jobfix);$/;"	v	file:
+quiet	contrib/pestat-1.0/pestat.c	/^int quiet = 0;$/;"	v
 quiet	src/cmds/pbsnodes.c	/^int quiet = 0;$/;"	v
 quota	src/resmom/cygwin/mom_mach.c	/^static char *quota($/;"	f	file:
 quota	src/resmom/darwin/mom_mach.c	/^static char *quota($/;"	f	file:
@@ -9727,6 +9828,7 @@ release_file_lock	src/server/pbsd_main.c	/^int release_file_lock($/;"	f
 release_job	src/server/req_holdjob.c	/^int release_job($/;"	f
 release_req	src/server/issue_request.c	/^void release_req($/;"	f
 release_whole_array	src/server/req_holdjob.c	/^int release_whole_array($/;"	f
+reload	contrib/init.d/pbs_server	/^reload() {$/;"	f
 rem	src/mom_rcp/rcp.c	/^int errs, rem;$/;"	v
 remaining_time	src/scheduler.cc/samples/dec_cluster/toolkit.h	/^  int remaining_time;$/;"	m	struct:Uinfo
 remotesock	src/include/port_forwarding.h	/^  int remotesock;$/;"	m	struct:pfwdsock
@@ -9830,6 +9932,7 @@ res	src/scheduler.basl/af_server.h	/^  char    *res;  \/* server resource name (
 res	src/scheduler.cc/samples/fifo/data_types.h	/^  struct resource *res;  \/* list of resources *\/$/;"	m	struct:server_info	typeref:struct:server_info::resource
 res_str	src/scheduler.cc/samples/fifo/data_types.h	/^  char *res_str;  \/* string value of resource *\/$/;"	m	struct:resource_req
 res_to_check	src/scheduler.cc/samples/fifo/globals.c	/^const struct rescheck res_to_check[] =$/;"	v	typeref:struct:rescheck
+res_to_get	contrib/pestat-1.0/pestat.c	/^const char *res_to_get[] =$/;"	v
 res_to_get	src/scheduler.cc/samples/fifo/globals.c	/^const char *res_to_get[] =$/;"	v
 res_to_num	src/scheduler.cc/samples/fifo/misc.c	/^sch_resource_t res_to_num(char * res_str)$/;"	f
 resc	src/lib/Libifl/tm.c	/^  char *resc;$/;"	m	struct:reschold	file:
@@ -9960,6 +10063,7 @@ return_file	src/resmom/requests.c	/^static int return_file($/;"	f	file:
 return_stdfile	src/server/req_jobobit.c	/^static struct batch_request *return_stdfile($/;"	f	file:
 revoke_unused_hpm	src/scheduler.cc/samples/sgi_origin/hpm.c	/^revoke_unused_hpm(Resources *rsrcs)$/;"	f	file:
 right	src/include/pbs_nodes.h	/^  struct tree_t  *right;$/;"	m	struct:tree_t	typeref:struct:tree_t::tree_t
+rl_callback_handler_install	configure	/^rl_callback_handler_install ();$/;"	f
 rm_attribute	src/include/resmon.h	/^struct rm_attribute$/;"	s
 rm_errno	src/resmom/mom_main.c	/^int   rm_errno;$/;"	v
 rm_files	src/server/pbsd_init.c	/^static void rm_files($/;"	f	file:
@@ -9970,6 +10074,7 @@ rmonedir	src/resmom/unicos8/mom_start.c	/^rmonedir(char *tmpdir)$/;"	f
 rmonedir	src/resmom/unicosmk2/mom_start.c	/^rmonedir(char *tmpdir)$/;"	f
 rmtmpdir	src/resmom/unicos8/mom_start.c	/^rmtmpdir(char *sequence)$/;"	f
 rmtmpdir	src/resmom/unicosmk2/mom_start.c	/^rmtmpdir(char *sequence)$/;"	f
+rname	contrib/pestat-1.0/pestat.c	/^  char *rname;$/;"	m	struct:state_map	file:
 rot	src/drmaa/src/lookup3.c	90;"	d	file:
 round_robin	src/scheduler.cc/samples/fifo/data_types.h	/^unsigned round_robin:$/;"	m	struct:status
 routem	src/resmom/pbs_demux.c	/^struct routem$/;"	s	file:
@@ -10200,6 +10305,7 @@ running_jobs	src/scheduler.cc/samples/msic_cluster/toolkit.h	/^  int running_job
 running_jobs	src/scheduler.cc/samples/sgi_origin/usersort.c	/^  int running_jobs;$/;"	m	struct:Uinfo	file:
 runon	src/scheduler.cc/samples/dec_cluster/toolkit.h	/^  char   *runon;  \/* Host on which this job must run.   *\/$/;"	m	struct:job
 runon	src/scheduler.cc/samples/sgi_origin/toolkit.h	/^  char   *runon;  \/* Host on which this job must run.   *\/$/;"	m	struct:job
+ruserok	configure	/^ruserok ();$/;"	f
 rwhere	src/resmom/pbs_demux.c	/^enum rwhere {invalid, new_out, new_err, old_out, old_err};$/;"	g	file:
 s	src/scheduler.basl/af.h	/^  int  s;$/;"	m	struct:time_struct
 s_connect	src/include/qmgr.h	/^  int s_connect;              \/* PBS connection descriptor to server *\/$/;"	m	struct:server
@@ -11287,6 +11393,7 @@ sharedregionsize	src/resmom/darwin/mom_mach.c	/^static  unsigned int  sharedregi
 shares	src/scheduler.cc/samples/fifo/data_types.h	/^  int shares;    \/* number of shares this group has *\/$/;"	m	struct:group_info
 shellpid	src/resmom/start_exec.c	/^static pid_t    shellpid;  \/* shell part of interactive job  *\/$/;"	v	file:
 shift	src/scheduler.basl/af.h	/^  unsigned int shift; \/* K=10, M=20, G=30, T=40, P=50 *\/$/;"	m	struct:size_struct
+shl_load	configure	/^shl_load ();$/;"	f
 should_retry_route	src/server/svr_movejob.c	/^static int should_retry_route($/;"	f	file:
 show_help	src/cmds/qmgr.c	/^void show_help($/;"	f
 shut_nvidia_nvml	src/resmom/mom_server.c	/^int shut_nvidia_nvml()$/;"	f
@@ -11491,6 +11598,7 @@ socket_to_conn	src/scheduler.basl/af_server.c	/^socket_to_conn($/;"	f	file:
 socket_to_conn	src/scheduler.cc/pbs_sched.c	/^socket_to_conn(int sock)$/;"	f
 socket_to_conn	src/scheduler.tcl/pbs_sched.c	/^socket_to_conn($/;"	f
 socket_to_handle	src/server/svr_connect.c	/^int socket_to_handle($/;"	f
+sodir	doc/soelim.c	/^char *sodir[] = { 0, 0, 0, 0, 0 };$/;"	v
 sort	src/scheduler.cc/samples/fifo/data_types.h	/^  enum sort_type sort;$/;"	m	struct:sort_info	typeref:enum:sort_info::sort_type
 sort_by	src/scheduler.cc/samples/fifo/data_types.h	/^  struct sort_info *sort_by;  \/* current sort *\/$/;"	m	struct:config	typeref:struct:config::sort_info
 sort_by	src/scheduler.cc/samples/fifo/data_types.h	/^  struct sort_info *sort_by;$/;"	m	struct:status	typeref:struct:status::sort_info
@@ -11533,6 +11641,7 @@ split_jobs	src/scheduler.cc/samples/msic_cluster/usersort.c	/^split_jobs(Job *jo
 split_jobs	src/scheduler.cc/samples/sgi_origin/usersort.c	/^split_jobs(Job *jobs)$/;"	f	file:
 split_jobs	src/scheduler.cc/samples/umn_cluster/usersort.c	/^split_jobs(Job *jobs)$/;"	f	file:
 spoolasfinalname	src/resmom/mom_main.c	/^int    spoolasfinalname = 0;$/;"	v
+sqrt	configure	/^sqrt ();$/;"	f
 src_login_batch	src/resmom/mom_main.c	/^int     src_login_batch = TRUE;$/;"	v
 src_login_interactive	src/resmom/mom_main.c	/^int     src_login_interactive = TRUE;$/;"	v
 srfs	src/scheduler.basl/af_cnode.h	/^  struct  IODevice *srfs;   \/* dynamic array of srfs devices *\/$/;"	m	struct:cnode_struct	typeref:struct:cnode_struct::IODevice
@@ -11551,6 +11660,7 @@ stageinFiles	src/scheduler.basl/af_job.h	/^  char  *stageinFiles;$/;"	m	struct:j
 stageoutFiles	src/scheduler.basl/af_job.h	/^  char  *stageoutFiles;$/;"	m	struct:job_struct
 staging	src/gui/staging.tk	/^proc staging {callerDialogBox {qalter 0}} {$/;"	p
 standard_config	src/resmom/rm_dep.h	/^struct  config  standard_config[] =$/;"	v	typeref:struct:config
+start	contrib/init.d/pbs_server	/^start() {$/;"	f
 start	src/include/array.h	/^  int start;$/;"	m	struct:__anon6
 start_checkpoint	src/resmom/checkpoint.c	/^int start_checkpoint($/;"	f
 start_exec	src/resmom/start_exec.c	/^void start_exec($/;"	f
@@ -11631,6 +11741,7 @@ state	src/scheduler.cc/samples/sgi_origin/toolkit.h	/^  char    state;  \/* Is t
 state	src/scheduler.cc/samples/umn_cluster/toolkit.h	/^  char    state;  \/* Is the job Running, Queued, etc    *\/$/;"	m	struct:job
 state_count	src/scheduler.cc/samples/fifo/data_types.h	/^struct state_count$/;"	s
 state_count	src/scheduler.cc/samples/fifo/data_types.h	/^typedef struct state_count state_count;$/;"	t	typeref:struct:state_count
+state_map	contrib/pestat-1.0/pestat.c	/^struct state_map$/;"	s	file:
 state_sel	src/server/req_select.c	/^static attribute_def state_sel =$/;"	v	file:
 state_to_server	src/resmom/mom_server.c	/^void state_to_server($/;"	f
 states	src/cmds/qstat.c	/^static void states($/;"	f	file:
@@ -11651,6 +11762,7 @@ stdoutfd	src/cmds/pbsdsh.c	/^int stdoutfd, stdoutport;$/;"	v
 stdoutport	src/cmds/pbsdsh.c	/^int stdoutfd, stdoutport;$/;"	v
 stime	src/resmom/cygwin/mom_mach.h	/^  unsigned long   stime; \/* stime this process *\/$/;"	m	struct:proc_stat
 stime	src/resmom/linux/mom_mach.h	/^  unsigned long   stime; \/* stime this process *\/$/;"	m	struct:proc_stat
+stop	contrib/init.d/pbs_server	/^stop() {$/;"	f
 stop_me	src/resmom/mom_main.c	/^static void stop_me($/;"	f	file:
 stop_me	src/server/pbsd_init.c	/^static void stop_me($/;"	f	file:
 stopme	src/cmds/qsub.c	/^void stopme($/;"	f
@@ -11693,6 +11805,7 @@ stream_eof	src/server/node_manager.c	/^void stream_eof($/;"	f
 stream_id	src/lib/Libifl/rpp.c	/^  int stream_id; \/* id of other end of the *\/$/;"	m	struct:stream	file:
 stream_num	src/lib/Libifl/rpp.c	/^static int  stream_num = 0;  \/* current number of stream *\/$/;"	v	file:
 streams	src/server/node_manager.c	/^tree *streams = NULL; \/* tree of stream numbers *\/$/;"	v
+strftime	configure	/^strftime ();$/;"	f
 strget_keyvals	src/gui/listbox.tk	/^proc strget_keyvals {str key_list sep} {$/;"	p
 strget_keyvals	src/tools/xpbsmon/listbox.tk	/^proc strget_keyvals {str key_list sep} {$/;"	p
 strict_fifo	src/scheduler.cc/samples/fifo/data_types.h	/^unsigned strict_fifo:$/;"	m	struct:status
@@ -11888,6 +12001,7 @@ swap_used	src/resmom/cygwin/mom_mach.c	/^  unsigned long long swap_used;$/;"	m	s
 swap_used	src/resmom/linux/mom_mach.c	/^  unsigned long long swap_used;$/;"	m	struct:proc_mem	file:
 swapin_rate	src/resmom/unicos8/mom_mach.c	/^double swapin_rate;$/;"	v
 swapout_rate	src/resmom/unicos8/mom_mach.c	/^double swapout_rate;$/;"	v
+swtbl_load_table	configure	/^swtbl_load_table ();$/;"	f
 swtbl_num	src/resmom/aix4/mom_mach.c	/^struct swtbl_num swtbl_num[MAX_SW_NODES];$/;"	v	typeref:struct:swtbl_num
 swtbl_num	src/resmom/aix4/mom_mach.h	/^struct swtbl_num$/;"	s
 swtbl_num	src/resmom/aix5/mom_mach.c	/^struct swtbl_num swtbl_num[MAX_SW_NODES];$/;"	v	typeref:struct:swtbl_num
@@ -12690,9 +12804,11 @@ x11handler	src/cmds/qsub.c	/^void x11handler($/;"	f
 x_val	src/lib/Libattr/strTouL.c	/^static unsigned x_val;$/;"	v	file:
 xauth_path	src/cmds/qsub.c	/^char xauth_path[256];$/;"	v
 xauth_path	src/resmom/mom_main.c	/^char            xauth_path[MAXPATHLEN];$/;"	v
+xdr_int	configure	/^xdr_int ();$/;"	f
 xpbs_help	src/gui/pbs.tcl	/^proc xpbs_help {help_category callerDialogBox} {$/;"	p
 xpbs_help	src/tools/xpbsmon/pbs.tk	/^proc xpbs_help {help_category callerDialogBox} {$/;"	p
 y	src/scheduler.basl/af.h	/^  int  y;  \/* full year please *\/$/;"	m	struct:date_struct
+yywrap	configure	/^yywrap ();$/;"	f
 z_opt	src/cmds/qsub.c	/^int z_opt = FALSE;$/;"	v
 z_opt	src/gui/Ccode/xpbs_scriptload.c	/^int z_opt = FALSE;$/;"	v
 zopt	src/cmds/qmgr.c	/^int zopt = FALSE;  \/* -z option *\/$/;"	v
