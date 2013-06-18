@@ -255,7 +255,8 @@ unsigned can_never_run:
   resource_req *resused; /* a list of resources used */
   group_info *ginfo;  /* the fair share node for the owner */
   node_info *job_node;  /* node the job is running on */
-  char *fileused;
+  int fileused_count;
+  char **fileused;
   };
 
 struct node_info

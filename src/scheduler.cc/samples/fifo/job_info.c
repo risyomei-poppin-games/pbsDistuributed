@@ -277,13 +277,52 @@ job_info *query_job_info(struct batch_status *job, queue_info *queue)
       }
 	else if(!strcmp(attrp -> name, ATTR_fileused))
 	{
-		jinfo -> fileused = string_dup(attrp -> value);
-//		FILE* file = fopen("/home/lee/jobinfolog.txt", "wa");
-//		fprintf(file,"WTF:int job_info.c:%s",attrp->value);
-//		fclose(file);
+		char *fileusedStr = string_dup(attrp -> value);
+		int strlength = strlen(fileusedStr);
+		int i,j=0,comma_count=0;
+		char *abber = calloc(1,strlength);
 
+		for(i=0; i<strlen(fileusedStr); i++)
+		{
+			if(!isspace((int)fileusedStr[i]))
+			{
+				abber[j++]=fileusedStr[i];		
+			}
+			if(fileusedStr[i]==',')
+			{
+				comma_count++;
+			}
+		}
+
+		jinfo -> fileused_count = comma_count + 1;
+		jinfo -> fileused = calloc(jinfo -> fileused_count, sizeof(char*));
+
+		if(comma_count == 0)
+		{
+			jinfo -> fileused[0] = strdup(abber);
+	
+		}
+		else
+		{
+			char **tempStorage;
+			tempStorage=calloc(jinfo->fileused_count,sizeof(char*));
+		
+			char* p;
+
+			p = strtok_r(abber,",",tempStorage);
+			jinfo -> fileused[0] = strdup(p); 
+
+			
+			for(i=1;i<jinfo -> fileused_count; i++)
+			{
+				p = strtok_r(NULL,",",tempStorage);
+				jinfo -> fileused[i] = strdup(p);
+			}
+			free(tempStorage);
+		}
+		free(fileusedStr);
+		free(abber);
 	}
-
     attrp = attrp -> next;
     }
 
@@ -352,6 +391,8 @@ job_info *new_job_info()
   jinfo -> job_node = NULL;
 
   jinfo -> fileused = NULL;
+
+  jinfo -> fileused_count = 0;
 
   return jinfo;
   }
@@ -445,9 +486,19 @@ void free_job_info(job_info *jinfo)
   if (jinfo -> group != NULL)
     free(jinfo -> group);
 
-  if(jinfo -> fileused !=NULL )
-	free(jinfo -> fileused);
-
+  if(jinfo-> fileused_count > 0)
+  {
+	  int i;
+	  for(i=0;i<jinfo->fileused_count;i++)
+	  {
+		  if(jinfo -> fileused[i]!=NULL )
+		  {
+			  free(jinfo -> fileused[i]);
+			  jinfo -> fileused[i] = NULL;
+		  }
+	  }
+	  jinfo -> fileused_count = 0;
+  }
   free_resource_req_list(jinfo -> resreq);
 
   free_resource_req_list(jinfo -> resused);
