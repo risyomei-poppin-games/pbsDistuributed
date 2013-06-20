@@ -630,9 +630,9 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	char logbuf[256];   /* buffer for log messages */
 	node_info **ninfo_arr = jinfo -> queue -> server -> nodes;
 	float dataAwareLoad=10; 
- 	char  **nodes_filelocated=NULL;
-	int replicaCount = 0;
-	int fileSize=0;
+ 	char  ***nodes_filelocated=NULL;
+	int *replicaCount = NULL;
+	gfarm_off_t *fileSize=NULL;
 
 	//No information? fuck yourself
 	if (jinfo == NULL||ninfo_arr == NULL)
@@ -642,45 +642,54 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	i = 0;
 	ln_i = jinfo -> queue -> server -> num_nodes;
 
-	jinfo->fileused;
 
-	if(jinfo->fileused)
+	if(jinfo->fileused_count>0)
 	{
-		int noErr = 1;
+
 		gfarm_error_t  e;
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i] -> name,"Preparing dataAwareDispatch");
 		//Get prepared for getting the Information about the file used;
 		if( GFARM_ERR_NO_ERROR !=  gfarm_initialize(NULL,NULL) )
 		{
 			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize failed, used default value for data-aware value");
-			noErr = 0;	
+			goto normal;	
 		}
 		else
 		{
 			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize Success");	
-			
+
 		}
 
-		if(noErr)
+
+		nodes_filelocated = calloc(jinfo->fileused_count,sizeof(char**));
+		fileSize = calloc(jinfo->fileused_count, sizeof(gfarm_off_t));
+		replicaCount = calloc(jinfo->fileused_count, sizeof(int));
+		int lk = 0;
+		
+		if(!noErr)
+			goto normal;
+		
+
+		for(lk=0; lk< jinfo -> fileused_count ; lk ++ )
 		{
 			struct gfs_replica_info* ri=NULL;
-			e=gfs_replica_info_by_name(jinfo->fileused, 0, &ri);
+			e=gfs_replica_info_by_name(jinfo->fileused[lk], 0, &ri);
 			if(e==GFARM_ERR_NO_ERROR)
 			{
-				replicaCount = gfs_replica_info_number(ri);
-				sprintf(logbuf, "ReplicaCount %d",replicaCount );
+				replicaCount[lk] = gfs_replica_info_number(ri);
+				sprintf(logbuf, "ReplicaCount %d",replicaCount[lk] );
 				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
 
-				if(replicaCount>0)
-					nodes_filelocated = malloc(sizeof(nodes_filelocated)*replicaCount);
+				if(replicaCount[lk]>0)
+					nodes_filelocated[lk] = malloc(sizeof(char**)*replicaCount[lk]);
 
 
 				int z;
-				for(z=0;z<replicaCount;z++)
+				for(z=0;z<replicaCount[lk];z++)
 				{
 
-					nodes_filelocated[z]=strdup(gfs_replica_info_nth_host(ri, z));
-					sprintf(logbuf, " %s",nodes_filelocated[z]); 
+					nodes_filelocated[lk][z]=strdup(gfs_replica_info_nth_host(ri, z));
+					sprintf(logbuf, " %s",nodes_filelocated[lk][z]); 
 					sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
 					logbuf[0] = 0;
 				}
@@ -689,28 +698,27 @@ node_info* dataAwareDispatch(job_info *jinfo)
 			else
 			{
 				sprintf(logbuf, "get_replic_info failed:error = %d",e );
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
-				noErr = 0;
+				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused[lk],logbuf);
+				goto normal;
 			}
-		}	
 
-		if(noErr)
-		{
+
 			struct gfs_stat st;
-			e=gfs_lstat(jinfo->fileused, &st);
+			e=gfs_lstat(jinfo->fileused[lk], &st);
 			if(e==GFARM_ERR_NO_ERROR)	
 			{
 				sprintf(logbuf, "user %s, group %s, size %ld",st.st_user,st.st_group,st.st_size);
-				fileSize = st.st_size;
+				fileSize[lk] = st.st_size;
 				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"wtf" ,logbuf );
 			}
 			else
 			{
 				sprintf(logbuf, "gfs_lstat  failed:error = %d",e );
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
-				noErr = 0;	
+				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused[lk],logbuf);
 			}
+
 		}
+		
 
 		//Gfarm termination
 		gfarm_terminate();
@@ -721,7 +729,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 
 
-
+normal:
 
 	for (c=0; c< ln_i; c++)//loop for the host
 	{
