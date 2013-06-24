@@ -679,7 +679,17 @@ node_info* dataAwareDispatch(job_info *jinfo)
 				for(z=0;z<replicaCount;z++)
 				{
 
-					nodes_filelocated[z]=strdup(gfs_replica_info_nth_host(ri, z));
+					char *tempHostName =gfs_replica_info_nth_host(ri, z);
+					
+					int x;
+					for(x=0;x<strlen(tempHostName);x++)
+						if(tempHostName[x]=='.')
+							break;
+					
+					char job_name_prefix[LOG_BUF_SIZE];
+					strncpy(job_name_prefix,tempHostName,x);
+					
+					nodes_filelocated[z]=strdup(job_name_prefix);
 					sprintf(logbuf, " %s",nodes_filelocated[z]); 
 					sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
 					logbuf[0] = 0;
