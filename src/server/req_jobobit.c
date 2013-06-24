@@ -2387,6 +2387,8 @@ void req_jobobit(
   sprintf(acctbuf, msg_job_end_stat,
           pjob->ji_qs.ji_un.ji_exect.ji_exitstat);
 
+  profile(pjob->ji_qs.ji_jobid, "jobends");
+
   if (exitstatus < 10000)
     {
     strcpy(mailbuf, acctbuf);

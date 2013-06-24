@@ -225,6 +225,10 @@ void req_runjob(
     pjob->ji_qs.ji_jobid,
     log_buffer);
 
+  profile( pjob->ji_qs.ji_jobid,"jobstarts");
+
+ 
+
   /* If async run, reply now; otherwise reply is handled in */
   /* post_sendmom or post_stagein */
 

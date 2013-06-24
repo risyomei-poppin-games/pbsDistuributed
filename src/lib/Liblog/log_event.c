@@ -123,6 +123,8 @@ long     *log_event_mask = &log_event_lvl_priv;
  * is to contain "continuation lines".
  */
 
+
+
 void log_event(
 
   int   eventtype,
@@ -141,6 +143,43 @@ void log_event(
 
   return;
   }  /* END log_event() */
+
+
+
+void profile(char *job_name, char *jobStatus )
+{
+	char log_buffer[LOG_BUF_SIZE];
+
+	struct timespec startdate;
+	clock_gettime(CLOCK_REALTIME,&startdate);
+
+	int x;
+	for(x=0;x<strlen(job_name);x++)
+		if(job_name[x]=='.')
+		{
+			break;
+		}
+
+	char job_name_num[LOG_BUF_SIZE];
+	strncpy(job_name_num,job_name,x);	
+
+
+	sprintf(log_buffer,"	%ld   %lf   %s    %s	",
+			startdate.tv_sec,
+			startdate.tv_nsec/1000000000.0,
+			job_name_num,
+			jobStatus
+			);
+
+	log_event(
+			PBSEVENT_SCHED,
+			PBS_EVENTCLASS_SERVER,
+			"profile",
+			log_buffer);
+
+
+
+}
 
 
 /* END log_event.c */
