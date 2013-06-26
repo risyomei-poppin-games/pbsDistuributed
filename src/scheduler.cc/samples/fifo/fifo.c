@@ -630,7 +630,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	char logbuf[256];   /* buffer for log messages */
 	node_info **ninfo_arr = jinfo -> queue -> server -> nodes;
 	float dataAwareLoad=10; 
- 	char  **nodes_filelocated=NULL;
+	char  **nodes_filelocated=NULL;
 	int replicaCount = 0;
 	int fileSize=0;
 
@@ -641,8 +641,6 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	//Initialize loop valiable and the maxhostvalue
 	i = 0;
 	ln_i = jinfo -> queue -> server -> num_nodes;
-
-	jinfo->fileused;
 
 	if(jinfo->fileused)
 	{
@@ -658,7 +656,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 		else
 		{
 			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize Success");	
-			
+
 		}
 
 		if(noErr)
@@ -680,15 +678,15 @@ node_info* dataAwareDispatch(job_info *jinfo)
 				{
 
 					char *tempHostName =gfs_replica_info_nth_host(ri, z);
-					
+
 					int x;
 					for(x=0;x<strlen(tempHostName);x++)
 						if(tempHostName[x]=='.')
 							break;
-					
+
 					char job_name_prefix[LOG_BUF_SIZE];
 					strncpy(job_name_prefix,tempHostName,x);
-					
+
 					nodes_filelocated[z]=strdup(job_name_prefix);
 					sprintf(logbuf, " %s",nodes_filelocated[z]); 
 					sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
@@ -728,11 +726,6 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 
 
-
-
-
-
-
 	for (c=0; c< ln_i; c++)//loop for the host
 	{
 		/* if the job didn't specify memory, it will default to 0, and if
@@ -750,11 +743,10 @@ node_info* dataAwareDispatch(job_info *jinfo)
 					break;
 				}
 			}
-	
+
 			int fileIOFacotor = 10;
 			if(fileMatch)
 				fileIOFacotor = 0;	
-			
 
 			//update the average load value
 			proj_la = ninfo_arr[i] -> loadave + fileIOFacotor;
@@ -763,7 +755,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 			{
 				if( proj_la < good_node_la )//try to find hosts with low load
 				{
-					sprintf(logbuf, "Possible low-loaded node load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
+					sprintf(logbuf, "lowload load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
 							proj_la, ninfo_arr[i]->ideal_load, good_node_la);
 
 					good_node = ninfo_arr[i];//this host is currently the lowest loaded one
@@ -772,7 +764,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 				}
 				else
 				{
-					sprintf(logbuf, "Node Rejected, Load higher then last possible node: load: %6.2f last good ideal: %6.2f", 
+					sprintf(logbuf, "lowload Rej, higher: load: %6.2f last good ideal: %6.2f", 
 							ninfo_arr[i]->loadave, good_node_la);
 				}
 			}
@@ -780,13 +772,13 @@ node_info* dataAwareDispatch(job_info *jinfo)
 			{
 				if (proj_la < good_node_la)
 				{
-					sprintf(logbuf, "Possible medium-loaded node load: %6.2f max_load: %6.2f  last good ideal: %6.2f",
+					sprintf(logbuf, "midload load: %6.2f max_load: %6.2f  last good ideal: %6.2f",
 							proj_la, ninfo_arr[i]->max_load, good_node_la);
 					possible_node = ninfo_arr[i];
 					good_node_la = proj_la;
 				}
 				else
-					sprintf(logbuf, "Node Rejected, Load higher then last possible node: load: %6.2f last good ideal: %6.2f", 
+					sprintf(logbuf, "midload Rej, higher load: %6.2f last good ideal: %6.2f", 
 							ninfo_arr[i] -> loadave, good_node_la);
 			}
 			else
@@ -807,23 +799,35 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	}
 
 	//release the memory used
-	
+
+
+	sprintf(logbuf,"Replica COunt %d",replicaCount);
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", logbuf);
 	int lp = 0 ;
 	for(lp=0;lp<replicaCount;lp++)
-		free(*nodes_filelocated);
+	{
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", "memory freed");
+		free(nodes_filelocated[lp]);
+	}
+
 	free(nodes_filelocated);	
 
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", "memory freed");
 
-
-
-	if (good_node == NULL)
+	if(good_node == NULL && possible_node == NULL)
 	{
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, possible_node -> name, "good Node Chosen to run job on");
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", "no nodes available now");
+		return NULL;	
+
+	}
+	else if (good_node == NULL)
+	{
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, possible_node -> name, "possible Chosen to run job on");
 		return possible_node;
 	}
 	else
 	{
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, good_node -> name, "possible Node Chosen to run job on");
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, good_node -> name, "good Chosen to run job on");
 		return good_node;
 	}
 
@@ -1038,10 +1042,6 @@ job_info *next_job(server_info *sinfo, int init)
             }
           }
         }
-      }
-    }
-  else if (cstat.by_queue)
-    {
     if (init == INITIALIZE)
       {
       last_job = -1;
