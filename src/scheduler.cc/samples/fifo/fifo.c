@@ -878,7 +878,8 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
   strftime(timebuf, 128, "started on %a %b %d at %H:%M", localtime(&cstat.current_time));
 
   best_node = dataAwareDispatch(jinfo);
-  best_node_name = best_node -> name;
+  if(!best_node)
+  	best_node_name = best_node -> name;
 //  if (cstat.load_balancing || cstat.load_balancing_rr)
 //    {
 //    best_node = find_best_node(jinfo, sinfo -> timesharing_nodes);
