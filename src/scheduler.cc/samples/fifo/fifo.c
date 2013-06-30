@@ -324,6 +324,122 @@ int init_scheduling_cycle(server_info *sinfo)
   return 1;  /* SUCCESS */
   }
 
+
+////
+///*
+//   Replica Making
+//*/
+//int replicaGenerate(int sd)
+//{
+//
+//	//Replilca Making
+//
+//	server_info *sinfo;  /* ptr to the server/queue/job/node info */
+//	job_info *jinfo;  /* ptr to the job to see if it can run */
+//	int ret = SUCCESS;  /* return code from is_ok_to_run_job() */
+////	char log_msg[MAX_LOG_SIZE]; /* used to log an message about job */
+////	char comment[MAX_COMMENT_SIZE]; /* used to update comment of job */
+//
+//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Entering Schedule");
+//
+////	update_cycle_status();
+//
+//	/* create the server / queue / job / node structures */
+//
+//	if ((sinfo = query_server(sd)) == NULL)
+//	{
+//		fprintf(stderr, "Problem with creating server data strucutre\n");
+//
+//		return(0);
+//	}
+//
+//	if (init_scheduling_cycle(sinfo) == 0)
+//	{
+//		sched_log(
+//				PBSEVENT_DEBUG,
+//				PBS_EVENTCLASS_SERVER,
+//				sinfo -> name,
+//				"init_scheduling_cycle failed.");
+//
+//		free_server(sinfo, 1);
+//
+//		return(0);
+//	}
+//
+//	/* main scheduling loop */
+//
+//
+//
+//
+//
+//	while ((jinfo = next_job(sinfo, 0)))
+//	{
+////		sched_log(
+////				PBSEVENT_DEBUG2,
+////				PBS_EVENTCLASS_JOB,
+////				jinfo->name,
+////				"Considering job to run");
+////
+////		if ((ret = is_ok_to_run_job(sd, sinfo, jinfo->queue, jinfo)) == SUCCESS)
+////		{
+////			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.scheduleing_cycle this job is ok to run"); 	 	
+////			run_update_job(sd, sinfo, jinfo->queue, jinfo);
+////		}
+////		else
+////		{
+////			if (jinfo->can_never_run)
+////			{
+////				sched_log(
+////						PBSEVENT_JOB,
+////						PBS_EVENTCLASS_JOB,
+////						jinfo->name,
+////						"Job Deleted because it would never run");
+////
+////				pbs_deljob(sd, jinfo->name, "Job could never run");
+////			}
+////
+////			jinfo->can_not_run = 1;
+////
+////			if (translate_job_fail_code(ret, comment, log_msg))
+////			{
+////				/* if the comment doesn't get changed, its because it hasn't changed.
+////				 * if the reason for the job has not changed, we do not need to log it
+////				 */
+////
+////				if (update_job_comment(sd, jinfo, comment) == 0)
+////				{
+////					sched_log(
+////							PBSEVENT_SCHED,
+////							PBS_EVENTCLASS_JOB,
+////							jinfo->name,
+////							log_msg);
+////				}
+////			}
+////
+////			if ((ret != NOT_QUEUED) && cstat.strict_fifo)
+////			{
+////				update_jobs_cant_run(
+////						sd,
+////						jinfo->queue->jobs,
+////						jinfo,
+////						COMMENT_STRICT_FIFO,
+////						START_AFTER_JOB);
+////			}
+////		}
+//	}
+//
+////	if (cstat.fair_share)
+////		update_last_running(sinfo);
+//
+//	free_server(sinfo, 1); /* free server and queues and jobs */
+//
+//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Leaving schedule\n");
+//
+//	return 0;
+//}
+//
+
+
 /*
  *
  * schedule - this function gets called to start each scheduling cycle
@@ -378,6 +494,7 @@ int schedule(
       break;
 
     case SCH_SCHEDULE_NEW:
+		//replicaGen(sd);
 
     case SCH_SCHEDULE_TERM:
 
@@ -386,7 +503,7 @@ int schedule(
     case SCH_SCHEDULE_CMD:
 
     case SCH_SCHEDULE_TIME:
-
+		replicaGen(sd);
       return(scheduling_cycle(sd));
 
       /*NOTREACHED*/
@@ -435,6 +552,153 @@ int schedule(
 
 /*
  *
+ *
+ *
+ *
+ *
+ * */
+
+int replicaGen(int sd)
+{
+	server_info *sinfo;  /* ptr to the server/queue/job/node info */
+	job_info *jinfo;  /* ptr to the job to see if it can run */
+	int ret = SUCCESS;  /* return code from is_ok_to_run_job() */
+//	char log_msg[MAX_LOG_SIZE]; /* used to log an message about job */
+//	char comment[MAX_COMMENT_SIZE]; /* used to update comment of job */
+
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "A new job is enqued");
+
+//	update_cycle_status();
+
+	/* create the server / queue / job / node structures */
+
+	if ((sinfo = query_server(sd)) == NULL)
+	{
+		fprintf(stderr, "Problem with creating server data strucutre\n");
+
+		return(0);
+	}
+
+	if (init_scheduling_cycle(sinfo) == 0)
+	{
+		sched_log(
+				PBSEVENT_SCHED,
+				PBS_EVENTCLASS_SERVER,
+				sinfo -> name,
+				"init_scheduling_cycle failed.");
+
+		free_server(sinfo, 1);
+
+		return(0);
+	}
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "check Point");
+	while ((jinfo = next_job(sinfo, 0)))
+	{
+	
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "1111");
+		
+		if(jinfo->name!=NULL && jinfo->fileused!=NULL)
+			sched_log(
+					PBSEVENT_SCHED,
+					PBS_EVENTCLASS_JOB,
+					jinfo->name,
+					jinfo->fileused);
+		else
+			sched_log(
+					PBSEVENT_SCHED,
+					PBS_EVENTCLASS_JOB,
+					"not set",
+					"not set");
+
+//		if(replicaCount)
+//		{
+//			int fileusedHash = getHashCode(jinfo->fileused);
+//
+//			if(fileHash[fileusedHash]<=nodes_number*2)
+//			{
+//				fileHash[fileusedHash]++;
+//			}
+//
+//			if( fileHash[fileusedHash] > 2*replicaCount && replicaCount < nodes_number)
+//			{
+//				char sysCommand[100];
+//				sprintf(sysCommand,"/work/risyomei/gfarm/bin/gfrep -N %d %s",replicaCount+1,jinfo->fileused);
+//				system(sysCommand);	
+//
+//			}
+//
+//			char temp[100];
+//			sprintf(temp,"filename:%s,repCount:%d,Inhashtable:%d"
+//					,jinfo->fileused
+//					,replicaCount
+//					,	fileHash[fileusedHash]);
+//			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "profile",temp);
+//
+//		}
+
+
+//		if ((ret = is_ok_to_run_job(sd, sinfo, jinfo->queue, jinfo)) == SUCCESS)
+//		{
+//			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.scheduleing_cycle this job is ok to run"); 	 	
+//			run_update_job(sd, sinfo, jinfo->queue, jinfo);
+//		}
+//		else
+//		{
+//			if (jinfo->can_never_run)
+//			{
+//				sched_log(
+//						PBSEVENT_JOB,
+//						PBS_EVENTCLASS_JOB,
+//						jinfo->name,
+//						"Job Deleted because it would never run");
+//
+//				pbs_deljob(sd, jinfo->name, "Job could never run");
+//			}
+//
+//			jinfo->can_not_run = 1;
+//
+//			if (translate_job_fail_code(ret, comment, log_msg))
+//			{
+//				/* if the comment doesn't get changed, its because it hasn't changed.
+//				 * if the reason for the job has not changed, we do not need to log it
+//				 */
+//
+//				if (update_job_comment(sd, jinfo, comment) == 0)
+//				{
+//					sched_log(
+//							PBSEVENT_SCHED,
+//							PBS_EVENTCLASS_JOB,
+//							jinfo->name,
+//							log_msg);
+//				}
+//			}
+//
+//			if ((ret != NOT_QUEUED) && cstat.strict_fifo)
+//			{
+//				update_jobs_cant_run(
+//						sd,
+//						jinfo->queue->jobs,
+//						jinfo,
+//						COMMENT_STRICT_FIFO,
+//						START_AFTER_JOB);
+//			}
+//		}
+	}
+
+//	if (cstat.fair_share)
+//		update_last_running(sinfo);
+
+	free_server(sinfo, 1); /* free server and queues and jobs */
+
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Leaving making replica\n");
+	return 0;
+}
+
+
+
+
+/*
+ *
  * scheduling_cycle - the controling function of the scheduling cycle
  *
  *   sd  - connection descriptor to the pbs server
@@ -455,7 +719,7 @@ int scheduling_cycle(
 	char log_msg[MAX_LOG_SIZE]; /* used to log an message about job */
 	char comment[MAX_COMMENT_SIZE]; /* used to update comment of job */
 
-	sched_log(PBSEVENT_DEBUG2, PBS_EVENTCLASS_REQUEST, "", "Entering Schedule");
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Entering Schedule");
 
 	update_cycle_status();
 
@@ -500,7 +764,7 @@ int scheduling_cycle(
 			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.scheduleing_cycle this job is ok to run"); 	 	
 			run_update_job(sd, sinfo, jinfo->queue, jinfo);
 		}
-		else
+	else
 		{
 			if (jinfo->can_never_run)
 			{
@@ -548,7 +812,7 @@ int scheduling_cycle(
 
 	free_server(sinfo, 1); /* free server and queues and jobs */
 
-	sched_log(PBSEVENT_DEBUG2, PBS_EVENTCLASS_REQUEST, "", "Leaving schedule\n");
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Leaving schedule\n");
 
 	return 0;
 }
@@ -642,6 +906,145 @@ unsigned int getHashCode(char* val)
 	return h%HASH_TABLE_LENGTH;
 }
 
+
+gfarm_error_t getRepInfo(
+		char *fileUsed,
+		int *replicaCount,
+		int *fileSize,
+		int ***nodes_filelocated)
+{
+
+	int noErr = 1;
+	gfarm_error_t  e;
+	char logbuf[256];   /* buffer for log messages */
+
+	sched_log(	PBSEVENT_SCHED, 
+			 	PBS_EVENTCLASS_NODE,
+				"getReplicaInformation",
+				fileUsed);
+
+	//Get prepared for getting the Information about the file used;
+	if( (e=  gfarm_initialize(NULL,NULL) )!=GFARM_ERR_NO_ERROR )
+	{
+		sched_log(	PBSEVENT_SCHED, 
+					PBS_EVENTCLASS_NODE, 
+					"getReplicaInformation", 
+					"gfarm Initalize failed, used default value for data-aware value");
+		
+		*replicaCount=0;
+		*nodes_filelocated=NULL;
+		*fileSize=0;
+		return e;	
+	}
+
+	sched_log(	PBSEVENT_SCHED,
+		   		PBS_EVENTCLASS_NODE,
+			"getReplicaInformation", 
+				"gfarm Initalize Success");	
+
+
+	struct gfs_replica_info* ri=NULL;
+	if(	(e=gfs_replica_info_by_name(fileUsed, 0, &ri))!=GFARM_ERR_NO_ERROR)
+	{
+		sprintf(logbuf, "get_replic_info failed:error = %d",e );
+		sched_log(PBSEVENT_SCHED, 
+				PBS_EVENTCLASS_NODE,
+				fileUsed,
+				logbuf);
+		*replicaCount=0;
+		*nodes_filelocated=NULL;
+		*fileSize=0;
+		return e;
+	}
+
+	*replicaCount = gfs_replica_info_number(ri);
+	sprintf(logbuf, "ReplicaCount %d",*replicaCount );
+	sched_log(PBSEVENT_SCHED, 
+			PBS_EVENTCLASS_NODE, 
+			fileUsed,
+			logbuf);
+
+	if(*replicaCount<=0)
+	{
+		*replicaCount=0;
+		*nodes_filelocated = NULL; 
+		*fileSize=0;
+		return -1;
+	}
+
+
+	*nodes_filelocated = malloc(sizeof(*nodes_filelocated)*(*replicaCount));
+	int z;
+	for(z=0;z<*replicaCount;z++)
+	{
+
+		char *tempHostName =gfs_replica_info_nth_host(ri, z);
+
+		int x;
+		for(x=0;x<strlen(tempHostName);x++)
+			if(tempHostName[x]=='.')
+				break;
+
+		char job_name_prefix[LOG_BUF_SIZE];
+		strncpy(job_name_prefix,tempHostName,x);
+
+		*nodes_filelocated[z]=strdup(job_name_prefix);
+		sprintf(logbuf, " %s",*nodes_filelocated[z]); 
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
+		logbuf[0] = 0;
+	}
+
+
+
+	struct gfs_stat st;
+	e=gfs_lstat(fileUsed, &st);
+	if(e!=GFARM_ERR_NO_ERROR)	
+	{
+
+		sprintf(logbuf, "gfs_lstat  failed:error = %d",e );
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, fileUsed,logbuf);\
+		*replicaCount=0;
+		free(*nodes_filelocated);
+		*nodes_filelocated = NULL; 
+		*fileSize=0;
+		return e;
+
+	}
+
+	sprintf(logbuf, "user %s, group %s, size %ld",st.st_user,st.st_group,st.st_size);
+	*fileSize = st.st_size;
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"wtf" ,logbuf );
+
+
+
+	//Gfarm termination
+	gfarm_terminate();
+	return GFARM_ERR_NO_ERROR;
+
+}
+void relRepInfo(int *replicaCount,int ***nodes_filelocated)
+{
+	char logbuf[256];   /* buffer for log messages */
+
+	sprintf(logbuf,"Replica Count %d",replicaCount);
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "relRepInfo", logbuf);
+	
+	if(*replicaCount==0||*nodes_filelocated==NULL)
+		return;
+
+	int lp = 0 ;
+	for(lp=0;lp<*replicaCount;lp++)
+	{
+		
+		free(*nodes_filelocated[lp]);
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "in", "memory  freed");
+	}
+
+	free(*nodes_filelocated);	
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "out", "memory freed");
+
+}
+
 node_info* dataAwareDispatch(job_info *jinfo)
 {
 
@@ -650,15 +1053,20 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	node_info *good_node = NULL;  /* node which is under ideal load */
 
 	int i = 0, c;   /* index & loop vars */
-	int ln_i;    /* index of the last node in ninfo_arr*/
+	int nodes_number;    /* index of the last node in ninfo_arr*/
 	float good_node_la = 1.0e10;  /* the best load ave found yet */
 	float proj_la;   /* the projected load average */
 	char logbuf[256];   /* buffer for log messages */
+
 	node_info **ninfo_arr = jinfo -> queue -> server -> nodes;
+	nodes_number = jinfo -> queue -> server -> num_nodes;
+	
+	
 	float dataAwareLoad=10; 
 	char  **nodes_filelocated=NULL;
 	int replicaCount = 0;
 	int fileSize=0;
+	int dataAwareSwitch=0;
 
 	//No information? fuck yourself
 	if (jinfo == NULL||ninfo_arr == NULL)
@@ -666,95 +1074,16 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 	//Initialize loop valiable and the maxhostvalue
 	i = 0;
-	ln_i = jinfo -> queue -> server -> num_nodes;
 
 	if(jinfo->fileused)
 	{
-		int noErr = 1;
-		gfarm_error_t  e;
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i] -> name,"Preparing dataAwareDispatch");
-		//Get prepared for getting the Information about the file used;
-		if( GFARM_ERR_NO_ERROR !=  gfarm_initialize(NULL,NULL) )
-		{
-			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize failed, used default value for data-aware value");
-			noErr = 0;	
-		}
-		else
-		{
-			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "WTF", "gfarm Initalize Success");	
-
-		}
-
-		if(noErr)
-		{
-			struct gfs_replica_info* ri=NULL;
-			e=gfs_replica_info_by_name(jinfo->fileused, 0, &ri);
-			if(e==GFARM_ERR_NO_ERROR)
-			{
-				replicaCount = gfs_replica_info_number(ri);
-				sprintf(logbuf, "ReplicaCount %d",replicaCount );
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
-
-				if(replicaCount>0)
-				{
-					nodes_filelocated = malloc(sizeof(nodes_filelocated)*replicaCount);
-				}
-
-
-				int z;
-				for(z=0;z<replicaCount;z++)
-				{
-
-					char *tempHostName =gfs_replica_info_nth_host(ri, z);
-
-					int x;
-					for(x=0;x<strlen(tempHostName);x++)
-						if(tempHostName[x]=='.')
-							break;
-
-					char job_name_prefix[LOG_BUF_SIZE];
-					strncpy(job_name_prefix,tempHostName,x);
-
-					nodes_filelocated[z]=strdup(job_name_prefix);
-					sprintf(logbuf, " %s",nodes_filelocated[z]); 
-					sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
-					logbuf[0] = 0;
-				}
-
-			}
-			else
-			{
-				sprintf(logbuf, "get_replic_info failed:error = %d",e );
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
-				noErr = 0;
-			}
-		}	
-
-		if(noErr)
-		{
-			struct gfs_stat st;
-			e=gfs_lstat(jinfo->fileused, &st);
-			if(e==GFARM_ERR_NO_ERROR)	
-			{
-				sprintf(logbuf, "user %s, group %s, size %ld",st.st_user,st.st_group,st.st_size);
-				fileSize = st.st_size;
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"wtf" ,logbuf );
-			}
-			else
-			{
-				sprintf(logbuf, "gfs_lstat  failed:error = %d",e );
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, jinfo->fileused,logbuf);
-				noErr = 0;	
-			}
-		}
-
-		//Gfarm termination
-		gfarm_terminate();
+		 
+		gfarm_error_t e= getRepInfo(jinfo->fileused,&replicaCount,&fileSize,&nodes_filelocated);
 	}
 
 
 
-	for (c=0; c< ln_i; c++)//loop for the host
+	for (c=0; c< nodes_number; c++)//loop for the host
 	{
 		/* if the job didn't specify memory, it will default to 0, and if
 		 * the mom didn't return physmem, it defaults to 0.
@@ -817,32 +1146,6 @@ node_info* dataAwareDispatch(job_info *jinfo)
 		else
 		{
 			sprintf(logbuf, "Node Rejected, node does not fit job requirements.");
-			if(replicaCount)
-			{
-				int fileusedHash = getHashCode(jinfo->fileused);
-
-				if(fileHash[fileusedHash]<=ln_i*2)
-				{
-					fileHash[fileusedHash]++;
-				}
-
-				if( fileHash[fileusedHash] > 2*replicaCount && replicaCount < ln_i)
-				{
-					char sysCommand[100];
-					sprintf(sysCommand,"/work/risyomei/gfarm/bin/gfrep -N %d %s",replicaCount+1,jinfo->fileused);
-					system(sysCommand);	
-
-				}
-				
-				char temp[100];
-				sprintf(temp,"filename:%s,repCount:%d,Inhashtable:%d"
-							,jinfo->fileused
-							,replicaCount
-							,	fileHash[fileusedHash]);
-				sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "profile",temp);
-	
-			}
-
 		}
 
 
@@ -854,20 +1157,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	}
 
 	//release the memory used
-
-
-	sprintf(logbuf,"Replica COunt %d",replicaCount);
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", logbuf);
-	int lp = 0 ;
-	for(lp=0;lp<replicaCount;lp++)
-	{
-		
-		free(nodes_filelocated[lp]);
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "in", "memory  freed");
-	}
-
-	free(nodes_filelocated);	
-
+	relRepInfo(&replicaCount,&nodes_filelocated);
 	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "out", "memory freed");
 
 	if(good_node == NULL && possible_node == NULL)
@@ -1018,160 +1308,160 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
  *
  */
 job_info *next_job(server_info *sinfo, int init)
-  {
-  /* cjobs is an array of the queue's job_info arrays.  It is used to cycle
-   * through the jobs returning 1 job from each queue
-   */
-  static job_info ***cjobs = NULL;
+{
+	/* cjobs is an array of the queue's job_info arrays.  It is used to cycle
+	 * through the jobs returning 1 job from each queue
+	 */
+	static job_info ***cjobs = NULL;
 
-  /* last_queue is the index into a queue array of the last time
-   * the function was called
-   */
-  static int last_queue;
+	/* last_queue is the index into a queue array of the last time
+	 * the function was called
+	 */
+	static int last_queue;
 
-  /* last_job is the index into a job array of the last time
-   * the function was called
-   */
-  static int last_job;
+	/* last_job is the index into a job array of the last time
+	 * the function was called
+	 */
+	static int last_job;
 
-  job_info *rjob = NULL;  /* the job to return */
-  int i;
+	job_info *rjob = NULL;  /* the job to return */
+	int i;
 
-  if (cstat.round_robin)
-    {
-    if (init == INITIALIZE)
-      {
-      if (cjobs != NULL)
-        {
-        free(cjobs);
-        cjobs = NULL;
-        }
-
-      /*
-       * cjobs is an array of pointers which will point to each of the job
-       * arrays in each queue
-       */
-      if (cjobs == NULL)
-        {
-        if ((cjobs = (job_info ***) malloc(sizeof(job_info**) * sinfo -> num_queues)) == NULL)
-          {
-          perror("Memory Allocation Error");
-          return NULL;
-          }
-
-        last_queue = -1;
-
-        last_job = 0;
-
-        for (i = 0; i < sinfo -> num_queues; i++)
-          cjobs[i] = sinfo -> queues[i] -> jobs;
-        }
-      } /* end initalization */
-    else
-      {
-      /* find the next queue to run a job out of */
-      for (i = 0; i < sinfo -> num_queues && rjob == NULL; i++)
-        {
-        /* we have reached the end of the array, cycle back through */
-        if (last_queue == (sinfo -> num_queues - 1))
-          {
-          last_queue = 0;
-          last_job++;
-          }
-        else /* still more queues to go */
-          last_queue++;
-
-        if (cjobs[last_queue] != NULL)
-          {
-          if (cjobs[last_queue][last_job] == NULL)
-            cjobs[last_queue] = NULL;
-          else
-            {
-            if (cstat.fair_share)
-              rjob = extract_fairshare(cjobs[last_queue]);
-            else if (cjobs[last_queue][last_job] -> can_not_run == 0)
-              rjob = cjobs[last_queue][last_job];
+	if (cstat.round_robin)
+	{
+		if (init == INITIALIZE)
+		{
+			if (cjobs != NULL)
+			{
+				free(cjobs);
+				cjobs = NULL;
 			}
-		  }
+
+			/*
+			 * cjobs is an array of pointers which will point to each of the job
+			 * arrays in each queue
+			 */
+			if (cjobs == NULL)
+			{
+				if ((cjobs = (job_info ***) malloc(sizeof(job_info**) * sinfo -> num_queues)) == NULL)
+				{
+					perror("Memory Allocation Error");
+					return NULL;
+				}
+
+				last_queue = -1;
+
+				last_job = 0;
+
+				for (i = 0; i < sinfo -> num_queues; i++)
+					cjobs[i] = sinfo -> queues[i] -> jobs;
+			}
+		} /* end initalization */
+		else
+		{
+			/* find the next queue to run a job out of */
+			for (i = 0; i < sinfo -> num_queues && rjob == NULL; i++)
+			{
+				/* we have reached the end of the array, cycle back through */
+				if (last_queue == (sinfo -> num_queues - 1))
+				{
+					last_queue = 0;
+					last_job++;
+				}
+				else /* still more queues to go */
+					last_queue++;
+
+				if (cjobs[last_queue] != NULL)
+				{
+					if (cjobs[last_queue][last_job] == NULL)
+						cjobs[last_queue] = NULL;
+					else
+					{
+						if (cstat.fair_share)
+							rjob = extract_fairshare(cjobs[last_queue]);
+						else if (cjobs[last_queue][last_job] -> can_not_run == 0)
+							rjob = cjobs[last_queue][last_job];
+					}
+				}
+			}
 		}
-	  }
 	}
-  else if (cstat.by_queue)
-  {
+	else if (cstat.by_queue)
+	{
 
-	  if (init == INITIALIZE)
-	  {
-		  last_job = -1;
-		  last_queue = 0;
-	  }
-	  else
-      {
-    if (init == INITIALIZE)
-      {
-      last_job = -1;
-      last_queue = 0;
-      }
-    else
-      {
-      last_job++;
+		if (init == INITIALIZE)
+		{
+			last_job = -1;
+			last_queue = 0;
+		}
+		else
+		{
+			if (init == INITIALIZE)
+			{
+				last_job = -1;
+				last_queue = 0;
+			}
+			else
+			{
+				last_job++;
 
-      /* check if we have reached the end of a queue and need to find another */
+				/* check if we have reached the end of a queue and need to find another */
 
-      while (last_queue < sinfo -> num_queues &&
-             (sinfo -> queues[last_queue] -> jobs == NULL ||
-              sinfo -> queues[last_queue] -> jobs[last_job] == NULL ||
-              sinfo -> queues[last_queue] -> jobs[last_job] -> can_not_run))
-        {
-        if (sinfo -> queues[last_queue] -> jobs == NULL ||
-            sinfo -> queues[last_queue] -> jobs[last_job] == NULL)
-          {
-          last_queue++;
-          last_job = 0;
-          }
-        else if (sinfo -> queues[last_queue] -> jobs[last_job] -> can_not_run)
-          last_job++;
-        }
+				while (last_queue < sinfo -> num_queues &&
+						(sinfo -> queues[last_queue] -> jobs == NULL ||
+						 sinfo -> queues[last_queue] -> jobs[last_job] == NULL ||
+						 sinfo -> queues[last_queue] -> jobs[last_job] -> can_not_run))
+				{
+					if (sinfo -> queues[last_queue] -> jobs == NULL ||
+							sinfo -> queues[last_queue] -> jobs[last_job] == NULL)
+					{
+						last_queue++;
+						last_job = 0;
+					}
+					else if (sinfo -> queues[last_queue] -> jobs[last_job] -> can_not_run)
+						last_job++;
+				}
 
-      if (last_queue == sinfo -> num_queues ||
-          sinfo -> queues[last_queue] == NULL)
-        rjob = NULL;
-      else
-        {
-        if (cstat.fair_share)
-          rjob = extract_fairshare(sinfo -> queues[last_queue] -> jobs);
-        else
-          {
-          if (last_job < sinfo -> queues[last_queue] -> sc.total)
-            rjob = sinfo -> queues[last_queue] -> jobs[last_job];
-          }
-        }
-      }
-    }
-  }
-  else /* treat the entire system as one large queue */
-    {
-    if (init == INITIALIZE)
-      {
-      last_job = -1;
-      }
-    else
-      {
-      if (cstat.fair_share)
-        rjob = extract_fairshare(sinfo -> jobs);
-      else
-        {
-        last_job++;
+				if (last_queue == sinfo -> num_queues ||
+						sinfo -> queues[last_queue] == NULL)
+					rjob = NULL;
+				else
+				{
+					if (cstat.fair_share)
+						rjob = extract_fairshare(sinfo -> queues[last_queue] -> jobs);
+					else
+					{
+						if (last_job < sinfo -> queues[last_queue] -> sc.total)
+							rjob = sinfo -> queues[last_queue] -> jobs[last_job];
+					}
+				}
+			}
+		}
+	}
+	else /* treat the entire system as one large queue */
+	{
+		if (init == INITIALIZE)
+		{
+			last_job = -1;
+		}
+		else
+		{
+			if (cstat.fair_share)
+				rjob = extract_fairshare(sinfo -> jobs);
+			else
+			{
+				last_job++;
 
-        while (sinfo -> jobs[last_job] != NULL &&
-               sinfo -> jobs[last_job] -> can_not_run)
-          {
-          last_job++;
-          }
+				while (sinfo -> jobs[last_job] != NULL &&
+						sinfo -> jobs[last_job] -> can_not_run)
+				{
+					last_job++;
+				}
 
-        rjob = sinfo -> jobs[last_job];
-        }
-      }
-    }
+				rjob = sinfo -> jobs[last_job];
+			}
+		}
+	}
 
-  return rjob;
-  }
+	return rjob;
+}
