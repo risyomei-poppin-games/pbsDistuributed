@@ -325,119 +325,7 @@ int init_scheduling_cycle(server_info *sinfo)
   }
 
 
-////
-///*
-//   Replica Making
-//*/
-//int replicaGenerate(int sd)
-//{
-//
-//	//Replilca Making
-//
-//	server_info *sinfo;  /* ptr to the server/queue/job/node info */
-//	job_info *jinfo;  /* ptr to the job to see if it can run */
-//	int ret = SUCCESS;  /* return code from is_ok_to_run_job() */
-////	char log_msg[MAX_LOG_SIZE]; /* used to log an message about job */
-////	char comment[MAX_COMMENT_SIZE]; /* used to update comment of job */
-//
-//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Entering Schedule");
-//
-////	update_cycle_status();
-//
-//	/* create the server / queue / job / node structures */
-//
-//	if ((sinfo = query_server(sd)) == NULL)
-//	{
-//		fprintf(stderr, "Problem with creating server data strucutre\n");
-//
-//		return(0);
-//	}
-//
-//	if (init_scheduling_cycle(sinfo) == 0)
-//	{
-//		sched_log(
-//				PBSEVENT_DEBUG,
-//				PBS_EVENTCLASS_SERVER,
-//				sinfo -> name,
-//				"init_scheduling_cycle failed.");
-//
-//		free_server(sinfo, 1);
-//
-//		return(0);
-//	}
-//
-//	/* main scheduling loop */
-//
-//
-//
-//
-//
-//	while ((jinfo = next_job(sinfo, 0)))
-//	{
-////		sched_log(
-////				PBSEVENT_DEBUG2,
-////				PBS_EVENTCLASS_JOB,
-////				jinfo->name,
-////				"Considering job to run");
-////
-////		if ((ret = is_ok_to_run_job(sd, sinfo, jinfo->queue, jinfo)) == SUCCESS)
-////		{
-////			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.scheduleing_cycle this job is ok to run"); 	 	
-////			run_update_job(sd, sinfo, jinfo->queue, jinfo);
-////		}
-////		else
-////		{
-////			if (jinfo->can_never_run)
-////			{
-////				sched_log(
-////						PBSEVENT_JOB,
-////						PBS_EVENTCLASS_JOB,
-////						jinfo->name,
-////						"Job Deleted because it would never run");
-////
-////				pbs_deljob(sd, jinfo->name, "Job could never run");
-////			}
-////
-////			jinfo->can_not_run = 1;
-////
-////			if (translate_job_fail_code(ret, comment, log_msg))
-////			{
-////				/* if the comment doesn't get changed, its because it hasn't changed.
-////				 * if the reason for the job has not changed, we do not need to log it
-////				 */
-////
-////				if (update_job_comment(sd, jinfo, comment) == 0)
-////				{
-////					sched_log(
-////							PBSEVENT_SCHED,
-////							PBS_EVENTCLASS_JOB,
-////							jinfo->name,
-////							log_msg);
-////				}
-////			}
-////
-////			if ((ret != NOT_QUEUED) && cstat.strict_fifo)
-////			{
-////				update_jobs_cant_run(
-////						sd,
-////						jinfo->queue->jobs,
-////						jinfo,
-////						COMMENT_STRICT_FIFO,
-////						START_AFTER_JOB);
-////			}
-////		}
-//	}
-//
-////	if (cstat.fair_share)
-////		update_last_running(sinfo);
-//
-//	free_server(sinfo, 1); /* free server and queues and jobs */
-//
-//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Leaving schedule\n");
-//
-//	return 0;
-//}
-//
+
 
 
 /*
@@ -503,7 +391,7 @@ int schedule(
     case SCH_SCHEDULE_CMD:
 
     case SCH_SCHEDULE_TIME:
-		replicaGen(sd);
+	//	replicaGen(sd);
       return(scheduling_cycle(sd));
 
       /*NOTREACHED*/
@@ -557,7 +445,7 @@ int schedule(
  *
  *
  * */
-
+#define MAXTRACKSIZE 60
 int replicaGen(int sd)
 {
 	server_info *sinfo;  /* ptr to the server/queue/job/node info */
@@ -592,8 +480,11 @@ int replicaGen(int sd)
 		return(0);
 	}
 	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "check Point");
+	int count = 0;
 	while ((jinfo = next_job(sinfo, 0)))
 	{
+		if(count++>MAXTRACKSIZE)
+			break;
 	
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "1111");
 		
@@ -1048,7 +939,7 @@ void relRepInfo(int *replicaCount,int ***nodes_filelocated)
 node_info* dataAwareDispatch(job_info *jinfo)
 {
 
-
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", "d-a called");
 	node_info *possible_node = NULL; /* node which under max node not ideal*/
 	node_info *good_node = NULL;  /* node which is under ideal load */
 
@@ -1062,7 +953,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	nodes_number = jinfo -> queue -> server -> num_nodes;
 	
 	
-	float dataAwareLoad=10; 
+	float dataAwareLoad=0; 
 	char  **nodes_filelocated=NULL;
 	int replicaCount = 0;
 	int fileSize=0;
