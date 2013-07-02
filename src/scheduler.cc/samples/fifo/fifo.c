@@ -971,7 +971,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 	int i = 0, c;   /* index & loop vars */
 	int nodes_number;    /* index of the last node in ninfo_arr*/
-	float good_node_la = 1.0e10;  /* the best load ave found yet */
+//	float good_node_la = 1.0e10;  /* the best load ave found yet */
 	float proj_la;   /* the projected load average */
 	char logbuf[256];   /* buffer for log messages */
 
@@ -990,83 +990,143 @@ node_info* dataAwareDispatch(job_info *jinfo)
 		return NULL;
 
 	//Initialize loop valiable and the maxhostvalue
-	i = 0;
+
 
 	if(jinfo->fileused)
 	{
 		gfarm_error_t e= getRepInfo(jinfo->fileused,&replicaCount,&fileSize,&nodes_filelocated);
+		if(replicaCount>0)
+			dataAwareSwitch = 1;
 	}
 
 
+	float currentScore = 2;	
 
-	for (c=0; c< nodes_number; c++)//loop for the host
+	for (i = 0,c=0; c< nodes_number; c++)//loop for the host
 	{
 		/* if the job didn't specify memory, it will default to 0, and if
 		 * the mom didn't return physmem, it defaults to 0.
 		 */
-		if (ninfo_arr[i] -> is_free) 
-		{
+//		if (ninfo_arr[i] -> is_free) 
+//		{
 			long fileMatch = 0;
-			int lp2=0;
-			for(lp2=0;lp2<replicaCount;lp2++)
+			long fileMismatch = 0;
+			float fileFactor = 0;
+
+			if(dataAwareSwitch==1)
 			{
-				if(!strcmp(ninfo_arr[i]->name,nodes_filelocated[lp2]))
+				int lp2=0;
+				for(lp2=0;lp2<replicaCount;lp2++)
 				{
-					fileMatch += fileSize;
-					break;
+					if(!strcmp(ninfo_arr[i]->name,nodes_filelocated[lp2]))
+					{
+						fileMatch += fileSize;
+					}
+					else
+					{
+						fileMismatch +=fileSize;
+					}
+
 				}
 			}
+			fileFactor = ( ( -fileMatch + fileMismatch ) / (float)fileSize  + 1 ) / 2;
 
-			int fileIOFacotor = 10;
-			if(fileMatch)
-				fileIOFacotor = 0;	
+			float BETA = 0.9;
+			float CPUloadAve = ( ninfo_arr[i] -> loadave) / 16 ;
+			float score = fileFactor * BETA + CPUloadAve*(1-BETA); 
+			proj_la = ninfo_arr[i] -> loadave;
 
-			//update the average load value
-			proj_la = ninfo_arr[i] -> loadave + fileIOFacotor;
+			sprintf(logbuf, "CPUloadAved: %6.2f FileLoad: %6.2f Score: %6.2f",
+							CPUloadAve, fileFactor,score);
 
-			if( proj_la <= ninfo_arr[i]->ideal_load + fileIOFacotor)
+			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i]->name,logbuf);
+
+			if( proj_la  <= ninfo_arr[i]->ideal_load)
 			{
-				if( proj_la < good_node_la )//try to find hosts with low load
+				if( score < currentScore )//try to find hosts with low load
 				{
-					sprintf(logbuf, "lowload load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
-							proj_la, ninfo_arr[i]->ideal_load, good_node_la);
+					sprintf(logbuf, "lowload load: %6.2f Score: %6.2f last Score: %6.2f",
+							proj_la, score,currentScore);
 
 					good_node = ninfo_arr[i];//this host is currently the lowest loaded one
-					good_node_la = proj_la;//save its load
+					currentScore = score;
 
 				}
 				else
 				{
-					sprintf(logbuf, "lowload Rej, higher: load: %6.2f last good ideal: %6.2f", 
-							ninfo_arr[i]->loadave, good_node_la);
+					sprintf(logbuf, "lowload Rej, higher: Score: %6.2f last Score: %6.2f", 
+							score, currentScore);
 				}
 			}
-			else if (possible_node==NULL && proj_la <= ninfo_arr[i]->max_load + fileIOFacotor )
+			else if (proj_la <= ninfo_arr[i]->max_load)
 			{
-				if (proj_la < good_node_la)
+				if (score < currentScore)
 				{
-					sprintf(logbuf, "midload load: %6.2f max_load: %6.2f  last good ideal: %6.2f",
-							proj_la, ninfo_arr[i]->max_load, good_node_la);
+					sprintf(logbuf, "midload load: %6.2f Score: %6.2f last Score: %6.2f",
+							proj_la, score,currentScore);
 					possible_node = ninfo_arr[i];
-					good_node_la = proj_la;
+					currentScore = score;
+
 				}
 				else
-					sprintf(logbuf, "midload Rej, higher load: %6.2f last good ideal: %6.2f", 
-							ninfo_arr[i] -> loadave, good_node_la);
+					sprintf(logbuf, "midload Rej, higher: Score: %6.2f last Score: %6.2f", 
+							score, currentScore);
 			}
 			else
 				sprintf(logbuf, "Node Rejected, Load too high: load: %6.2f max_load: %6.2f", 
 						proj_la, ninfo_arr[i] -> max_load);
 
-		}
-		else
-		{
-			sprintf(logbuf, "Node Rejected, node does not fit job requirements.");
-		}
+
+		
+//			int fileIOFacotor = 10;
+//			if(fileMatch)
+//				fileIOFacotor = 0;
+
+//			//update the average load value
+//			proj_la = ninfo_arr[i] -> loadave + fileIOFacotor;
+//
+//			if( proj_la <= ninfo_arr[i]->ideal_load + fileIOFacotor)
+//			{
+//				if( proj_la < good_node_la )//try to find hosts with low load
+//				{
+//					sprintf(logbuf, "lowload load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
+//							proj_la, ninfo_arr[i]->ideal_load, good_node_la);
+//
+//					good_node = ninfo_arr[i];//this host is currently the lowest loaded one
+//					good_node_la = proj_la;//save its load
+//
+//				}
+//				else
+//				{
+//					sprintf(logbuf, "lowload Rej, higher: load: %6.2f last good ideal: %6.2f", 
+//							ninfo_arr[i]->loadave, good_node_la);
+//				}
+//			}
+//			else if (possible_node==NULL && proj_la <= ninfo_arr[i]->max_load + fileIOFacotor )
+//			{
+//				if (proj_la < good_node_la)
+//				{
+//					sprintf(logbuf, "midload load: %6.2f max_load: %6.2f  last good ideal: %6.2f",
+//							proj_la, ninfo_arr[i]->max_load, good_node_la);
+//					possible_node = ninfo_arr[i];
+//					good_node_la = proj_la;
+//				}
+//				else
+//					sprintf(logbuf, "midload Rej, higher load: %6.2f last good ideal: %6.2f", 
+//							ninfo_arr[i] -> loadave, good_node_la);
+//			}
+//			else
+//				sprintf(logbuf, "Node Rejected, Load too high: load: %6.2f max_load: %6.2f", 
+//						proj_la, ninfo_arr[i] -> max_load);
+//
+//		}
+//		else
+//		{
+//			sprintf(logbuf, "Node Rejected, node does not fit job requirements.");
+//		}
 
 
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i]->name,logbuf);
-		logbuf[0] = '\0';
 		i++;
 		if (ninfo_arr[i] == NULL)
 			i = 0;
@@ -1074,7 +1134,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 	//release the memory used
 	relRepInfo(&replicaCount,&nodes_filelocated);
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "out", "memory freed");
+
 
 	if(good_node == NULL && possible_node == NULL)
 	{
@@ -1084,12 +1144,14 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	}
 	else if (good_node == NULL)
 	{
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, possible_node -> name, "possible Chosen to run job on");
+		sprintf(logbuf, "%s on possible  %s", jinfo->name,possible_node -> name);
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Job Run", logbuf);
 		return possible_node;
 	}
 	else
 	{
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, good_node -> name, "good Chosen to run job on");
+		sprintf(logbuf, "%s on good  %s", jinfo->name,good_node -> name);
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Job Run", logbuf);	
 		return good_node;
 	}
 	return NULL;  /* should never get here */
