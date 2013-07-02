@@ -353,6 +353,8 @@ job_info *new_job_info()
 
   jinfo -> fileused = NULL;
 
+  jinfo -> fileusedChecked = 0;
+
   return jinfo;
   }
 

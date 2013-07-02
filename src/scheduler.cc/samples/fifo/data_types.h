@@ -256,6 +256,7 @@ unsigned can_never_run:
   group_info *ginfo;  /* the fair share node for the owner */
   node_info *job_node;  /* node the job is running on */
   char *fileused;
+  int fileusedChecked;
   };
 
 struct node_info

@@ -391,7 +391,7 @@ int schedule(
     case SCH_SCHEDULE_CMD:
 
     case SCH_SCHEDULE_TIME:
-	//	replicaGen(sd);
+	  replicaGen(sd);
       return(scheduling_cycle(sd));
 
       /*NOTREACHED*/
@@ -488,18 +488,33 @@ int replicaGen(int sd)
 	
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "1111");
 		
-		if(jinfo->name!=NULL && jinfo->fileused!=NULL)
+
+		if( jinfo->fileusedChecked != 1 ) //checked
+		{
 			sched_log(
 					PBSEVENT_SCHED,
 					PBS_EVENTCLASS_JOB,
-					jinfo->name,
+					"old",
 					jinfo->fileused);
+		}
+		else if(jinfo->name!=NULL && jinfo->fileused!=NULL)//not checked
+		{
+			jinfo -> fileusedChecked = 1;
+			sched_log(
+					PBSEVENT_SCHED,
+					PBS_EVENTCLASS_JOB,
+					"new",
+					jinfo->fileused);
+		}
+		
 		else
+		{
 			sched_log(
 					PBSEVENT_SCHED,
 					PBS_EVENTCLASS_JOB,
 					"not set",
 					"not set");
+		}
 
 //		if(replicaCount)
 //		{
@@ -802,7 +817,7 @@ gfarm_error_t getRepInfo(
 		char *fileUsed,
 		int *replicaCount,
 		int *fileSize,
-		int ***nodes_filelocated)
+		char ***nodes_filelocated)
 {
 
 	int noErr = 1;
@@ -864,12 +879,16 @@ gfarm_error_t getRepInfo(
 	}
 
 
-	*nodes_filelocated = malloc(sizeof(*nodes_filelocated)*(*replicaCount));
+	*nodes_filelocated = malloc(sizeof(char*)*(*replicaCount));
 	int z;
 	for(z=0;z<*replicaCount;z++)
 	{
 
 		char *tempHostName =gfs_replica_info_nth_host(ri, z);
+
+		
+
+		
 
 		int x;
 		for(x=0;x<strlen(tempHostName);x++)
@@ -879,16 +898,19 @@ gfarm_error_t getRepInfo(
 		char job_name_prefix[LOG_BUF_SIZE];
 		strncpy(job_name_prefix,tempHostName,x);
 
-		*nodes_filelocated[z]=strdup(job_name_prefix);
-		sprintf(logbuf, " %s",*nodes_filelocated[z]); 
+		(*nodes_filelocated)[z]=strdup(job_name_prefix);
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found C" ,"C");
+		sprintf(logbuf, " %s",(*nodes_filelocated)[z]); 
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
-		logbuf[0] = 0;
 	}
 
 
 
 	struct gfs_stat st;
+
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found A" ,"A");
 	e=gfs_lstat(fileUsed, &st);
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found B" ,"B");
 	if(e!=GFARM_ERR_NO_ERROR)	
 	{
 
@@ -917,7 +939,7 @@ void relRepInfo(int *replicaCount,int ***nodes_filelocated)
 {
 	char logbuf[256];   /* buffer for log messages */
 
-	sprintf(logbuf,"Replica Count %d",replicaCount);
+	sprintf(logbuf,"Replica Count %d",*replicaCount);
 	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "relRepInfo", logbuf);
 	
 	if(*replicaCount==0||*nodes_filelocated==NULL)
@@ -927,7 +949,7 @@ void relRepInfo(int *replicaCount,int ***nodes_filelocated)
 	for(lp=0;lp<*replicaCount;lp++)
 	{
 		
-		free(*nodes_filelocated[lp]);
+		free((*nodes_filelocated)[lp]);
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "in", "memory  freed");
 	}
 
@@ -968,7 +990,6 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 	if(jinfo->fileused)
 	{
-		 
 		gfarm_error_t e= getRepInfo(jinfo->fileused,&replicaCount,&fileSize,&nodes_filelocated);
 	}
 
