@@ -495,7 +495,7 @@ int replicaGen(int sd)
 		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "1111");
 		
 
-		if( jinfo->fileusedChecked != 1 ) //checked
+		if( jinfo->fileusedChecked == 1 ) //checked
 		{
 			sched_log(
 					PBSEVENT_SCHED,
@@ -888,7 +888,7 @@ gfarm_error_t getRepInfo(
 	for(z=0;z<*replicaCount;z++)
 	{
 
-		char *tempHostName =gfs_replica_info_nth_host(ri, z);
+		const char *tempHostName =gfs_replica_info_nth_host(ri, z);
 
 		
 
@@ -939,7 +939,7 @@ gfarm_error_t getRepInfo(
 	return GFARM_ERR_NO_ERROR;
 
 }
-void relRepInfo(int *replicaCount,int ***nodes_filelocated)
+void relRepInfo(int *replicaCount,char ***nodes_filelocated)
 {
 	char logbuf[256];   /* buffer for log messages */
 
@@ -979,7 +979,6 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	nodes_number = jinfo -> queue -> server -> num_nodes;
 	
 	
-	float dataAwareLoad=0; 
 	char  **nodes_filelocated=NULL;
 	int replicaCount = 0;
 	int fileSize=0;
@@ -1032,6 +1031,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 			fileFactor = ( ( -fileMatch + fileMismatch ) / (float)fileSize  + 1 ) / 2;
 
 			float BETA = 0.9;
+			float scoreThreshould=0.7;
 			float CPUloadAve = ( ninfo_arr[i] -> loadave) / 16 ;
 			float score = fileFactor * BETA + CPUloadAve*(1-BETA); 
 			proj_la = ninfo_arr[i] -> loadave;
@@ -1041,7 +1041,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i]->name,logbuf);
 
-			if( proj_la  <= ninfo_arr[i]->ideal_load)
+			if( proj_la  <= ninfo_arr[i]->ideal_load&& score < scoreThreshould)
 			{
 				if( score < currentScore )//try to find hosts with low load
 				{
@@ -1058,7 +1058,7 @@ node_info* dataAwareDispatch(job_info *jinfo)
 							score, currentScore);
 				}
 			}
-			else if (proj_la <= ninfo_arr[i]->max_load)
+			else if (proj_la <= ninfo_arr[i]->max_load&& score < scoreThreshould)
 			{
 				if (score < currentScore)
 				{
@@ -1076,49 +1076,6 @@ node_info* dataAwareDispatch(job_info *jinfo)
 				sprintf(logbuf, "Node Rejected, Load too high: load: %6.2f max_load: %6.2f", 
 						proj_la, ninfo_arr[i] -> max_load);
 
-
-		
-//			int fileIOFacotor = 10;
-//			if(fileMatch)
-//				fileIOFacotor = 0;
-
-//			//update the average load value
-//			proj_la = ninfo_arr[i] -> loadave + fileIOFacotor;
-//
-//			if( proj_la <= ninfo_arr[i]->ideal_load + fileIOFacotor)
-//			{
-//				if( proj_la < good_node_la )//try to find hosts with low load
-//				{
-//					sprintf(logbuf, "lowload load: %6.2f ideal_load: %6.2f last good ideal: %6.2f",
-//							proj_la, ninfo_arr[i]->ideal_load, good_node_la);
-//
-//					good_node = ninfo_arr[i];//this host is currently the lowest loaded one
-//					good_node_la = proj_la;//save its load
-//
-//				}
-//				else
-//				{
-//					sprintf(logbuf, "lowload Rej, higher: load: %6.2f last good ideal: %6.2f", 
-//							ninfo_arr[i]->loadave, good_node_la);
-//				}
-//			}
-//			else if (possible_node==NULL && proj_la <= ninfo_arr[i]->max_load + fileIOFacotor )
-//			{
-//				if (proj_la < good_node_la)
-//				{
-//					sprintf(logbuf, "midload load: %6.2f max_load: %6.2f  last good ideal: %6.2f",
-//							proj_la, ninfo_arr[i]->max_load, good_node_la);
-//					possible_node = ninfo_arr[i];
-//					good_node_la = proj_la;
-//				}
-//				else
-//					sprintf(logbuf, "midload Rej, higher load: %6.2f last good ideal: %6.2f", 
-//							ninfo_arr[i] -> loadave, good_node_la);
-//			}
-//			else
-//				sprintf(logbuf, "Node Rejected, Load too high: load: %6.2f max_load: %6.2f", 
-//						proj_la, ninfo_arr[i] -> max_load);
-//
 //		}
 //		else
 //		{
