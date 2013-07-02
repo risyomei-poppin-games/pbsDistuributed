@@ -113,9 +113,6 @@ static time_t last_decay;
 static time_t last_sync;
 
 
-#define HASH_TABLE_LENGTH 2000
-unsigned int fileHash[HASH_TABLE_LENGTH] = { 0 };
-
 
 
 
@@ -444,6 +441,37 @@ int schedule(
 
 
 
+
+#define HASH_TABLE_LENGTH 2000
+pthread_t gThread;
+pthread_mutex_t mutLock;
+typedef enum {making,stopped} gThreadStatus; 
+unsigned int fileHash[HASH_TABLE_LENGTH] = { 0 };
+char *fileHashName[HASH_TABLE_LENGTH]={0};
+gThreadStatus gstatus = stopped;
+
+void *gfrepThread()
+{
+	pthread_mutex_lock(&mutLock);
+	
+	gstatus = making; 
+	pthread_mutex_unlock(&mutLock);
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread start");
+
+	sleep(8);
+		
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread end");
+	pthread_mutex_lock(&mutLock);
+	gstatus  = stopped; 
+	pthread_mutex_unlock(&mutLock);
+	
+
+	pthread_exit(NULL);
+}
+
+
+
+
 /*
  *
  *
@@ -505,6 +533,7 @@ int replicaGen(int sd)
 		}
 		else if(jinfo->name!=NULL && jinfo->fileused!=NULL)//not checked
 		{
+			
 			jinfo -> fileusedChecked = 1;
 			sched_log(
 					PBSEVENT_SCHED,
@@ -521,6 +550,24 @@ int replicaGen(int sd)
 					"not set",
 					"not set");
 		}
+
+		static int threadPID;
+		if(gstatus==stopped)
+		{	
+			if((threadPID = pthread_create(&gThread, NULL, gfrepThread, NULL)) != 0)  //comment3
+				sched_log(
+						PBSEVENT_SCHED,
+						PBS_EVENTCLASS_JOB,
+						"main thread",
+						"error creating thread");
+			else
+				sched_log(
+						PBSEVENT_SCHED,
+						PBS_EVENTCLASS_JOB,
+						"main thread",
+						"thread created");
+		}
+
 
 //		if(replicaCount)
 //		{
