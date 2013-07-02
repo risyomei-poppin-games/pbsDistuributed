@@ -113,6 +113,12 @@ static time_t last_decay;
 static time_t last_sync;
 
 
+#define HASH_TABLE_LENGTH 2000
+unsigned int fileHash[HASH_TABLE_LENGTH] = { 0 };
+
+
+
+
 /*
  *
  * schedinit - initialize conf struct and parse conf files
@@ -793,8 +799,6 @@ job_info *update_starvation(job_info **jobs)
 
 
 
-#define HASH_TABLE_LENGTH 2000
-unsigned int fileHash[HASH_TABLE_LENGTH] = { 0 };
 
 unsigned int getHashCode(char* val)
 {
