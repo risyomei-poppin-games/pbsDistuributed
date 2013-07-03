@@ -113,7 +113,7 @@ static time_t last_decay;
 static time_t last_sync;
 
 
-
+#define HASH_TABLE_LENGTH 300 
 
 
 /*
@@ -442,32 +442,50 @@ int schedule(
 
 
 
-#define HASH_TABLE_LENGTH 2000
 pthread_t gThread;
 pthread_mutex_t mutLock;
 typedef enum {making,stopped} gThreadStatus; 
-unsigned int fileHash[HASH_TABLE_LENGTH] = { 0 };
-char *fileHashName[HASH_TABLE_LENGTH]={0};
+char fileToBeCreated[100];
+int numberToBeCreated;
 gThreadStatus gstatus = stopped;
 
 void *gfrepThread()
 {
-	pthread_mutex_lock(&mutLock);
+//	pthread_mutex_lock(&mutLock);
 	
 	gstatus = making; 
-	pthread_mutex_unlock(&mutLock);
+//	pthread_mutex_unlock(&mutLock);
 	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread start");
 
-	sleep(8);
-		
+
+	char sysCommand[100];
+	sprintf(sysCommand,"/work/risyomei/gfarm/bin/gfrep -N %d %s",numberToBeCreated,fileToBeCreated);
+	system(sysCommand);	
+
 	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread end");
-	pthread_mutex_lock(&mutLock);
+//	pthread_mutex_lock(&mutLock);
 	gstatus  = stopped; 
-	pthread_mutex_unlock(&mutLock);
+//	pthread_mutex_unlock(&mutLock);
 	
 
 	pthread_exit(NULL);
 }
+unsigned int getHashCode(char* val)
+{
+	int offset = 0;
+
+	int off = offset;
+	int len = strlen(val);
+
+	unsigned int h = 0;
+	int i;
+	for (i = 0; i < len; i++) {
+		h = 31*h + val[off++];
+	}
+
+	return h%HASH_TABLE_LENGTH;
+}
+
 
 
 
@@ -485,12 +503,15 @@ int replicaGen(int sd)
 	server_info *sinfo;  /* ptr to the server/queue/job/node info */
 	job_info *jinfo;  /* ptr to the job to see if it can run */
 	int ret = SUCCESS;  /* return code from is_ok_to_run_job() */
-//	char log_msg[MAX_LOG_SIZE]; /* used to log an message about job */
+	char logbuf[MAX_LOG_SIZE]; /* used to log an message about job */
 //	char comment[MAX_COMMENT_SIZE]; /* used to update comment of job */
 
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "A new job is enqued");
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "in replicaGen");
 
 //	update_cycle_status();
+//
+	unsigned int fileHash[HASH_TABLE_LENGTH] = {0};
+	char *fileHashName[HASH_TABLE_LENGTH]={0};
 
 	/* create the server / queue / job / node structures */
 
@@ -514,138 +535,108 @@ int replicaGen(int sd)
 		return(0);
 	}
 	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "check Point");
+	
+	if(  gfarm_initialize(NULL,NULL) !=GFARM_ERR_NO_ERROR )
+	{
+		sched_log(	PBSEVENT_SCHED, 
+					PBS_EVENTCLASS_NODE, 
+					"getReplicaInformation", 
+					"gfarm Initalize failed, used default value for data-aware value");
+		goto cleanUp;
+	}
+
+	
 	int count = 0;
 	while ((jinfo = next_job(sinfo, 0)))
 	{
 		if(count++>MAXTRACKSIZE)
 			break;
-	
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "1111");
-		
 
 		if( jinfo->fileusedChecked == 1 ) //checked
-		{
-			sched_log(
-					PBSEVENT_SCHED,
-					PBS_EVENTCLASS_JOB,
-					"old",
-					jinfo->fileused);
+		{	
 		}
 		else if(jinfo->name!=NULL && jinfo->fileused!=NULL)//not checked
 		{
 			
 			jinfo -> fileusedChecked = 1;
-			sched_log(
-					PBSEVENT_SCHED,
-					PBS_EVENTCLASS_JOB,
-					"new",
-					jinfo->fileused);
+
+			int hashVar = getHashCode(jinfo->fileused);	
+			fileHash[ hashVar] ++;
+
+
+			
+
+			if(fileHashName[hashVar]==NULL)
+				fileHashName[hashVar]=strdup(jinfo->fileused);
+		
+	
 		}
 		
 		else
+		{	
+		}
+	}
+
+
+	int currentMax=0;
+	int index = -1;
+	int i;
+	for(i=0;i<HASH_TABLE_LENGTH;i++)
+	{
+		if(fileHash[i]>currentMax)
 		{
+			currentMax = fileHash[i];
+			index = i;
+		}
+	}
+	int replicaCount =0;
+	struct gfs_replica_info* ri=NULL;
+	if( index >= 0 && fileHashName[index]!=NULL)
+	{
+
+		if(gfs_replica_info_by_name(fileHashName[index], 0, &ri)==GFARM_ERR_NO_ERROR)
+		{
+		
+			replicaCount = gfs_replica_info_number(ri);
+		}	
+	}
+	
+	static int threadPID;
+
+	if(index<0)
+		index = 0;
+	sprintf(logbuf,"replicaCount %d, fileUsed %d",replicaCount, fileHash[index]);
+
+
+	sched_log(	PBSEVENT_SCHED, 
+			PBS_EVENTCLASS_NODE, 
+			"decision", 
+			logbuf);
+
+
+
+	if(replicaCount>0&&(replicaCount*20<fileHash[index]))
+	{		
+		numberToBeCreated = fileHash[index]/(replicaCount*10);
+		strcpy(fileToBeCreated,fileHashName[index]);
+
+		if((threadPID = pthread_create(&gThread, NULL, gfrepThread, NULL)) != 0)  //comment3
 			sched_log(
 					PBSEVENT_SCHED,
 					PBS_EVENTCLASS_JOB,
-					"not set",
-					"not set");
-		}
-
-		static int threadPID;
-		if(gstatus==stopped)
-		{	
-			if((threadPID = pthread_create(&gThread, NULL, gfrepThread, NULL)) != 0)  //comment3
-				sched_log(
-						PBSEVENT_SCHED,
-						PBS_EVENTCLASS_JOB,
-						"main thread",
-						"error creating thread");
-			else
-				sched_log(
-						PBSEVENT_SCHED,
-						PBS_EVENTCLASS_JOB,
-						"main thread",
-						"thread created");
-		}
-
-
-//		if(replicaCount)
-//		{
-//			int fileusedHash = getHashCode(jinfo->fileused);
-//
-//			if(fileHash[fileusedHash]<=nodes_number*2)
-//			{
-//				fileHash[fileusedHash]++;
-//			}
-//
-//			if( fileHash[fileusedHash] > 2*replicaCount && replicaCount < nodes_number)
-//			{
-//				char sysCommand[100];
-//				sprintf(sysCommand,"/work/risyomei/gfarm/bin/gfrep -N %d %s",replicaCount+1,jinfo->fileused);
-//				system(sysCommand);	
-//
-//			}
-//
-//			char temp[100];
-//			sprintf(temp,"filename:%s,repCount:%d,Inhashtable:%d"
-//					,jinfo->fileused
-//					,replicaCount
-//					,	fileHash[fileusedHash]);
-//			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "profile",temp);
-//
-//		}
-
-
-//		if ((ret = is_ok_to_run_job(sd, sinfo, jinfo->queue, jinfo)) == SUCCESS)
-//		{
-//			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.scheduleing_cycle this job is ok to run"); 	 	
-//			run_update_job(sd, sinfo, jinfo->queue, jinfo);
-//		}
-//		else
-//		{
-//			if (jinfo->can_never_run)
-//			{
-//				sched_log(
-//						PBSEVENT_JOB,
-//						PBS_EVENTCLASS_JOB,
-//						jinfo->name,
-//						"Job Deleted because it would never run");
-//
-//				pbs_deljob(sd, jinfo->name, "Job could never run");
-//			}
-//
-//			jinfo->can_not_run = 1;
-//
-//			if (translate_job_fail_code(ret, comment, log_msg))
-//			{
-//				/* if the comment doesn't get changed, its because it hasn't changed.
-//				 * if the reason for the job has not changed, we do not need to log it
-//				 */
-//
-//				if (update_job_comment(sd, jinfo, comment) == 0)
-//				{
-//					sched_log(
-//							PBSEVENT_SCHED,
-//							PBS_EVENTCLASS_JOB,
-//							jinfo->name,
-//							log_msg);
-//				}
-//			}
-//
-//			if ((ret != NOT_QUEUED) && cstat.strict_fifo)
-//			{
-//				update_jobs_cant_run(
-//						sd,
-//						jinfo->queue->jobs,
-//						jinfo,
-//						COMMENT_STRICT_FIFO,
-//						START_AFTER_JOB);
-//			}
-//		}
+					"main thread",
+					"error creating thread");
+		else
+			sched_log(
+					PBSEVENT_SCHED,
+					PBS_EVENTCLASS_JOB,
+					"main thread",
+					"thread created");
 	}
 
-//	if (cstat.fair_share)
-//		update_last_running(sinfo);
+
+cleanUp:
+	gfarm_terminate();
 
 	free_server(sinfo, 1); /* free server and queues and jobs */
 
@@ -711,7 +702,11 @@ int scheduling_cycle(
 
 
 	while ((jinfo = next_job(sinfo, 0)))
-	{
+	{	
+		
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "debug1", jinfo->name);
+
+
 		sched_log(
 				PBSEVENT_DEBUG2,
 				PBS_EVENTCLASS_JOB,
@@ -720,10 +715,11 @@ int scheduling_cycle(
 
 		if ((ret = is_ok_to_run_job(sd, sinfo, jinfo->queue, jinfo)) == SUCCESS)
 		{
-			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_SERVER, "WTF", "fifo.scheduleing_cycle this job is ok to run"); 	 	
+			//int freeNodesLeft;
 			run_update_job(sd, sinfo, jinfo->queue, jinfo);
+
 		}
-	else
+		else
 		{
 			if (jinfo->can_never_run)
 			{
@@ -768,6 +764,8 @@ int scheduling_cycle(
 
 	if (cstat.fair_share)
 		update_last_running(sinfo);
+
+cleanUpInSchedule:
 
 	free_server(sinfo, 1); /* free server and queues and jobs */
 
@@ -847,21 +845,6 @@ job_info *update_starvation(job_info **jobs)
 
 
 
-unsigned int getHashCode(char* val)
-{
-	int offset = 0;
-
-	int off = offset;
-	int len = strlen(val);
-
-	unsigned int h = 0;
-	int i;
-	for (i = 0; i < len; i++) {
-		h = 31*h + val[off++];
-	}
-
-	return h%HASH_TABLE_LENGTH;
-}
 
 
 gfarm_error_t getRepInfo(
@@ -893,11 +876,6 @@ gfarm_error_t getRepInfo(
 		*fileSize=0;
 		return e;	
 	}
-
-	sched_log(	PBSEVENT_SCHED,
-		   		PBS_EVENTCLASS_NODE,
-			"getReplicaInformation", 
-				"gfarm Initalize Success");	
 
 
 	struct gfs_replica_info* ri=NULL;
@@ -950,18 +928,14 @@ gfarm_error_t getRepInfo(
 		strncpy(job_name_prefix,tempHostName,x);
 
 		(*nodes_filelocated)[z]=strdup(job_name_prefix);
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found C" ,"C");
 		sprintf(logbuf, " %s",(*nodes_filelocated)[z]); 
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found in" ,logbuf);
 	}
 
 
 
 	struct gfs_stat st;
 
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found A" ,"A");
 	e=gfs_lstat(fileUsed, &st);
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE,"Replica Found B" ,"B");
 	if(e!=GFARM_ERR_NO_ERROR)	
 	{
 
@@ -990,8 +964,8 @@ void relRepInfo(int *replicaCount,char ***nodes_filelocated)
 {
 	char logbuf[256];   /* buffer for log messages */
 
-	sprintf(logbuf,"Replica Count %d",*replicaCount);
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "relRepInfo", logbuf);
+//	sprintf(logbuf,"Replica Count %d",*replicaCount);
+//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "relRepInfo", logbuf);
 	
 	if(*replicaCount==0||*nodes_filelocated==NULL)
 		return;
@@ -1001,18 +975,18 @@ void relRepInfo(int *replicaCount,char ***nodes_filelocated)
 	{
 		
 		free((*nodes_filelocated)[lp]);
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "in", "memory  freed");
+//		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "in", "memory  freed");
 	}
 
 	free(*nodes_filelocated);	
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "out", "memory freed");
+//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "out", "memory freed");
 
 }
 
 node_info* dataAwareDispatch(job_info *jinfo)
 {
 
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", "d-a called");
+//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, "NONE", "d-a called");
 	node_info *possible_node = NULL; /* node which under max node not ideal*/
 	node_info *good_node = NULL;  /* node which is under ideal load */
 
@@ -1047,14 +1021,21 @@ node_info* dataAwareDispatch(job_info *jinfo)
 
 
 	float currentScore = 2;	
+	unsigned lastFree = 0;	
+	float scoreThreshould=0.7;
+	float BETA = 0.9;
+	
 
+	
 	for (i = 0,c=0; c< nodes_number; c++)//loop for the host
 	{
 		/* if the job didn't specify memory, it will default to 0, and if
 		 * the mom didn't return physmem, it defaults to 0.
 		 */
-//		if (ninfo_arr[i] -> is_free) 
-//		{
+	//	if (!ninfo_arr[i] -> is_free) 
+	//	{
+
+
 			long fileMatch = 0;
 			long fileMismatch = 0;
 			float fileFactor = 0;
@@ -1068,69 +1049,73 @@ node_info* dataAwareDispatch(job_info *jinfo)
 					{
 						fileMatch += fileSize;
 					}
-					else
-					{
-						fileMismatch +=fileSize;
-					}
-
+				
 				}
+				if(fileMatch==0)
+				{
+					fileMismatch +=fileSize;
+				}
+
 			}
 			fileFactor = ( ( -fileMatch + fileMismatch ) / (float)fileSize  + 1 ) / 2;
 
-			float BETA = 0.9;
-			float scoreThreshould=0.7;
-			float CPUloadAve = ( ninfo_arr[i] -> loadave) / 16 ;
-			float score = fileFactor * BETA + CPUloadAve*(1-BETA); 
-			proj_la = ninfo_arr[i] -> loadave;
+			float CPUloadAve = ( ninfo_arr[i] -> loadave) / 16.0 ;
+			float score = fileFactor * BETA + CPUloadAve*(1-BETA);
+			//proj_la = ninfo_arr[i] -> loadave;
 
-			sprintf(logbuf, "CPUloadAved: %6.2f FileLoad: %6.2f Score: %6.2f",
-							CPUloadAve, fileFactor,score);
-
+			sprintf(logbuf, "CPU: %6.2f score: %6.2f last: %6.2f Score: %u,%u",
+							CPUloadAve, score, currentScore,lastFree,ninfo_arr[i]->is_free);
 			sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i]->name,logbuf);
-
-			if( proj_la  <= ninfo_arr[i]->ideal_load&& score < scoreThreshould)
+			if( /*proj_la  <= ninfo_arr[i]->ideal_load&&*/ score < scoreThreshould)
 			{
-				if( score < currentScore )//try to find hosts with low load
+
+
+
+				if(lastFree==0&&ninfo_arr[i]->is_free)
 				{
-					sprintf(logbuf, "lowload load: %6.2f Score: %6.2f last Score: %6.2f",
-							proj_la, score,currentScore);
-
-					good_node = ninfo_arr[i];//this host is currently the lowest loaded one
+					good_node = ninfo_arr[i];
 					currentScore = score;
+					lastFree=1;
+					sprintf(logbuf,"not free to free:useThis" );
+				}
+				else if(lastFree==1&&!ninfo_arr[i]->is_free)
+				{
 
+					sprintf(logbuf,"free to not free: skipped" );
+					goto endofloop;	
+				}
+
+				else if( score < currentScore  )
+				{
+			//		sprintf(logbuf, "lowload load: %6.2f Score: %6.2f last Score``: %6.2f",
+				//			proj_la, score,currentScore);
+
+					sprintf(logbuf,"score < currentScore: useThis" );
+					good_node = ninfo_arr[i];
+					currentScore = score;
+					lastFree = ninfo_arr[i]->is_free;
 				}
 				else
 				{
-					sprintf(logbuf, "lowload Rej, higher: Score: %6.2f last Score: %6.2f", 
-							score, currentScore);
-				}
-			}
-			else if (proj_la <= ninfo_arr[i]->max_load&& score < scoreThreshould)
-			{
-				if (score < currentScore)
-				{
-					sprintf(logbuf, "midload load: %6.2f Score: %6.2f last Score: %6.2f",
-							proj_la, score,currentScore);
-					possible_node = ninfo_arr[i];
-					currentScore = score;
 
+					sprintf(logbuf,"score >= currentScore: skipped" );
+		//			sprintf(logbuf, "lowload Rej, higher: Score: %6.2f last Score: %6.2f", 
+			//				score, currentScore);
 				}
-				else
-					sprintf(logbuf, "midload Rej, higher: Score: %6.2f last Score: %6.2f", 
-							score, currentScore);
 			}
 			else
-				sprintf(logbuf, "Node Rejected, Load too high: load: %6.2f max_load: %6.2f", 
+				sprintf(logbuf, "thresholud not met", 
 						proj_la, ninfo_arr[i] -> max_load);
 
-//		}
-//		else
-//		{
-//			sprintf(logbuf, "Node Rejected, node does not fit job requirements.");
-//		}
+	//	}
+	//	else
+	//	{
+	//		sprintf(logbuf, "Node Rejected, node does not fit job requirements.");
+	//	}
 
 
-		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i]->name,logbuf);
+
+endofloop:	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_NODE, ninfo_arr[i]->name,logbuf);
 		i++;
 		if (ninfo_arr[i] == NULL)
 			i = 0;
@@ -1204,7 +1189,6 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
 
 
   strftime(timebuf, 128, "started on %a %b %d at %H:%M", localtime(&cstat.current_time));
-
   best_node = dataAwareDispatch(jinfo);
   if(best_node)
   	best_node_name = best_node -> name;
@@ -1217,8 +1201,11 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
 //      best_node_name = best_node -> name;
 //      snprintf(buf, RUJ_BUFSIZ, "Job run on node %s - %s", best_node_name, timebuf);
 //      }
-//    }
-
+//    //}
+//   
+  char logbuf[100]= {0}	;
+  sprintf(logbuf,"submission, *%s* on *%s*",jinfo->name,best_node_name); 
+  sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_JOB, "submission", logbuf);
   if (best_node == NULL)
     snprintf(buf, RUJ_BUFSIZ, "Job %s", timebuf);
 
@@ -1233,15 +1220,17 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
     /* If a job is 100% efficent, it will raise the load average by 1 per
      * cpu is uses.  Temporarly inflate load average by that value
      */
-    if (cstat.load_balancing && best_node != NULL)
-      {
+ //   if (cstat.load_balancing && best_node != NULL)
+   //   {
+
+  sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_JOB, "submission", "load_balancing now");
       if ((res = find_resource_req(jinfo -> resreq, "ncpus")) == NULL)
         ncpus = 1;
       else
         ncpus = res -> amount;
 
       best_node -> loadave += ncpus;
-      }
+  //    }
 
     if (cstat.help_starving_jobs && jinfo == cstat.starving_job)
       jinfo -> sch_priority = 0;
