@@ -1177,32 +1177,11 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
   int ncpus;    /* numeric amount of resource ncpus */
   char *errmsg;    /* used for pbs_geterrmsg() */
 
-//  if(jinfo->fileused)
-//  {
-//	char temp[100];
-//	sprintf(temp,"run_update_job:fileused:%s",jinfo->fileused);
-//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_JOB, "WTF",temp);
-//  }
-
-
-
-
-
   strftime(timebuf, 128, "started on %a %b %d at %H:%M", localtime(&cstat.current_time));
   best_node = dataAwareDispatch(jinfo);
   if(best_node)
   	best_node_name = best_node -> name;
-//  if (cstat.load_balancing || cstat.load_balancing_rr)
-//    {
-//    best_node = find_best_node(jinfo, sinfo -> timesharing_nodes);
-//
-//    if (best_node != NULL)
-//      {
-//      best_node_name = best_node -> name;
-//      snprintf(buf, RUJ_BUFSIZ, "Job run on node %s - %s", best_node_name, timebuf);
-//      }
-//    //}
-//   
+
   char logbuf[100]= {0}	;
   sprintf(logbuf,"submission, *%s* on *%s*",jinfo->name,best_node_name); 
   sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_JOB, "submission", logbuf);
@@ -1223,13 +1202,14 @@ int run_update_job(int pbs_sd, server_info *sinfo, queue_info *qinfo,
  //   if (cstat.load_balancing && best_node != NULL)
    //   {
 
-  sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_JOB, "submission", "load_balancing now");
-      if ((res = find_resource_req(jinfo -> resreq, "ncpus")) == NULL)
-        ncpus = 1;
-      else
-        ncpus = res -> amount;
+		sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_JOB, "submission", "load_balancing now");
+		if ((res = find_resource_req(jinfo -> resreq, "ncpus")) == NULL)
+			ncpus = 1;
+		else
+			ncpus = res -> amount;
 
-      best_node -> loadave += ncpus;
+		if(best_node)
+			best_node -> loadave += ncpus;
   //    }
 
     if (cstat.help_starving_jobs && jinfo == cstat.starving_job)
