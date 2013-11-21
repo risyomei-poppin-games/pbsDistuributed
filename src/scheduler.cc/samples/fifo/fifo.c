@@ -104,6 +104,7 @@
 #include "dedtime.h"
 #include "token_acct.h"
 #include "gfarm/gfarm.h"
+//#include "gfm_client.h"
 
 
 /* a list of running jobs from the last scheduling cycle */
@@ -439,35 +440,72 @@ int schedule(
   }  /* END schedule() */
 
 
+struct gfarm_host_sched_info {
+	char *host;
+	gfarm_uint32_t port;
+	gfarm_uint32_t ncpu;    /* XXX should have whole gfarm_host_info? */
+
+	/* if GFM_PROTO_SCHED_FLAG_LOADAVG_AVAIL */
+	float loadavg;
+	gfarm_uint64_t cache_time;
+	gfarm_uint64_t disk_used;
+	gfarm_uint64_t disk_avail;
+
+	/* if GFM_PROTO_SCHED_FLAG_RTT_AVAIL */
+	gfarm_uint64_t rtt_cache_time;
+	gfarm_uint32_t rtt_usec;
+
+	gfarm_uint32_t flags;           /* GFM_PROTO_SCHED_FLAG_* */
+};
 
 
-
-pthread_t gThread;
 pthread_mutex_t mutLock;
 typedef enum {making,stopped} gThreadStatus; 
 char fileToBeCreated[100];
 int numberToBeCreated;
 gThreadStatus gstatus = stopped;
 
+
+
 void *gfrepThread()
 {
-//	pthread_mutex_lock(&mutLock);
-	
-	gstatus = making; 
-//	pthread_mutex_unlock(&mutLock);
+	//thread Started
 	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread start");
 
+	//Replicating
+	int hostNumber;
+	struct gfarm_host_sched_info *infosp;
 
-	char sysCommand[100];
-	sprintf(sysCommand,"/work/risyomei/gfarm/bin/gfrep -N %d %s",numberToBeCreated,fileToBeCreated);
-	system(sysCommand);	
-
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread end");
-//	pthread_mutex_lock(&mutLock);
-	gstatus  = stopped; 
-//	pthread_mutex_unlock(&mutLock);
+	if(  gfarm_initialize(NULL,NULL) !=GFARM_ERR_NO_ERROR )
+	{
+		goto endRepThread;
+	}
 	
+	gfarm_error_t e;
+	struct gfm_connection *gfm_server;
+	if ((e = gfm_client_connection_and_process_acquire_by_path(fileToBeCreated, &gfm_server)) != GFARM_ERR_NO_ERROR)
+	{
+		int i=10;//return (e); 
+	}
+	e = gfm_client_schedule_host_domain(gfm_server, "", &hostNumber, &infosp);
+	gfm_client_connection_free(gfm_server);
 
+	int count = 0;	
+	int i;
+	for(i=0;i<1&&count<numberToBeCreated;i++)
+	{
+		gfs_replicate_to(fileToBeCreated, infosp[i].host, infosp[i].port);
+	}
+
+
+
+//thread Ended
+endRepThread:
+	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread end");
+	pthread_mutex_lock(&mutLock);
+	gstatus  = stopped; 
+	pthread_mutex_unlock(&mutLock);
+	gfarm_terminate();
 	pthread_exit(NULL);
 }
 unsigned int getHashCode(char* val)
@@ -601,7 +639,7 @@ int replicaGen(int sd)
 		}	
 	}
 	
-	static int threadPID;
+	//static int threadPID;
 
 	if(index<0)
 		index = 0;
@@ -619,21 +657,41 @@ int replicaGen(int sd)
 	{		
 		numberToBeCreated = fileHash[index]/(replicaCount*10);
 		strcpy(fileToBeCreated,fileHashName[index]);
+		
+		pthread_t gThread;
+		if(gstatus == making)  //comment3
+		{
 
-		if((threadPID = pthread_create(&gThread, NULL, gfrepThread, NULL)) != 0)  //comment3
 			sched_log(
 					PBSEVENT_SCHED,
 					PBS_EVENTCLASS_JOB,
 					"main thread",
-					"error creating thread");
+					"Replicating Thread Exists");
+		
+		}
 		else
-			sched_log(
-					PBSEVENT_SCHED,
-					PBS_EVENTCLASS_JOB,
-					"main thread",
-					"thread created");
+		{
+			if(pthread_create(&gThread, NULL, gfrepThread, NULL) == 0)
+			{	
+				sched_log(
+						PBSEVENT_SCHED,
+						PBS_EVENTCLASS_JOB,
+						"main thread",
+						"thread created");
+				pthread_mutex_lock(&mutLock);
+				gstatus = making; 
+				pthread_mutex_unlock(&mutLock);
+			}
+			else
+			{
+				sched_log(
+						PBSEVENT_SCHED,
+						PBS_EVENTCLASS_JOB,
+						"main thread",
+						"Error Creating Threads");
+			}
+		}
 	}
-
 
 cleanUp:
 	gfarm_terminate();
@@ -1029,12 +1087,6 @@ node_info* dataAwareDispatch(job_info *jinfo)
 	
 	for (i = 0,c=0; c< nodes_number; c++)//loop for the host
 	{
-		/* if the job didn't specify memory, it will default to 0, and if
-		 * the mom didn't return physmem, it defaults to 0.
-		 */
-	//	if (!ninfo_arr[i] -> is_free) 
-	//	{
-
 
 			long fileMatch = 0;
 			long fileMismatch = 0;
