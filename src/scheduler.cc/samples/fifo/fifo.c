@@ -653,6 +653,8 @@ int replicaGen(int sd)
 
 
 
+	int pid;
+
 	if(replicaCount>0&&(replicaCount*20<fileHash[index]))
 	{		
 		numberToBeCreated = fileHash[index]/(replicaCount*10);
