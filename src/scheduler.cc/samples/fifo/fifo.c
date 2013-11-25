@@ -458,56 +458,6 @@ struct gfarm_host_sched_info {
 	gfarm_uint32_t flags;           /* GFM_PROTO_SCHED_FLAG_* */
 };
 
-
-pthread_mutex_t mutLock;
-typedef enum {making,stopped} gThreadStatus; 
-char fileToBeCreated[100];
-int numberToBeCreated;
-gThreadStatus gstatus = stopped;
-
-
-
-void *gfrepThread()
-{
-	//thread Started
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread start");
-
-	//Replicating
-	int hostNumber;
-	struct gfarm_host_sched_info *infosp;
-
-	if(  gfarm_initialize(NULL,NULL) !=GFARM_ERR_NO_ERROR )
-	{
-		goto endRepThread;
-	}
-	
-	gfarm_error_t e;
-	struct gfm_connection *gfm_server;
-	if ((e = gfm_client_connection_and_process_acquire_by_path(fileToBeCreated, &gfm_server)) != GFARM_ERR_NO_ERROR)
-	{
-		int i=10;//return (e); 
-	}
-	e = gfm_client_schedule_host_domain(gfm_server, "", &hostNumber, &infosp);
-	gfm_client_connection_free(gfm_server);
-
-	int count = 0;	
-	int i;
-	for(i=0;i<1&&count<numberToBeCreated;i++)
-	{
-		gfs_replicate_to(fileToBeCreated, infosp[i].host, infosp[i].port);
-	}
-
-
-
-//thread Ended
-endRepThread:
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "thread", "new thread end");
-	pthread_mutex_lock(&mutLock);
-	gstatus  = stopped; 
-	pthread_mutex_unlock(&mutLock);
-	gfarm_terminate();
-	pthread_exit(NULL);
-}
 unsigned int getHashCode(char* val)
 {
 	int offset = 0;
@@ -572,7 +522,6 @@ int replicaGen(int sd)
 
 		return(0);
 	}
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "check Point");
 	
 	if(  gfarm_initialize(NULL,NULL) !=GFARM_ERR_NO_ERROR )
 	{
@@ -601,17 +550,13 @@ int replicaGen(int sd)
 			int hashVar = getHashCode(jinfo->fileused);	
 			fileHash[ hashVar] ++;
 
-
-			
-
 			if(fileHashName[hashVar]==NULL)
 				fileHashName[hashVar]=strdup(jinfo->fileused);
 		
-	
 		}
-		
 		else
-		{	
+		{
+
 		}
 	}
 
@@ -653,54 +598,82 @@ int replicaGen(int sd)
 
 
 
-	int pid;
-
-	if(replicaCount>0&&(replicaCount*20<fileHash[index]))
-	{		
-		numberToBeCreated = fileHash[index]/(replicaCount*10);
-		strcpy(fileToBeCreated,fileHashName[index]);
-		
-		pthread_t gThread;
-		if(gstatus == making)  //comment3
-		{
-
-			sched_log(
-					PBSEVENT_SCHED,
-					PBS_EVENTCLASS_JOB,
-					"main thread",
-					"Replicating Thread Exists");
-		
-		}
-		else
-		{
-			if(pthread_create(&gThread, NULL, gfrepThread, NULL) == 0)
-			{	
-				sched_log(
-						PBSEVENT_SCHED,
-						PBS_EVENTCLASS_JOB,
-						"main thread",
-						"thread created");
-				pthread_mutex_lock(&mutLock);
-				gstatus = making; 
-				pthread_mutex_unlock(&mutLock);
-			}
-			else
-			{
-				sched_log(
-						PBSEVENT_SCHED,
-						PBS_EVENTCLASS_JOB,
-						"main thread",
-						"Error Creating Threads");
-			}
-		}
-	}
-
 cleanUp:
 	gfarm_terminate();
-
 	free_server(sinfo, 1); /* free server and queues and jobs */
+//	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Leaving making replica\n");
 
-	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Leaving making replica\n");
+
+	//ReplicaGeneration
+	static int threadCount = 0;
+	if(	threadCount <= 0 &&
+ 		replicaCount >0 &&
+		replicaCount*5 < fileHash[index])
+	{		
+		int numberToBeCreated = fileHash[index]/(replicaCount*5);
+		char* fileToBeCreated = fileHashName[index];
+		int k;
+ 		
+		
+		gfarm_initialize(NULL,NULL); 
+		int hostNumber;
+		struct gfarm_host_sched_info *infosp;
+		gfarm_error_t e;
+		struct gfm_connection *gfm_server;
+		if ((e = gfm_client_connection_and_process_acquire_by_path(fileToBeCreated, &gfm_server)) != GFARM_ERR_NO_ERROR)
+		{
+			goto cleanUp;
+		}
+		e = gfm_client_schedule_host_domain(gfm_server, "", &hostNumber, &infosp);
+		gfm_client_connection_free(gfm_server);
+		gfarm_terminate();
+
+
+
+
+
+		int count = hostNumber>numberToBeCreated?numberToBeCreated:hostNumber;	
+		int i;
+		threadCount+=count;
+		for(i=0;i<count;i++)
+		{
+			pid_t pid = 0;
+			pid = fork();
+			if(pid == 0)//Sub thread
+			{
+				//Replicating
+
+				if(  gfarm_initialize(NULL,NULL) ==GFARM_ERR_NO_ERROR )
+				{
+					gfs_replicate_to(fileToBeCreated, infosp[i].host, infosp[i].port);
+				}	
+				
+				//thread Ended
+				sched_log(PBSEVENT_SCHED,PBS_EVENTCLASS_REQUEST, "thread", "new thread end1");
+				gfarm_terminate();
+				sched_log(PBSEVENT_SCHED,PBS_EVENTCLASS_REQUEST, "thread", "new thread end2");
+				_exit((int)e);
+			}
+		}
+
+
+		int status;
+		pid_t wait_pid; 
+
+		do
+		{
+			wait_pid = 	waitpid(-1,&status,WNOHANG);
+			if(wait_pid>0)
+			{
+				threadCount--;
+			}
+			else if(wait_pid==-1)
+			{
+				threadCount=0;
+			}
+		}while(wait_pid!=-1);
+	}
+
 	return 0;
 }
 
