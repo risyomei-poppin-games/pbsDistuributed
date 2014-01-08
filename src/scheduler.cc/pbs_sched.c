@@ -124,6 +124,7 @@
 #include "libpbs.h"
 
 extern int pbs_errno;
+float rgAlphaValue = -1;
 int  connector;
 int  server_sock;
 
@@ -801,7 +802,7 @@ int main(
 
   opterr = 0;
 
-  while ((c = getopt(argc, argv, "L:S:R:d:p:c:a:-:")) != EOF)
+  while ((c = getopt(argc, argv, "L:S:R:d:p:c:a:-:g:")) != EOF)
     {
     switch (c)
       {
@@ -875,8 +876,12 @@ int main(
           }
 
         break;
-
-      case '?':
+	  case 'g':
+		rgAlphaValue = atof(optarg);
+		printf("rgAlphaValue:%f\n",rgAlphaValue);
+		break;
+   
+   	  case '?':
         errflg = 1;
         break;
       }

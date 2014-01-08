@@ -93,3 +93,5 @@
 #define SCH_QUIT           8
 #define SCH_RULESET        9
 #define SCH_SCHEDULE_FIRST 10  /* First schedule after server starts */
+
+//static float rgAlphaValue; 

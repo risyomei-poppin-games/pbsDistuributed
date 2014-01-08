@@ -106,7 +106,8 @@
 #include "gfarm/gfarm.h"
 //#include "gfm_client.h"
 
-
+extern float rgAlphaValue;
+int alphaParam; 
 /* a list of running jobs from the last scheduling cycle */
 static prev_job_info *last_running = NULL;
 static int last_running_size = 0;
@@ -130,7 +131,16 @@ static time_t last_sync;
  */
 int schedinit(int argc, char *argv[])
   {
+char logbuf[MAX_LOG_SIZE]; 
   init_config();
+
+	alphaParam = (int)rgAlphaValue;
+	sprintf(logbuf,"alphaParam %f", rgAlphaValue);
+	sched_log(	PBSEVENT_SCHED, 
+			PBS_EVENTCLASS_NODE, 
+			"alphaParam", 
+			logbuf);
+
   parse_config(CONFIG_FILE);
   parse_holidays(HOLIDAYS_FILE);
 
@@ -604,13 +614,16 @@ cleanUp:
 //	sched_log(PBSEVENT_SCHED, PBS_EVENTCLASS_REQUEST, "", "Leaving making replica\n");
 
 
+
+
+
 	//ReplicaGeneration
 	static int threadCount = 0;
 	if(	threadCount <= 0 &&
  		replicaCount >0 &&
-		replicaCount*5 < fileHash[index])
+		replicaCount*alphaParam < fileHash[index])
 	{		
-		int numberToBeCreated = fileHash[index]/(replicaCount*5);
+		int numberToBeCreated = fileHash[index]/(replicaCount*alphaParam);
 		char* fileToBeCreated = fileHashName[index];
 		int k;
  		
